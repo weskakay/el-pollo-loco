@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>El Pollo Loco</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="img/8_coin/coin_2.png" />
+
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
     <script src="models/character.class.js"></script>
@@ -17,15 +19,38 @@
     <script src="models/background-object.class.js"></script>
     <script src="models/keyboard.class.js"></script>
     <script src="models/level.class.js"></script>
-    <script src="models/throwable-object.class.js"> </script>
+    <script src="models/throwable-object.class.js"></script>
     <script src="models/endboss.class.js"></script>
     <script src="levels/level1.js"></script>
-    <script src="js/game.js"></script>
-</head>
+    <script src="js/game.js" defer></script>
+    </head>
 
-<body onload="init()">
-    <h1>EL POLLO LOCO</h1>
-    <canvas id="canvas" width="720" height="480"></canvas>
+<body>
+    <div id="start-screen" class="start-screen">
+        <button onclick="startGame()">START</button>
+    </div>
+
+    <div id="loading-screen" class="loading-screen d-none">
+        <div class="loading-box">
+        LOADING<span class="dots">...</span>
+        </div>
+    </div>
+    
+    <canvas id="canvas" width="720" height="480" class="hidden-placeholder"></canvas>
+    <div class="start-controls">
+        <button id="reset-btn" class="d-none" onclick="resetGame()">🔁 RESET</button>
+        <button id="music-btn" onclick="toggleMusic()">🎵 MUSIC: ON</button>
+        <button id="help-btn" onclick="toggleHelp()">❔ HELP</button>
+    </div>
+
+    <div id="help-screen" class="help-screen d-none">
+        <p><strong>CONTROL:</strong></p>
+        <ul>
+        <li>➡️ / D – Move right</li>
+        <li>⬅️ / A – Move left</li>
+        <li>SPACE – JUMP</li>
+        <li>O – Throw bottle</li>
+        </ul>
+    </div>
 </body>
-
 </html>

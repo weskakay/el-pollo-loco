@@ -18,6 +18,32 @@ let keyboard = new Keyboard();
  * @type {HTMLAudioElement}
  */
 let throwSound = new Audio('audio/throw.mp3');
+let backgroundMusic = new Audio('audio/music.mp3');
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.2;
+let musicOn = true;
+/**
+ * Initializes and starts the game.
+ * @returns {void}
+ */
+function startGame() {
+    document.getElementById('start-screen').classList.add('d-none');
+    document.getElementById('loading-screen').classList.remove('d-none');
+    document.getElementById('canvas').classList.remove('hidden-placeholder');
+    document.getElementById('reset-btn').classList.remove('d-none');
+
+    setTimeout(() => {
+        document.getElementById('loading-screen').classList.add('d-none');
+        document.getElementById('canvas').classList.remove('d-none');
+        init();
+    }, 1000);
+}
+/**
+ * Reloads the page to reset the game state.
+ */
+function resetGame() {
+    location.reload();
+}
 /**
  * Initializes the game by creating the world and linking the canvas and keyboard.
  */
@@ -25,6 +51,37 @@ function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     console.log('My Character is', world.character);
+}
+/**
+ * Toggles background music on or off.
+ */
+function toggleMusic() {
+    musicOn = !musicOn;
+
+    const btn = document.getElementById('music-btn');
+    btn.textContent = musicOn ? '🎵 MUSIC: ON' : '🔇 MUSIC: OFF';
+
+    if (musicOn) {
+        backgroundMusic.play();
+    } else {
+        backgroundMusic.pause();
+    }
+}
+/**
+ * Shows or hides the help screen.
+ */
+function toggleHelp() {
+    document.getElementById('help-screen').classList.toggle('d-none');
+}
+/**
+ * Throws a bottle if enough time has passed since the last throw.
+ */
+function throwBottle() {
+    if (world) {
+        let bottle = new ThrowableObject(world.character.x + 100, world.character.y + 100);
+        world.throwableObjects.push(bottle);
+    }
+    throwSound.play();
 }
 // Key down event: recognize movement and throwing immediately
 window.addEventListener("keydown", (e) => {
@@ -69,13 +126,3 @@ window.addEventListener("keyup", (e) => {
         keyboard.THROW = false;
     }
 });
-/**
- * Throws a bottle if enough time has passed since the last throw.
- */
-function throwBottle() {
-    if (world) {
-        let bottle = new ThrowableObject(world.character.x + 100, world.character.y + 100);
-        world.throwableObjects.push(bottle);
-    }
-    throwSound.play();
-}

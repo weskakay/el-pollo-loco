@@ -1,9 +1,144 @@
+@font-face {
+    font-family: 'Zabras';
+    src: url('fonts/zabars.ttf') format('truetype');
+}
+
 body {
+    margin: 0;
+    background-image: url('img/10_background/desert.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
+    font-family: 'Zabras', Arial, sans-serif;
+}
+
+.d-none {
+    display: none !important;
 }
 
 canvas {
     background-color: black;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+canvas.hidden-placeholder {
+    visibility: hidden;
+    height: 540px;
+}
+
+button {
+    font-family: 'Zabras', Arial, sans-serif;
+    background-color: #ffc400;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 18px;
+    transition: scale 0.2s ease-in-out;
+}
+
+button:hover {
+    scale: 1.1;
+}
+
+.start-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 720px;
+    height: 480px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    background-image: url('img/9_intro_outro_screens/start/startscreen_1.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.start-screen button {
+    font-size: 40px;
+    margin-top: -360px;
+}
+
+.loading-screen {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 36px;
+}
+
+.loading-box {
+    text-align: center;
+}
+
+.dots::after {
+    content: '';
+    animation: dotty 1.5s infinite steps(3);
+}
+
+@keyframes dotty {
+    0%   { content: ''; }
+    33%  { content: '.'; }
+    66%  { content: '..'; }
+    100% { content: '...'; }
+}
+
+.start-controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    z-index: 1001;
+}
+
+.help-screen {
+    position: absolute;
+    width: 300px;
+    min-height: 380px;
+    background-image: url('img/10_background/wanted.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 100px 30px 40px 30px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    z-index: 2000;
+    color: #2b1a0f;
+    font-size: 16px;
+    text-shadow: 1px 1px 1px #fff;
+    overflow: auto;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+     padding-top: 130px;   /* nach unten zentriert */
+    padding-left: 90px;   /* nach rechts zentriert */
+    padding-right: 90px;
+    padding-bottom: 40px;
+}
+
+.help-screen ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.help-screen li {
+    margin-bottom: 6px;
 }

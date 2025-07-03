@@ -26,20 +26,29 @@ My jump-and-run game project: El Pollo Loco
     el-pollo-loco/
     ├── index.html
     ├── style.css
-    ├── script.js
-    ├── classes/
-    │   ├── drawable-object.class.js
-    │   ├── character.class.js
-    │   ├── enemy.class.js
-    │   ├── cloud.class.js
-    │   ├── world.class.js
-    │   ├── level.class.js
-    │   ├── keyboard.class.js
-    │   └── background-object.class.js
+    ├├── js/
+    │ └── game.js
+    ├── levels/
+    │ └── level1.js
+    ├── models/
+    │ ├── background-object.class.js
+    │ ├── character.class.js
+    │ ├── chicken.class.js
+    │ ├── cloud.class.js
+    │ ├── drawable-object.class.js
+    │ ├── endboss.class.js
+    │ ├── keyboard.class.js
+    │ ├── level.class.js
+    │ ├── movable-object.class.js
+    │ ├── status-bar.class.js
+    │ ├── throwable-object.class.js
+    │ └── world.class.js
     ├── img/
     │   └── (game images)
     ├── audio/
     │   └── (sound effects and music)
+    ├── documents/
+    │   └── El Pollo Loco Checkliste.pdf
     └── README.md
 
 ✅ Features

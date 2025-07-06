@@ -1,8 +1,8 @@
 /**
- * Class representing all movable objects in the game.
+ * Class representing all moveable objects in the game.
  * Extends DrawableObject with movement, gravity, collision detection, and animation.
  */
-class MovableObject extends DrawableObject {
+class MoveableObject extends DrawableObject {
     /**
      * Horizontal movement speed.
      * @type {number}
@@ -56,8 +56,8 @@ class MovableObject extends DrawableObject {
         }
     }
     /**
-     * Checks collision with another movable object.
-     * @param {MovableObject} mo - The other movable object.
+     * Checks collision with another moveable object.
+     * @param {MoveableObject} mo - The other moveable object.
      * @returns {boolean} True if colliding. character.isColliding(chicken); 
      */
     isColliding(mo) {

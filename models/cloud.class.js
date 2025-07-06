@@ -1,8 +1,8 @@
 /**
  * Class representing a background cloud.
- * Extends MovableObject and moves slowly to the left.
+ * Extends MoveableObject and moves slowly to the left.
  */
-class Cloud extends MovableObject {
+class Cloud extends MoveableObject {
     /**
      * Cloud vertical position.
      * @type {number}
@@ -23,13 +23,15 @@ class Cloud extends MovableObject {
      */
     constructor(){
         super().loadImage('img/5_background/layers/4_clouds/1.png');
-        this.x = Math.random() * 500; // Zahl zwischen 0 und 500
+        this.x = 50 + Math.random() * 2500;
         this.animate();
     }
     /**
      * Animates the cloud: makes it move slowly to the left.
      */
-    animate(){
-        this.moveLeft();
+    animate() {
+        setInterval(() => {
+            this.x -= 0.3;
+        }, 1000 / 60);
     }
 }

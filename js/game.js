@@ -19,6 +19,7 @@ let keyboard = new Keyboard();
  */
 let throwSound = new Audio('audio/throw.mp3');
 let backgroundMusic = new Audio('audio/music.mp3');
+let jumpSound = new Audio('audio/jump.mp3');
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.2;
 let musicOn = true;

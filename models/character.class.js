@@ -1,8 +1,8 @@
 /**
  * Class representing the player character.
- * Extends MovableObject and handles animations, movement, and jumping.
+ * Extends MoveableObject and handles animations, movement, and jumping.
  */
-class Character extends MovableObject {
+class Character extends MoveableObject {
     /**
      * Character height.
      * @type {number}

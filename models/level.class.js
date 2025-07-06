@@ -5,7 +5,7 @@
 class Level {
     /**
      * Array of enemy objects.
-     * @type {MovableObject[]}
+     * @type {MoveableObject[]}
      */
     enemies;
     /**
@@ -18,6 +18,8 @@ class Level {
      * @type {BackgroundObject[]}
      */
     backgroundObjects;
+    bottles;
+    coins;
     /**
      * X coordinate where the level ends.
      * @type {number}
@@ -25,13 +27,17 @@ class Level {
     level_end_x = 2200;
     /**
      * Creates a new Level instance.
-     * @param {MovableObject[]} enemies - Array of enemy instances.
+     * @param {MoveableObject[]} enemies - Array of enemy instances.
      * @param {Cloud[]} clouds - Array of cloud instances.
      * @param {BackgroundObject[]} backgroundObjects - Array of background object instances.
+     * @param {Bottle[]} bottles - Array of bottle instances.
+     * @param {Coin[]} coins - Array of coin instances.
      */
-    constructor(enemies, clouds, backgroundObjects) {
+    constructor(enemies, clouds, backgroundObjects, bottles, coins) {
         this.enemies = enemies;
         this.clouds = clouds;
         this.backgroundObjects = backgroundObjects;
+        this.bottles = bottles;
+        this.coins = coins;
     }
 }

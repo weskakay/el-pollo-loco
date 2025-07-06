@@ -1,8 +1,8 @@
 /**
  * Class representing the final boss enemy.
- * Extends MovableObject and plays a walking animation.
+ * Extends MoveableObject and plays a walking animation.
  */
-class Endboss extends MovableObject {
+class Endboss extends MoveableObject {
     /**
      * Endboss height.
      * @type {number}

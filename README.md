@@ -39,7 +39,7 @@ My jump-and-run game project: El Pollo Loco
     │ ├── endboss.class.js
     │ ├── keyboard.class.js
     │ ├── level.class.js
-    │ ├── movable-object.class.js
+    │ ├── moveable-object.class.js
     │ ├── status-bar.class.js
     │ ├── throwable-object.class.js
     │ └── world.class.js

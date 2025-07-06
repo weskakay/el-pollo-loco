@@ -1,8 +1,8 @@
 /**
  * Class representing a background object (e.g., scenery).
- * Extends MovableObject and stays fixed vertically at the bottom.
+ * Extends MoveableObject and stays fixed vertically at the bottom.
  */
-class BackgroundObject extends MovableObject {
+class BackgroundObject extends MoveableObject {
     /**
      * Background object width.
      * @type {number}

@@ -1,8 +1,8 @@
 /**
  * Class representing an enemy chicken.
- * Extends MovableObject and handles its own animation and movement.
+ * Extends MoveableObject and handles its own animation and movement.
  */
-class Chicken extends MovableObject {
+class Chicken extends MoveableObject {
     /**
      * Chicken height.
      * @type {number}

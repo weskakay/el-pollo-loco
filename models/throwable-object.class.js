@@ -1,8 +1,8 @@
 /**
  * Class representing a throwable object, like a bottle.
- * Extends MovableObject and handles throwing mechanics.
+ * Extends MoveableObject and handles throwing mechanics.
  */
-class ThrowableObject extends MovableObject {
+class ThrowableObject extends MoveableObject {
     /**
      * Creates a new ThrowableObject instance.
      * @param {number} x - Initial horizontal position.

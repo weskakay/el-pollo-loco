@@ -12,12 +12,22 @@ class Character extends MoveableObject {
      * Character initial vertical position.
      * @type {number}
      */
-    y = 80
+    y = 120;
     /**
      * Horizontal speed.
      * @type {number}
      */
-    speed = 10;
+    speed = 6;
+    /**
+     * Time in milliseconds the character has been standing still.
+     * After 5000ms, the sleeping animation is triggered.
+     * @type {number}
+     */
+    standingTime = 0;
+    /**
+     * Standing animation image paths.
+     * @type {string[]}
+     */
     IMAGES_STANDING = [
         'img/2_character_pepe/1_idle/idle/I-1.png',
         'img/2_character_pepe/1_idle/idle/I-2.png',
@@ -31,7 +41,10 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/idle/I-10.png'
         
     ];
-
+    /**
+     * Sleeping animation image paths.
+     * @type {string[]}
+     */
     IMAGES_SLEEPING = [
         'img/2_character_pepe/1_idle/long_idle/I-11.png',
         'img/2_character_pepe/1_idle/long_idle/I-12.png',
@@ -99,11 +112,6 @@ class Character extends MoveableObject {
      */
     world;
     /**
-     * Walking sound effect.
-     * @type {HTMLAudioElement}
-     */
-    walking_sound = new Audio('audio/running.mp3');
-    /**
      * Creates a new Character instance.
      */
     constructor() {
@@ -121,46 +129,50 @@ class Character extends MoveableObject {
      * Animates the character: handles movement and animation switching.
      */
     animate() {
-
         setInterval(() => {
-            this.walking_sound.pause();
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
-                this.walking_sound.play();
+                this.world.sound.playWalking();
+                this.standingTime = 0;
             }
-
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft();
-                this.walking_sound.play();
+                this.world.sound.playWalking();
                 this.otherDirection = true;
+                this.standingTime = 0;
             }
-
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
+                this.standingTime = 0;
             }
-
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
-
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-            } else if(this.isHurt()){
+            } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
+                this.standingTime = 0;
+            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                this.playAnimation(this.IMAGES_WALKING);
+                this.standingTime = 0;
             } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.playAnimation(this.IMAGES_WALKING);
+                this.playAnimation(this.IMAGES_STANDING);
+                this.standingTime += 150;
+                if (this.standingTime >= 5000) {
+                    this.playAnimation(this.IMAGES_SLEEPING);
                 }
             }
-        }, 50);
+        }, 100);
     }
     /**
      * Makes the character jump by applying upward speed.
      */
     jump() {
         this.speedY = 30;
+        this.world.sound.playJump();
     }
 }

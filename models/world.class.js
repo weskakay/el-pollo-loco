@@ -34,7 +34,7 @@ class World {
      */
     camera_x = 0;
     /**
-     * The status bar UI element.
+     * The health status bar UI element.
      * @type {StatusBar}
      */
     statusBar = new StatusBar();
@@ -43,6 +43,7 @@ class World {
      * @type {ThrowableObject[]}
      */
     throwableObjects = [];
+    sound = new SoundManager();
     /**
      * Creates a new World instance.
      * @param {HTMLCanvasElement} canvas - The game's canvas element.
@@ -75,7 +76,7 @@ class World {
      * Checks if the player pressed throw and creates a throwable object.
      */
     checkThrowObjects() {
-        if (this.keyboard.D) {
+        if (this.keyboard.THROW) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
         }
@@ -108,7 +109,6 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObjects);
         this.ctx.translate(-this.camera_x, 0);
-
         let self = this;
         requestAnimationFrame(function () {
             self.draw();

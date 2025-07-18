@@ -61,10 +61,18 @@ class MoveableObject extends DrawableObject {
      * @returns {boolean} True if colliding. character.isColliding(chicken); 
      */
     isColliding(mo) {
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x &&
-            this.y < mo.y + mo.height;
+        if (this instanceof Character) {
+            return this.x + 60 + this.width - 105 > mo.x &&
+                this.y + this.height > mo.y &&
+                this.x + 60 < mo.x + mo.width &&
+                this.y + 130 < mo.y + mo.height;
+        }
+        else {
+            return this.x + this.width > mo.x &&
+                this.y + this.height > mo.y &&
+                this.x < mo.x + mo.width &&
+                this.y < mo.y + mo.height;
+        }
     }
     /**
      * Reduces energy when hit and records the time of the hit.
@@ -76,6 +84,7 @@ class MoveableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();
         }
+        this.world.sound.playHurt();
     }
     /**
      * Checks if the object is currently hurt.
@@ -98,7 +107,7 @@ class MoveableObject extends DrawableObject {
      * @param {string[]} images - Array of image paths.
      */
     playAnimation(images) {
-        let i = this.currentImage % images.length; // let i = 7 % 6; =>  1, Rest 1 
+        let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
@@ -115,10 +124,5 @@ class MoveableObject extends DrawableObject {
     moveLeft() {
         this.x -= this.speed;
     }
-    /**
-     * Makes the object jump by setting a positive vertical speed.
-     */
-    jump() {
-        this.speedY = 30;
-    }
+
 }

@@ -17,12 +17,7 @@ let keyboard = new Keyboard();
  * Sound for throwing a bottle.
  * @type {HTMLAudioElement}
  */
-let throwSound = new Audio('audio/throw.mp3');
-let backgroundMusic = new Audio('audio/music.mp3');
-let jumpSound = new Audio('audio/jump.mp3');
-backgroundMusic.loop = true;
-backgroundMusic.volume = 0.2;
-let musicOn = true;
+let musicOn = false;
 /**
  * Initializes and starts the game.
  * @returns {void}
@@ -32,11 +27,15 @@ function startGame() {
     document.getElementById('loading-screen').classList.remove('d-none');
     document.getElementById('canvas').classList.remove('hidden-placeholder');
     document.getElementById('reset-btn').classList.remove('d-none');
-
+    document.getElementById('music-btn').classList.remove('d-none');
+    
     setTimeout(() => {
         document.getElementById('loading-screen').classList.add('d-none');
         document.getElementById('canvas').classList.remove('d-none');
         init();
+        if (!musicOn) {
+            toggleMusic();
+        }
     }, 1000);
 }
 /**
@@ -63,9 +62,9 @@ function toggleMusic() {
     btn.textContent = musicOn ? '🎵 MUSIC: ON' : '🔇 MUSIC: OFF';
 
     if (musicOn) {
-        backgroundMusic.play();
+        world.sound.playBackground();
     } else {
-        backgroundMusic.pause();
+        world.sound.stopBackground();
     }
 }
 /**
@@ -82,7 +81,7 @@ function throwBottle() {
         let bottle = new ThrowableObject(world.character.x + 100, world.character.y + 100);
         world.throwableObjects.push(bottle);
     }
-    throwSound.play();
+    world.sound.playThrow();
 }
 // Key down event: recognize movement and throwing immediately
 window.addEventListener("keydown", (e) => {

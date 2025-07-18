@@ -17,7 +17,8 @@ class Chicken extends MoveableObject {
      * Chicken vertical position.
      * @type {number}
      */
-    y = 360
+    y = 370
+    chickenSound = new Audio('audio/chicken.mp3');
     /**
      * Walking animation image paths.
      * @type {string[]}
@@ -28,16 +29,37 @@ class Chicken extends MoveableObject {
         'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
     ];
     /**
+     * Dead animation image paths for the chicken enemy.
+     * Used to display the dead state of the chicken.
+     * @type {string[]}
+     */
+    IMAGES_DEAD = [
+        'img/3_enemies_chicken/chicken_normal/2_dead/dead.png',
+    ];
+    /**
      * Creates a new Chicken instance with random position and speed.
      */
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
-
-        this.x = 200 + Math.random() * 500; // Zahl zwischen 200 und 700
-        this.speed = 0.15 + Math.random() * 0.5;
+        this.loadImages(this.IMAGES_DEAD);
+        this.x = 600 + Math.random() * 1000; // Zahl zwischen 200 und 700
+        this.speed = 0.15 + Math.random() * 0.25;
 
         this.animate();
+    }
+    /**
+     * Displays the dead animation of the chicken and plays the death sound once.
+     */
+    playAnimationChickenDead() {
+        this.loadImage(this.IMAGES_DEAD);
+        if (!this.soundPlayed) {
+            this.playSound(chickenSound);
+            this.soundPlayed = true;
+        }
+        setTimeout(() => {
+            this.IMAGES_DEAD = [];
+        }, 500);
     }
     /**
      * Animates the chicken: moves it left and switches images.
@@ -48,7 +70,13 @@ class Chicken extends MoveableObject {
         }, 1000 / 60);
 
         setInterval(() => {
-            this.playAnimation(this.IMAGES_WALKING);
+            if (!this.chickenIsDead) {
+                this.playAnimation(this.IMAGES_WALKING);
+            }
+            else {
+                this.playAnimationChickenDead(this.IMAGES_DEAD);
+            }      
+            
         }, 200);
     }
 }

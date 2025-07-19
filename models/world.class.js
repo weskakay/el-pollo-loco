@@ -38,6 +38,7 @@ class World {
      * @type {StatusBar}
      */
     statusBar = new StatusBar();
+    
     /**
      * Array of throwable objects (e.g., bottles).
      * @type {ThrowableObject[]}

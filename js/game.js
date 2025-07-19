@@ -14,10 +14,10 @@ let world;
  */
 let keyboard = new Keyboard();
 /**
- * Sound for throwing a bottle.
- * @type {HTMLAudioElement}
+ * Global mute flag for all sounds.
+ * @type {boolean}
  */
-let musicOn = false;
+let isMuted = false;
 /**
  * Initializes and starts the game.
  * @returns {void}
@@ -33,9 +33,6 @@ function startGame() {
         document.getElementById('loading-screen').classList.add('d-none');
         document.getElementById('canvas').classList.remove('d-none');
         init();
-        if (!musicOn) {
-            toggleMusic();
-        }
     }, 1000);
 }
 /**
@@ -50,22 +47,28 @@ function resetGame() {
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+    world.sound.playBackground();
+    updateMusicButton();
     console.log('My Character is', world.character);
 }
 /**
  * Toggles background music on or off.
  */
 function toggleMusic() {
-    musicOn = !musicOn;
+    isMuted = !isMuted;
 
-    const btn = document.getElementById('music-btn');
-    btn.textContent = musicOn ? '🎵 MUSIC: ON' : '🔇 MUSIC: OFF';
+    updateMusicButton();
 
-    if (musicOn) {
-        world.sound.playBackground();
-    } else {
+    if (isMuted) {
         world.sound.stopBackground();
+    } else {
+        world.sound.playBackground();
     }
+}
+
+function updateMusicButton() {
+    const btn = document.getElementById('music-btn');
+    btn.textContent = isMuted ? '🔇 MUSIC: OFF' : '🎵 MUSIC: ON';
 }
 /**
  * Shows or hides the help screen.
@@ -80,8 +83,9 @@ function throwBottle() {
     if (world) {
         let bottle = new ThrowableObject(world.character.x + 100, world.character.y + 100);
         world.throwableObjects.push(bottle);
+        world.sound.playThrow();
     }
-    world.sound.playThrow();
+    
 }
 // Key down event: recognize movement and throwing immediately
 window.addEventListener("keydown", (e) => {
@@ -97,10 +101,10 @@ window.addEventListener("keydown", (e) => {
     if (e.code == "ArrowDown" || e.code == "KeyS") {
         keyboard.DOWN = true;
     }
-    if (e.code == "Space") {
+    if (e.code == "KeyJ") {
         keyboard.SPACE = true;
     }
-    if (e.code == "KeyO") {
+    if (e.code == "KeyT") {
         keyboard.THROW = true;
         throwBottle();
     }
@@ -119,10 +123,10 @@ window.addEventListener("keyup", (e) => {
     if (e.code == "ArrowDown" || e.code == "KeyS") {
         keyboard.DOWN = false;
     }
-    if (e.code == "Space") {
+    if (e.code == "KeyJ") {
         keyboard.SPACE = false;
     }
-    if (e.code == "KeyO") {
+    if (e.code == "KeyT") {
         keyboard.THROW = false;
     }
 });

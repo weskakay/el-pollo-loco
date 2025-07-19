@@ -17,29 +17,39 @@ class SoundManager {
     }
 
     playBackground() {
-        this.backgroundMusic.play();
+        if (!isMuted) this.backgroundMusic.play();
     }
-
     stopBackground() {
         this.backgroundMusic.pause();
     }
-
     playHurt() {
-        this.hurtSound.play();
+        if (!isMuted) {
+            this.hurtSound.currentTime = 0;
+            this.hurtSound.play();
+        }
     }
-
     playJump() {
-        this.jumpSound.play();
+        if (!isMuted) {
+            this.jumpSound.currentTime = 0;
+            this.jumpSound.play();
+        }
     }
-
     playThrow() {
-        this.throwSound.play();
+        if (!isMuted) {
+            this.throwSound.currentTime = 0;
+            this.throwSound.play();
+        }
     }
-
     playWalking() {
-        this.walkingSound.play();
+        if (!isMuted) {
+            this.walkingSound.currentTime = 0;
+            this.walkingSound.play();
+        }
     }
     playGameOver() {
-        this.gameOverSound.play();
+        if (!isMuted) {
+            this.gameOverSound.currentTime = 0;
+            this.gameOverSound.play();
+        }
     }
 }   

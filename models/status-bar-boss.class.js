@@ -1,19 +1,19 @@
 /**
- * Displays the number of coins collected.
- * @extends StatusBar
+ * Class representing the status bar in the game.
+ * Displays the player's item or health status visually.
  */
-class StatusBarCoin extends DrawableObject {
+class StatusBarBoss extends DrawableObject {
     /**
      * Array of image paths representing different status levels.
      * @type {string[]}
      */
     IMAGES = [
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/20.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/40.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/60.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/80.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue0.png', // 0
+        'img/7_statusbars/2_statusbar_endboss/blue/blue20.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue40.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue60.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue80.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue100.png' // 5
     ];
     /**
      * Current percentage displayed by the status bar.
@@ -27,7 +27,7 @@ class StatusBarCoin extends DrawableObject {
         super();
         this.loadImages(this.IMAGES);
         this.x = 500;
-        this.y = 0;
+        this.y = 50;
         this.width = 200;
         this.height = 60;
         this.setPercentage(100);

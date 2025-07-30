@@ -38,7 +38,9 @@ class World {
      * @type {StatusBar}
      */
     statusBar = new StatusBar();
-    
+    statusBarBoss = new StatusBarBoss();
+    statusBarBottle = new StatusBarBottle();
+    statusBarCoin = new StatusBarCoin();
     /**
      * Array of throwable objects (e.g., bottles).
      * @type {ThrowableObject[]}
@@ -90,6 +92,9 @@ class World {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
+                this.statusBarBoss.setPercentage(this.endboss.energy);
+                this.statusBarBottle.setPercentage(this.bottle.energy);
+                this.statusBarCoin.setPercentage(this.coin.energy);
             }
         });
     }
@@ -102,6 +107,9 @@ class World {
         this.addObjectsToMap(this.level.backgroundObjects);
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
+        this.addToMap(this.statusBarBoss);
+        this.addToMap(this.statusBarBottle);
+        this.addToMap(this.statusBarCoin);
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.clouds);
@@ -157,5 +165,9 @@ class World {
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
+    }
+    hitBoss() {
+        this.endboss.energy -= 20;
+        this.statusBarBoss.setPercentage(this.endboss.energy); 
     }
 }

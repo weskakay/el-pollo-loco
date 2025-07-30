@@ -1,6 +1,6 @@
 /**
- * Class representing the status bar in the game.
- * Displays the player's item or health status visually.
+ * Generic status bar showing a percentage-based indicator.
+ * @extends DrawableObject
  */
 class StatusBar extends DrawableObject {
     /**

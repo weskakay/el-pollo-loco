@@ -18,6 +18,10 @@ class Endboss extends MoveableObject {
      * @type {number}
      */
     y = 55;
+    hadFirstContact = false;
+    energyEndBoss = 100;
+    lastHitEndBoss = 0;
+    i = 0;
     /**
      * Walking animation image paths.
      * @type {string[]}
@@ -79,6 +83,56 @@ class Endboss extends MoveableObject {
         this.speed = 2;
         this.x = 2500;
         this.animate();
+    }
+    /**
+     * Reduces the endboss's energy when hit (e.g. by a bottle).
+     */
+    hitEndBoss() {
+        this.energyEndBoss -= 10;
+        if (this.energyEndBoss < 0) {
+            this.energyEndBoss = 0;
+        } else {
+            this.lastHitEndBoss = new Date().getTime();
+        }
+    }
+    /**
+     * Checks if the endboss was recently hit.
+     * @returns {boolean} True if hit within the last second
+     */
+    isHurtEndBoss() {
+        let timePassed = new Date().getTime() - this.lastHitEndBoss;
+        return (timePassed / 1000) < 1;
+    }
+    /**
+     * Checks if the endboss is dead.
+     * @returns {boolean} True if energy is 0 or below
+     */
+    isDeadEndBoss() {
+        return this.energyEndBoss <= 0;
+    }
+    /**
+     * Handles endboss animation depending on state:
+     * dead, hurt, alert or attack.
+     */
+    endBossAnimation() {
+        let interval = setInterval(() => {
+            if (this.isDeadEndBoss()) {
+                console.log("Endboss is dead");
+                this.playAnimation(this.IMAGES_DEAD);
+                clearInterval(interval);
+            } else if (this.isHurtEndBoss()) {
+                console.log("Endboss is hurt");
+                this.playAnimation(this.IMAGES_HURT);
+            } else if (this.hadFirstContact && this.i < 15) {
+                console.log("Endboss is in alert state");
+                this.playAnimation(this.IMAGES_ALERT);
+                this.i++;
+            } else if (this.hadFirstContact) {
+                console.log("Endboss is attacking!");
+                this.playAnimation(this.IMAGES_ATTACK);
+                this.x -= this.speed;
+            }
+        }, 200);
     }
     /**
      * Animates the endboss: plays the walking animation.

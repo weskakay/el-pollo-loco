@@ -5,6 +5,8 @@ class SoundManager {
     throwSound = new Audio('audio/throw.mp3');
     walkingSound = new Audio('audio/running.mp3');
     gameOverSound = new Audio('audio/gameover.mp3');
+    chickenDeadSound = new Audio('audio/chicken.mp3');
+    coinSound = new Audio('audio/coin.wav');
 
     constructor() {
         this.backgroundMusic.loop = true;
@@ -14,6 +16,8 @@ class SoundManager {
         this.hurtSound.volume = 0.5;
         this.throwSound.volume = 0.5;
         this.gameOverSound.volume = 0.5;
+        this.coinSound.volume = 0.5;
+        this.chickenDeadSound.volume = 0.5;
     }
 
     playBackground() {
@@ -50,6 +54,18 @@ class SoundManager {
         if (!isMuted) {
             this.gameOverSound.currentTime = 0;
             this.gameOverSound.play();
+        }
+    }
+    playCoinSound() {
+        if (!isMuted) {
+            this.coinSound.currentTime = 0;
+            this.coinSound.play();
+        }
+    }
+    playChickenDead() {
+        if (!isMuted) {
+            this.chickenDeadSound.currentTime = 0;
+            this.chickenDeadSound.play();
         }
     }
 }   

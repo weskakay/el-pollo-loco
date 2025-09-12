@@ -1,6 +1,6 @@
 /**
- * Class representing the status bar in the game.
- * Displays the player's item or health status visually.
+ * Displays the number of bottles collected.
+ * @extends StatusBar
  */
 class StatusBarBottle extends DrawableObject {
     /**

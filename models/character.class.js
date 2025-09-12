@@ -24,6 +24,10 @@ class Character extends MoveableObject {
      * @type {number}
      */
     standingTime = 0;
+    coinsCollected = 0;
+    bottlesCollected = 0;
+    bottleThrown = false;
+
     /**
      * Standing animation image paths.
      * @type {string[]}

@@ -43,23 +43,20 @@ class Chicken extends MoveableObject {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
-        this.x = 600 + Math.random() * 1000; // Zahl zwischen 200 und 700
+        this.x = 600 + Math.random() * 1000;
         this.speed = 0.15 + Math.random() * 0.25;
-
         this.animate();
     }
     /**
      * Displays the dead animation of the chicken and plays the death sound once.
      */
     playAnimationChickenDead() {
-        this.loadImage(this.IMAGES_DEAD);
-        if (!this.soundPlayed) {
-            this.playSound(chickenSound);
-            this.soundPlayed = true;
-        }
+        this.loadImage(this.IMAGES_DEAD[0] || this.IMAGES_DEAD);
+        
         setTimeout(() => {
             this.IMAGES_DEAD = [];
         }, 500);
+        
     }
     /**
      * Animates the chicken: moves it left and switches images.

@@ -1,6 +1,6 @@
 /**
- * Class representing the status bar in the game.
- * Displays the player's item or health status visually.
+ * Displays the health of the endboss.
+ * @extends StatusBar
  */
 class StatusBarBoss extends DrawableObject {
     /**
@@ -16,12 +16,12 @@ class StatusBarBoss extends DrawableObject {
         'img/7_statusbars/2_statusbar_endboss/blue/blue100.png' // 5
     ];
     /**
-     * Current percentage displayed by the status bar.
+     * Current percentage displayed by the status bar for endboss.
      * @type {number}
      */
     percentage = 100;
     /**
-     * Creates a new StatusBar instance.
+     * Creates a new StatusBar instance for endboss.
      */
     constructor() {
         super();

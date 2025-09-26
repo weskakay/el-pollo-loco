@@ -7,6 +7,7 @@ class SoundManager {
     gameOverSound = new Audio('audio/gameover.mp3');
     chickenDeadSound = new Audio('audio/chicken.mp3');
     coinSound = new Audio('audio/coin.wav');
+    bottlePickupSound = new Audio('audio/bottle.mp3');
 
     constructor() {
         this.backgroundMusic.loop = true;
@@ -18,6 +19,7 @@ class SoundManager {
         this.gameOverSound.volume = 0.5;
         this.coinSound.volume = 0.5;
         this.chickenDeadSound.volume = 0.5;
+        this.bottlePickupSound.volume = 0.5;
     }
 
     playBackground() {
@@ -60,6 +62,12 @@ class SoundManager {
         if (!isMuted) {
             this.coinSound.currentTime = 0;
             this.coinSound.play();
+        }
+    }
+    playBottlePickup() {
+        if (!isMuted) {
+            this.bottlePickupSound.currentTime = 0;
+            this.bottlePickupSound.play();
         }
     }
     playChickenDead() {

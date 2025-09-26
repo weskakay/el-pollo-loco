@@ -53,18 +53,20 @@ button:hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 720px;
-    height: 480px;
+    width: min(95vw, 1100px); 
+    aspect-ratio: 16 / 9; 
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     background-image: url('img/9_intro_outro_screens/start/startscreen_1.png');
-    background-size: cover;
+    background-size: cover;   
     background-position: center;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    overflow: hidden;      
 }
+
 
 .start-screen button {
     font-size: 40px;

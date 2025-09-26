@@ -45,6 +45,7 @@ class World {
      * Array of throwable objects (e.g., bottles).
      * @type {ThrowableObject[]}
      */
+    
     throwableObjects = [];
     sound = new SoundManager();
     /**
@@ -56,7 +57,7 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.soundManager = soundManager;
+        this.soundManager = soundManager || this.sound;
         this.draw();
         this.setWorld();
         this.run();
@@ -80,7 +81,7 @@ class World {
             this.checkEndbossActivation();
             this.checkBottleHitsEndboss();
             this.checkEndbossDead();
-        }, 200);
+        }, 1000 / 60);
     }
     /**
      * Checks if the player presses throw key and throws a bottle
@@ -105,20 +106,26 @@ class World {
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (!(enemy instanceof Endboss) && enemy.chickenIsDead) return;
-            if (this.character.isColliding(enemy)) {
-                if (enemy instanceof Endboss) {
-                    
-                    if (!this.character.isHurt()) {
-                        this.character.hit();
-                        this.statusBar.setPercentage(this.character.energy);
-                    }
-                } else {
-                    
-                    this.character.hit();
-                }
+            if (!this.character.isColliding(enemy)) return;
+            if (enemy instanceof Endboss) {
+            if (!this.character.isHurt()) {
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
+            }
+            } else {
+            const stompHit =
+                this.character.speedY < 0 &&
+                (this.character.y + this.character.height - 20) < (enemy.y + 20);
+            if (!stompHit && !this.character.isHurt()) {
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
+            }
             }
         });
     }
+    /**
+     * Checks for collisions between the character and coins.
+     */
     checkCollisionCharacterCoin() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
@@ -133,6 +140,9 @@ class World {
             }
         });
     }
+    /**
+     * Checks for collisions between the character and bottles.
+     */
     checkCollisionCharacterBottle() {
         this.level.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle)) {
@@ -140,33 +150,39 @@ class World {
                 this.level.bottles.splice(index, 1);
                 this.character.bottlesCollected++;
                 this.statusBarBottle.setPercentage(this.character.bottlesCollected * 20);
+                this.sound.playBottlePickup();
             }
         });
     }
-
+    /**
+     * Handles killing chickens when stomped from above.
+     */
     checkChickenKills() {
         this.level.enemies.forEach((enemy) => {
             if (enemy instanceof Endboss) return;
-            const stompHit = this.character.isColliding(enemy) && this.character.speedY < 0;
+            if (enemy.chickenIsDead) return; 
+            const colliding = this.character.isColliding(enemy);
+            const stompHit = colliding && this.character.speedY < 0 && (this.character.y + this.character.height - 20) < (enemy.y + 20);
             if (!stompHit) return;
             if (typeof this.character.jump === 'function') this.character.jump();
             if (typeof enemy.playAnimationChickenDead === 'function') {
                 enemy.playAnimationChickenDead();
             }
-            if (this.soundManager?.playChickenDead) {
-                this.soundManager.playChickenDead();
-            } else if (this.sound?.playChickenDead) {
+            if (this.sound?.playChickenDead) {
                 this.sound.playChickenDead();
+            } else if (this.soundManager?.playChickenDead) {
+                this.soundManager.playChickenDead();
             }
             enemy.chickenIsDead = true;
             setTimeout(() => {
-            const idx = this.level.enemies.indexOf(enemy);
-            if (idx > -1) this.level.enemies.splice(idx, 1);
-            }, 200);
+                const idx = this.level.enemies.indexOf(enemy);
+                if (idx > -1) this.level.enemies.splice(idx, 1);
+            }, 500);
         });
     }
-
-
+    /**
+     * Activates the Endboss when the character comes close.
+     */
     checkEndbossActivation() {
         this.level.enemies.forEach(enemy => {
             if (enemy instanceof Endboss) {
@@ -179,7 +195,9 @@ class World {
             }
         });
     }
-
+    /**
+     * Checks if thrown bottles hit the Endboss.
+     */
     checkBottleHitsEndboss() {
         this.throwableObjects.forEach((bottle) => {
             this.level.enemies.forEach((enemy) => {
@@ -192,19 +210,23 @@ class World {
             });
         });
     }
+    /**
+     * Checks if the Endboss has been defeated.
+     */
     checkEndbossDead() {
         this.level.enemies.forEach((enemy) => {
             if (enemy instanceof Endboss && enemy.isDeadEndBoss()) {
                 console.log("Endboss besiegt!");
                 this.gameOver = true;
-
-                // Spielende anzeigen
                 setTimeout(() => {
                     this.showWinScreen();
                 }, 1500);
             }
         });
     }
+    /**
+     * Displays the "YOU WIN" screen overlay.
+     */
     showWinScreen() {
         let winScreen = document.createElement("div");
         winScreen.innerHTML = "🏆 YOU WIN!";

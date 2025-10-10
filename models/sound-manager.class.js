@@ -4,7 +4,10 @@ class SoundManager {
     jumpSound = new Audio('audio/jump.mp3');
     throwSound = new Audio('audio/throw.mp3');
     walkingSound = new Audio('audio/running.mp3');
+    endbossAlertSound = new Audio('audio/endboss_alert.mp3');
+    endbossAttackSound = new Audio('audio/endboss_attack.mp3');
     gameOverSound = new Audio('audio/gameover.mp3');
+    gameWinSound = new Audio('audio/gamewin.mp3');
     chickenDeadSound = new Audio('audio/chicken.mp3');
     coinSound = new Audio('audio/coin.wav');
     bottlePickupSound = new Audio('audio/bottle.mp3');
@@ -16,7 +19,10 @@ class SoundManager {
         this.jumpSound.volume = 0.07;
         this.hurtSound.volume = 0.5;
         this.throwSound.volume = 0.5;
+        this.endbossAlertSound.volume = 0.6;
+        this.endbossAttackSound.volume = 0.6;
         this.gameOverSound.volume = 0.5;
+        this.gameWinSound.volume = 0.5;
         this.coinSound.volume = 0.5;
         this.chickenDeadSound.volume = 0.5;
         this.bottlePickupSound.volume = 0.5;
@@ -56,6 +62,24 @@ class SoundManager {
         if (!isMuted) {
             this.gameOverSound.currentTime = 0;
             this.gameOverSound.play();
+        }
+    }
+    playGameWin() {
+        if (!isMuted) {
+            this.gameWinSound.currentTime = 0;
+            this.gameWinSound.play();
+        }
+    }
+    playEndbossAlert() {
+        if (!isMuted) {
+            this.endbossAlertSound.currentTime = 0;
+            this.endbossAlertSound.play();
+        }
+    }
+    playEndbossAttack() {
+        if (!isMuted) {
+            this.endbossAttackSound.currentTime = 0;
+            this.endbossAttackSound.play();
         }
     }
     playCoinSound() {

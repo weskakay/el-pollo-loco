@@ -49,7 +49,6 @@ function init() {
     world = new World(canvas, keyboard);
     world.sound.playBackground();
     updateMusicButton();
-    console.log('My Character is', world.character);
 }
 /**
  * Toggles background music on or off.

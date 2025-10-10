@@ -144,3 +144,34 @@ button:hover {
 .help-screen li {
     margin-bottom: 6px;
 }
+
+.overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    max-width: 640px;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 48px;
+    color: #fff;
+    background-color: rgba(0,0,0,0.8);
+    padding: 40px;
+    border-radius: 20px;
+    z-index: 9999;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    pointer-events: none;
+}
+
+.overlay-title {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.overlay-subtitle {
+    font-size: 18px;
+    opacity: 0.85;
+}

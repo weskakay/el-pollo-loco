@@ -33,6 +33,7 @@ class World {
      * @type {number}
      */
     camera_x = 0;
+    gameOver = false;
     /**
      * The health status bar UI element.
      * @type {StatusBar}
@@ -73,6 +74,7 @@ class World {
      */
     run() {
         setInterval(() => {
+            if (this.gameOver) return;
             this.checkChickenKills();
             this.checkCollisions();
             this.checkThrowObjects();
@@ -81,6 +83,7 @@ class World {
             this.checkEndbossActivation();
             this.checkBottleHitsEndboss();
             this.checkEndbossDead();
+            this.checkCharacterDead();
         }, 1000 / 60);
     }
     /**
@@ -129,7 +132,6 @@ class World {
     checkCollisionCharacterCoin() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
-                console.log("Coin eingesammelt!");
                 this.level.coins.splice(index, 1);
                 this.character.coinsCollected++;
                 this.statusBarCoin.setPercentage(this.character.coinsCollected * 20);
@@ -146,7 +148,6 @@ class World {
     checkCollisionCharacterBottle() {
         this.level.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle)) {
-                console.log("Bottle eingesammelt!");
                 this.level.bottles.splice(index, 1);
                 this.character.bottlesCollected++;
                 this.statusBarBottle.setPercentage(this.character.bottlesCollected * 20);
@@ -186,15 +187,21 @@ class World {
     checkEndbossActivation() {
         this.level.enemies.forEach(enemy => {
             if (enemy instanceof Endboss) {
-                let distance = Math.abs(this.character.x - enemy.x);
-                if (distance < 400 && !enemy.hadFirstContact) {
-                    console.log("Endboss activated!");
+                const distance = Math.abs(this.character.x - enemy.x);
+                if (distance < 600 && !enemy.hadFirstContact) {
                     enemy.hadFirstContact = true;
+                    if (this.soundManager && !enemy._alertPlayedOnce) {
+                        this.soundManager.playEndbossAlert();
+                        enemy._alertPlayedOnce = true;
+                    }
+                    enemy.i = 5;
                     enemy.endBossAnimation();
+                    this.soundManager.playEndbossAttack();
                 }
             }
         });
     }
+
     /**
      * Checks if thrown bottles hit the Endboss.
      */
@@ -202,7 +209,6 @@ class World {
         this.throwableObjects.forEach((bottle) => {
             this.level.enemies.forEach((enemy) => {
                 if (enemy instanceof Endboss && bottle.isColliding(enemy)) {
-                    console.log("Bottle hits Endboss!");
                     enemy.hitEndBoss(); 
                     this.statusBarBoss.setPercentage(enemy.energyEndBoss);
                     this.throwableObjects.splice(this.throwableObjects.indexOf(bottle), 1);
@@ -216,7 +222,6 @@ class World {
     checkEndbossDead() {
         this.level.enemies.forEach((enemy) => {
             if (enemy instanceof Endboss && enemy.isDeadEndBoss()) {
-                console.log("Endboss besiegt!");
                 this.gameOver = true;
                 setTimeout(() => {
                     this.showWinScreen();
@@ -224,24 +229,62 @@ class World {
             }
         });
     }
+        /**
+     * Prüft, ob der Charakter gestorben ist und zeigt Lose-Screen.
+     */
+    checkCharacterDead() {
+        if (this.character?.energy !== undefined && this.character.energy <= 0 && !this.gameOver) {
+            this.showLoseScreen();
+        }
+    }
+
     /**
-     * Displays the "YOU WIN" screen overlay.
+     * Creates a unified overlay for win or lose screens.
+     * @param {string} title - The main title text (e.g., "YOU WIN" or "YOU LOSE").
+     * @param {string} subtitle - The subtitle text (e.g., "Try again" or empty).
+     * @param {string} color - Background color in RGBA format.
+     * @param {string} [icon=""] - Optional emoji or icon prefix (e.g., 🏆).
+     */
+    createGameOverlay(title, subtitle, color, icon = "") {
+        const overlay = document.createElement("div");
+        overlay.classList.add("overlay");
+        if (color) overlay.style.backgroundColor = color;
+        
+        overlay.innerHTML = `
+            <div class="overlay-title">${icon ? icon + " " : ""}${title}</div>
+            <div class="overlay-subtitle">${subtitle}</div>
+        `;
+        
+        document.body.appendChild(overlay);
+    }
+    /**
+     * Displays the "YOU WIN" overlay and plays the win sound.
      */
     showWinScreen() {
-        let winScreen = document.createElement("div");
-        winScreen.innerHTML = "🏆 YOU WIN!";
-        winScreen.style.position = "absolute";
-        winScreen.style.top = "40%";
-        winScreen.style.left = "50%";
-        winScreen.style.transform = "translate(-50%, -50%)";
-        winScreen.style.fontSize = "48px";
-        winScreen.style.color = "#fff";
-        winScreen.style.backgroundColor = "rgba(0,0,0,0.7)";
-        winScreen.style.padding = "40px";
-        winScreen.style.borderRadius = "20px";
-        winScreen.style.zIndex = "9999";
-        document.body.appendChild(winScreen);
+        this.gameOver = true;
+        if (this.soundManager) {
+            if (this.soundManager.backgroundMusic) {
+                this.soundManager.backgroundMusic.pause();
+            }
+            this.soundManager.playGameWin();
+        }
+        this.createGameOverlay("YOU WIN!", "", "rgba(0,0,0,0.8)", "🏆");
     }
+    /**
+     * Displays the "YOU LOSE" overlay and plays the lose sound.
+     */
+    showLoseScreen() {
+        this.gameOver = true;
+
+        if (this.soundManager) {
+            if (this.soundManager.backgroundMusic) {
+                this.soundManager.backgroundMusic.pause();
+            }
+            this.soundManager.playGameOver();
+        }
+        this.createGameOverlay("YOU LOSE", "Try again", "rgba(0,0,0,0.8)", "❌");
+    }
+
     /**
      * Draws all game objects on the canvas.
      */
@@ -263,9 +306,11 @@ class World {
         this.addObjectsToMap(this.throwableObjects);
         this.ctx.translate(-this.camera_x, 0);
         let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        if (!this.gameOver) {
+            requestAnimationFrame(function () {
+                self.draw();
+            });
+        }
     }
     /**
      * Adds multiple objects to the map.

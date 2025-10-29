@@ -32,31 +32,33 @@
     </head>
 
 <body>
-    <div id="start-screen" class="start-screen">
-        <button onclick="startGame()">START</button>
-    </div>
-
-    <div id="loading-screen" class="loading-screen d-none">
-        <div class="loading-box">
-        LOADING<span class="dots">...</span>
+    <div id="stage">
+        <canvas id="canvas" width="720" height="480" class="hidden-placeholder"></canvas>
+        <div class="ui">
+        <div id="start-screen" class="start-screen">
+            <button onclick="startGame()">START</button>
         </div>
-    </div>
-    
-    <canvas id="canvas" width="720" height="480" class="hidden-placeholder"></canvas>
-    <div class="start-controls">
-        <button id="reset-btn" class="d-none" onclick="resetGame()">🔁 RESET</button>
-        <button id="music-btn"class="d-none"  onclick="toggleMusic()">🎵 MUSIC: ON</button>
-        <button id="help-btn" onclick="toggleHelp()">❔ HELP</button>
-    </div>
-
-    <div id="help-screen" class="help-screen d-none">
-        <p><strong>CONTROL:</strong></p>
-        <ul>
-        <li>➡️ / D – Move right</li>
-        <li>⬅️ / A – Move left</li>
-        <li>J – JUMP</li>
-        <li>T – Throw bottle</li>
-        </ul>
+        <div id="loading-screen" class="loading-screen d-none">
+            <div class="loading-box">
+                LOADING<span class="dots">...</span>
+            </div>
+        </div>
+        <div class="start-controls">
+            <button id="reset-btn" class="d-none" onclick="resetGame()">🔁 RESET</button>
+            <button id="music-btn" class="d-none" onclick="toggleMusic()">🎵 MUSIC: ON</button>
+            <button id="help-btn" onclick="toggleHelp()">❔ HELP</button>
+        </div>
+        <div id="help-screen" class="help-screen d-none">
+            
+                <p><strong>CONTROL:</strong></p>
+                <ul>
+                    <li>➡️ / D – Move right</li>
+                    <li>⬅️ / A – Move left</li>
+                    <li>J – JUMP</li>
+                    <li>T – Throw bottle</li>
+                </ul>
+            
+        </div>
     </div>
 </body>
 </html>

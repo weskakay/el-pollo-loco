@@ -1,0 +1,33 @@
+{
+    "source": {
+        "include": ["js", "models", "levels"],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "opts": {
+        "destination": "./docs",
+        "recurse": true,
+        "template": "./node_modules/docdash",
+        "readme": "./README.md"
+    },
+    "templates": {
+        "default": {
+        "includeDate": false
+        },
+        "docdash": {
+        "static": true,
+        "sort": true,
+        "search": true,
+        "collapse": true,
+        "typedefs": true,
+        "sectionOrder": ["Modules", "Classes", "Namespaces", "Mixins", "Interfaces", "Events"],
+        "meta": {
+            "title": "El Pollo Loco – Documentation"
+        },
+        "openGraph": {
+            "title": "El Pollo Loco Documentation",
+            "type": "website"
+        }
+        }
+    }
+}

@@ -1,35 +1,67 @@
 /**
- * Class representing the player character.
- * Extends MoveableObject and handles animations, movement, and jumping.
+ * @fileoverview Defines the {@link Character} class.
+ * Represents the main player character of the game, controlling
+ * movement, animations, input handling, and interactions such as jumping.
+ * 
+ * The character reacts to keyboard input, switches animation states
+ * (walking, jumping, idle, sleeping, hurt, dead), and updates the
+ * world camera based on movement.
+ *
+ * @extends MoveableObject
+ * @see World
+ * @see Keyboard
+ * @see MoveableObject
+ * 
+ * @author KW
+ * @version 1.0.0
+ */
+
+/**
+ * Class representing the player character (Pepe).
+ * Handles animation sequences, movement logic, gravity, and sound effects.
+ *
+ * @class Character
+ * @extends MoveableObject
  */
 class Character extends MoveableObject {
     /**
-     * Character height.
+     * Character height in pixels.
      * @type {number}
      */
     height = 250;
     /**
-     * Character initial vertical position.
+     * Initial vertical position of the character.
      * @type {number}
      */
     y = 120;
     /**
-     * Horizontal speed.
+     * Horizontal walking speed of the character.
      * @type {number}
      */
     speed = 6;
     /**
-     * Time in milliseconds the character has been standing still.
+     * Tracks how long the character has been standing still (in ms).
      * After 5000ms, the sleeping animation is triggered.
      * @type {number}
      */
     standingTime = 0;
-    coinsCollected = 0;
-    bottlesCollected = 0;
-    bottleThrown = false;
-
     /**
-     * Standing animation image paths.
+     * Total number of coins collected by the player.
+     * @type {number}
+     */
+    coinsCollected = 0;
+    /**
+     * Total number of bottles collected by the player.
+     * @type {number}
+     */
+    bottlesCollected = 0;
+    /**
+     * Indicates whether a bottle has been thrown.
+     * @type {boolean}
+     */
+    bottleThrown = false;
+    /**
+     * Animation frames for idle/standing state.
      * @type {string[]}
      */
     IMAGES_STANDING = [
@@ -43,10 +75,9 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/idle/I-8.png',
         'img/2_character_pepe/1_idle/idle/I-9.png',
         'img/2_character_pepe/1_idle/idle/I-10.png'
-        
     ];
     /**
-     * Sleeping animation image paths.
+     * Animation frames for sleeping state.
      * @type {string[]}
      */
     IMAGES_SLEEPING = [
@@ -62,7 +93,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/long_idle/I-20.png'
     ];
     /**
-     * Walking animation image paths.
+     * Animation frames for walking state.
      * @type {string[]}
      */
     IMAGES_WALKING = [
@@ -74,7 +105,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/2_walk/W-26.png'
     ];
     /**
-     * Jumping animation image paths.
+     * Animation frames for jumping state.
      * @type {string[]}
      */
     IMAGES_JUMPING = [
@@ -89,7 +120,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/3_jump/J-39.png'
     ];
     /**
-     * Dead animation image paths.
+     * Animation frames for the dead state.
      * @type {string[]}
      */
     IMAGES_DEAD = [
@@ -102,7 +133,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/5_dead/D-57.png'
     ];
     /**
-     * Hurt animation image paths.
+     * Animation frames for the hurt state.
      * @type {string[]}
      */
     IMAGES_HURT = [
@@ -111,12 +142,16 @@ class Character extends MoveableObject {
         'img/2_character_pepe/4_hurt/H-43.png'
     ];
     /**
-     * Reference to the game world.
+     * Reference to the active game world instance.
+     * Used to access keyboard input, sound manager, and camera.
      * @type {World}
      */
     world;
     /**
-     * Creates a new Character instance.
+     * Creates a new {@link Character} instance.
+     * Loads all animation images, applies gravity, and starts animation loops.
+     *
+     * @constructor
      */
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -130,7 +165,11 @@ class Character extends MoveableObject {
         this.animate();
     }
     /**
-     * Animates the character: handles movement and animation switching.
+     * Main animation loop for the character.
+     * Handles movement (left/right/jump) and switches animations
+     * depending on player input and current state (dead, hurt, idle, etc.).
+     *
+     * @returns {void}
      */
     animate() {
         setInterval(() => {
@@ -173,7 +212,10 @@ class Character extends MoveableObject {
         }, 100);
     }
     /**
-     * Makes the character jump by applying upward speed.
+     * Makes the character jump by applying upward velocity
+     * and triggering the jump sound effect.
+     *
+     * @returns {void}
      */
     jump() {
         this.speedY = 30;

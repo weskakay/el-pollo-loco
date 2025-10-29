@@ -1,32 +1,55 @@
-# el-pollo-loco
-My jump-and-run game project: El Pollo Loco
+# 🐔 El Pollo Loco
 
-🐔 El Pollo Loco
+**A 2D Jump-and-Run Game built with JavaScript & HTML5 Canvas**
 
-    El Pollo Loco is an engaging 2D jump-and-run game built using JavaScript and HTML5 Canvas, demonstrating object-oriented programming (OOP) concepts. The game features dynamic animations, interactive gameplay, sound effects, and responsive design optimized for desktop and mobile (landscape mode).
+El Pollo Loco is a fun and dynamic browser game demonstrating **object-oriented programming (OOP)** concepts in JavaScript.  
+Guide your character through a colorful desert world — **run, jump, collect coins, throw bottles,** and defeat enemies to face the mighty **Endboss Chicken!**
 
-🎮 Gameplay
+---
 
-    Control your character to jump, run, collect coins, throw bottles, and defeat various enemies to reach the challenging final bos
+## 🎮 Gameplay
 
-🖥️ Technologies Used
+🕹️ **Controls**
+| Action | Key |
+|:--|:--|
+| Move Right | ➡️ / D |
+| Move Left | ⬅️ / A |
+| Jump | J |
+| Throw Bottle | T |
 
-    - HTML5
+💡 *Tip:* Works best in desktop or landscape mobile mode.
 
-    - CSS3
+---
 
-    - JavaScript (ES6)
+## 🧠 Features
 
-    - HTML Canvas API
+✅ Object-oriented architecture  
+✅ Animated character and enemies  
+✅ Collectible coins & bottles  
+✅ Health, bottle & coin status bars  
+✅ Background music & sound effects (toggleable)  
+✅ Responsive layout and canvas scaling  
+✅ Parallax scrolling background  
+✅ Final Boss fight with alert & attack phases  
 
-    - Object-Oriented Programming
+---
 
-📁 Project Structure
+## 🖥️ Technologies Used
+
+- **HTML5 Canvas API**
+- **CSS3**
+- **JavaScript (ES6)**
+- **Object-Oriented Programming (OOP)**
+- **JSDoc** for documentation
+
+---
+
+## 📁 Project Structure
 
     el-pollo-loco/
     ├── index.html
     ├── style.css
-    ├├── js/
+    ├── js/
     │ └── game.js
     ├── levels/
     │ └── level1.js
@@ -40,31 +63,36 @@ My jump-and-run game project: El Pollo Loco
     │ ├── keyboard.class.js
     │ ├── level.class.js
     │ ├── moveable-object.class.js
+    │ ├── sound-manager.class.js
     │ ├── status-bar.class.js
+    │ ├── status-bar-boss.class.js
+    │ ├── status-bar-bottle.class.js
+    │ ├── status-bar-coin.class.js
     │ ├── throwable-object.class.js
     │ └── world.class.js
-    ├── img/
-    │   └── (game images)
-    ├── audio/
-    │   └── (sound effects and music)
-    ├── documents/
-    │   └── El Pollo Loco Checkliste.pdf
+    ├── img/ # Game images
+    ├── audio/ # Sound effects & music
+    ├── documents/ # Checklist & planning files
+    │ └── El Pollo Loco Checkliste.pdf
     └── README.md
 
-✅ Features
 
-    - Animated character and enemies
+---
 
-    - Background music & sound effects (toggleable)
+## 📘 Documentation
 
-    - Collectibles (coins and bottles)
+The complete codebase is documented using **[JSDoc](https://jsdoc.app/)** and the **Docdash** template.
 
-    - Multiple enemy types and a challenging final boss
+To generate the documentation:
 
-    - Status bar for health and items
+```bash
+npm install
+npm run docs
 
-    - Responsive and optimized for mobile landscape mode
+---
 
-👤 Author
+## 👤 Author
 
-    Created by Kay W.
+Created by Kay W.
+
+---

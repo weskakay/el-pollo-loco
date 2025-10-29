@@ -5,18 +5,42 @@
 
 body {
     margin: 0;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
     background-image: url('img/10_background/desert.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 100vh;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     font-family: 'Zabras', Arial, sans-serif;
 }
+
+#stage {
+    position: relative;
+    width: min(92vw, 92vh * (16/9), 1100px);
+    aspect-ratio: 16 / 9;
+    background: #222;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+#stage > #canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: black;
+    border-radius: 20px;
+    box-shadow: none; /* Schatten macht jetzt #stage */
+}
+
+#stage .ui {
+    position: absolute;
+    inset: 0;
+    pointer-events: none; /* Events nur auf Buttons/Screens */
+}
+
 
 .d-none {
     display: none !important;
@@ -48,48 +72,59 @@ button:hover {
     scale: 1.1;
 }
 
-.start-screen {
+#stage .start-screen {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(95vw, 1100px); 
-    aspect-ratio: 16 / 9; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    inset: 0;
+    display: grid;
+    place-items: center;
     z-index: 1000;
     background-image: url('img/9_intro_outro_screens/start/startscreen_1.png');
-    background-size: cover;   
+    background-size: cover;
     background-position: center;
     border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-    overflow: hidden;      
+    overflow: hidden;
+    pointer-events: auto;
 }
 
 
-.start-screen button {
-    font-size: 40px;
-    margin-top: -360px;
-}
-
-.loading-screen {
+#stage .start-screen button {
     position: absolute;
-    width: 100vw;
-    height: 100vh;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+    font-family: 'Zabras', Arial, sans-serif;
+    font-size: clamp(24px, 4vw, 40px);
+    background-color: #ffc400;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: scale 0.2s ease-in-out;
+}
+
+#stage .start-screen button:hover { 
+    scale: 1.1; 
+}
+
+#stage .loading-screen {
+    position: absolute;
+    inset: 0;
     background-color: rgba(0, 0, 0, 0.8);
-    top: 0;
-    left: 0;
     z-index: 2000;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
-    font-size: 36px;
+    font-size: clamp(20px, 3vw, 36px);
+    pointer-events: auto;
 }
 
-.loading-box {
-    text-align: center;
+#stage .loading-box { 
+    text-align: center; 
+}
+#stage .dots::after { 
+    content: ''; 
+    animation: dotty 1.5s infinite steps(3); 
 }
 
 .dots::after {
@@ -104,74 +139,96 @@ button:hover {
     100% { content: '...'; }
 }
 
-.start-controls {
-    margin-top: 20px;
+#stage .start-controls {
+    position: absolute;
+    left: 50%;
+    bottom: 2.5%;
+    transform: translateX(-50%);
     display: flex;
-    gap: 20px;
+    gap: clamp(8px, 1.8vw, 20px);
     justify-content: center;
-    z-index: 1001;
+    z-index: 1500;
+    pointer-events: auto;
 }
 
-.help-screen {
+#stage .start-controls button {
+    font-family: 'Zabras', Arial, sans-serif;
+    background-color: #ffc400;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: clamp(14px, 1.6vw, 18px);
+    transition: scale 0.2s ease-in-out;
+}
+
+#stage .start-controls button:hover { 
+    scale: 1.1; 
+}
+
+#stage .help-screen {
     position: absolute;
-    width: 300px;
-    min-height: 380px;
+    right: 2%;
+    top: 10%; /* deine perfekte Position */
+    width: clamp(200px, 25vw, 300px);
+    min-height: clamp(250px, 30vw, 380px);
     background-image: url('img/10_background/wanted.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    padding: 100px 30px 40px 30px;
+    padding: clamp(80px, 10vw, 130px) clamp(50px, 6vw, 90px) clamp(30px, 5vw, 40px) clamp(50px, 6vw, 90px);
     box-sizing: border-box;
     border-radius: 12px;
     z-index: 2000;
     color: #2b1a0f;
-    font-size: 16px;
+    font-size: clamp(12px, 1.5vw, 16px);
+    line-height: 1.25;
     text-shadow: 1px 1px 1px #fff;
     overflow: auto;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-     padding-top: 130px;   /* nach unten zentriert */
-    padding-left: 90px;   /* nach rechts zentriert */
-    padding-right: 90px;
-    padding-bottom: 40px;
+    pointer-events: auto;
+    text-align: center;
 }
 
-.help-screen ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 10px;
+#stage .help-screen ul { 
+    list-style: none; 
+    padding: 0; 
+    margin-top: 10px; 
 }
 
-.help-screen li {
-    margin-bottom: 6px;
+#stage .help-screen li { 
+    margin-bottom: 6px; 
 }
 
-.overlay {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60%;
-    max-width: 640px;
+#stage .overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
     text-align: center;
     font-family: sans-serif;
-    font-size: 48px;
     color: #fff;
+    pointer-events: none;
+    z-index: 3000;
+}
+
+#stage .overlay > .box {
+    width: 60%;
+    max-width: 640px;
     background-color: rgba(0,0,0,0.8);
     padding: 40px;
     border-radius: 20px;
-    z-index: 9999;
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    pointer-events: none;
 }
 
-.overlay-title {
-    font-size: 56px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+.overlay-title   { 
+    font-size: clamp(28px, 4vw, 56px); 
+    font-weight: 700; 
+    letter-spacing: 2px; 
+    margin-bottom: 10px; 
 }
 
-.overlay-subtitle {
-    font-size: 18px;
-    opacity: 0.85;
+.overlay-subtitle{ 
+    font-size: clamp(14px, 1.8vw, 18px); 
+    opacity: 0.85; 
 }

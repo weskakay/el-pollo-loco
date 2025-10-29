@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>models/world.class.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a><ul class='methods'><li data-type='method'><a href="BackgroundObject.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="BackgroundObject.html#hit">hit</a></li><li data-type='method'><a href="BackgroundObject.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="BackgroundObject.html#isColliding">isColliding</a></li><li data-type='method'><a href="BackgroundObject.html#isDead">isDead</a></li><li data-type='method'><a href="BackgroundObject.html#isHurt">isHurt</a></li><li data-type='method'><a href="BackgroundObject.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="BackgroundObject.html#moveRight">moveRight</a></li><li data-type='method'><a href="BackgroundObject.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Bottle.html">Bottle</a><ul class='methods'><li data-type='method'><a href="Bottle.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Bottle.html#hit">hit</a></li><li data-type='method'><a href="Bottle.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Bottle.html#isColliding">isColliding</a></li><li data-type='method'><a href="Bottle.html#isDead">isDead</a></li><li data-type='method'><a href="Bottle.html#isHurt">isHurt</a></li><li data-type='method'><a href="Bottle.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Bottle.html#moveRight">moveRight</a></li><li data-type='method'><a href="Bottle.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Character.html">Character</a><ul class='methods'><li data-type='method'><a href="Character.html#animate">animate</a></li><li data-type='method'><a href="Character.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Character.html#hit">hit</a></li><li data-type='method'><a href="Character.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Character.html#isColliding">isColliding</a></li><li data-type='method'><a href="Character.html#isDead">isDead</a></li><li data-type='method'><a href="Character.html#isHurt">isHurt</a></li><li data-type='method'><a href="Character.html#jump">jump</a></li><li data-type='method'><a href="Character.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Character.html#moveRight">moveRight</a></li><li data-type='method'><a href="Character.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Chicken.html">Chicken</a><ul class='methods'><li data-type='method'><a href="Chicken.html#animate">animate</a></li><li data-type='method'><a href="Chicken.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Chicken.html#hit">hit</a></li><li data-type='method'><a href="Chicken.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Chicken.html#isColliding">isColliding</a></li><li data-type='method'><a href="Chicken.html#isDead">isDead</a></li><li data-type='method'><a href="Chicken.html#isHurt">isHurt</a></li><li data-type='method'><a href="Chicken.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Chicken.html#moveRight">moveRight</a></li><li data-type='method'><a href="Chicken.html#playAnimation">playAnimation</a></li><li data-type='method'><a href="Chicken.html#playAnimationChickenDead">playAnimationChickenDead</a></li></ul></li><li></li><li><a href="Cloud.html">Cloud</a><ul class='methods'><li data-type='method'><a href="Cloud.html#animate">animate</a></li><li data-type='method'><a href="Cloud.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Cloud.html#hit">hit</a></li><li data-type='method'><a href="Cloud.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Cloud.html#isColliding">isColliding</a></li><li data-type='method'><a href="Cloud.html#isDead">isDead</a></li><li data-type='method'><a href="Cloud.html#isHurt">isHurt</a></li><li data-type='method'><a href="Cloud.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Cloud.html#moveRight">moveRight</a></li><li data-type='method'><a href="Cloud.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Coin.html">Coin</a><ul class='methods'><li data-type='method'><a href="Coin.html#animate">animate</a></li><li data-type='method'><a href="Coin.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Coin.html#hit">hit</a></li><li data-type='method'><a href="Coin.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Coin.html#isColliding">isColliding</a></li><li data-type='method'><a href="Coin.html#isDead">isDead</a></li><li data-type='method'><a href="Coin.html#isHurt">isHurt</a></li><li data-type='method'><a href="Coin.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Coin.html#moveRight">moveRight</a></li><li data-type='method'><a href="Coin.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="DrawableObject.html">DrawableObject</a><ul class='methods'><li data-type='method'><a href="DrawableObject.html#draw">draw</a></li><li data-type='method'><a href="DrawableObject.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="DrawableObject.html#loadImage">loadImage</a></li><li data-type='method'><a href="DrawableObject.html#loadImages">loadImages</a></li></ul></li><li><a href="Endboss.html">Endboss</a><ul class='methods'><li data-type='method'><a href="Endboss.html#animate">animate</a></li><li data-type='method'><a href="Endboss.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Endboss.html#endBossAnimation">endBossAnimation</a></li><li data-type='method'><a href="Endboss.html#hit">hit</a></li><li data-type='method'><a href="Endboss.html#hitEndBoss">hitEndBoss</a></li><li data-type='method'><a href="Endboss.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Endboss.html#isColliding">isColliding</a></li><li data-type='method'><a href="Endboss.html#isDead">isDead</a></li><li data-type='method'><a href="Endboss.html#isDeadEndBoss">isDeadEndBoss</a></li><li data-type='method'><a href="Endboss.html#isHurt">isHurt</a></li><li data-type='method'><a href="Endboss.html#isHurtEndBoss">isHurtEndBoss</a></li><li data-type='method'><a href="Endboss.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Endboss.html#moveRight">moveRight</a></li><li data-type='method'><a href="Endboss.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li></li><li><a href="MoveableObject.html">MoveableObject</a><ul class='methods'><li data-type='method'><a href="MoveableObject.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="MoveableObject.html#draw">draw</a></li><li data-type='method'><a href="MoveableObject.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="MoveableObject.html#hit">hit</a></li><li data-type='method'><a href="MoveableObject.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="MoveableObject.html#isColliding">isColliding</a></li><li data-type='method'><a href="MoveableObject.html#isDead">isDead</a></li><li data-type='method'><a href="MoveableObject.html#isHurt">isHurt</a></li><li data-type='method'><a href="MoveableObject.html#loadImage">loadImage</a></li><li data-type='method'><a href="MoveableObject.html#loadImages">loadImages</a></li><li data-type='method'><a href="MoveableObject.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="MoveableObject.html#moveRight">moveRight</a></li><li data-type='method'><a href="MoveableObject.html#playAnimation">playAnimation</a></li></ul></li><li><a href="SoundManager.html">SoundManager</a><ul class='methods'><li data-type='method'><a href="SoundManager.html#playBackground">playBackground</a></li><li data-type='method'><a href="SoundManager.html#playBottlePickup">playBottlePickup</a></li><li data-type='method'><a href="SoundManager.html#playChickenDead">playChickenDead</a></li><li data-type='method'><a href="SoundManager.html#playCoinSound">playCoinSound</a></li><li data-type='method'><a href="SoundManager.html#playEndbossAlert">playEndbossAlert</a></li><li data-type='method'><a href="SoundManager.html#playEndbossAttack">playEndbossAttack</a></li><li data-type='method'><a href="SoundManager.html#playGameOver">playGameOver</a></li><li data-type='method'><a href="SoundManager.html#playGameWin">playGameWin</a></li><li data-type='method'><a href="SoundManager.html#playHurt">playHurt</a></li><li data-type='method'><a href="SoundManager.html#playJump">playJump</a></li><li data-type='method'><a href="SoundManager.html#playThrow">playThrow</a></li><li data-type='method'><a href="SoundManager.html#playWalking">playWalking</a></li><li data-type='method'><a href="SoundManager.html#stopBackground">stopBackground</a></li></ul></li><li></li><li><a href="StatusBar.html">StatusBar</a><ul class='methods'><li data-type='method'><a href="StatusBar.html#draw">draw</a></li><li data-type='method'><a href="StatusBar.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="StatusBar.html#loadImage">loadImage</a></li><li data-type='method'><a href="StatusBar.html#loadImages">loadImages</a></li><li data-type='method'><a href="StatusBar.html#resolveImageIndex">resolveImageIndex</a></li><li data-type='method'><a href="StatusBar.html#setPercentage">setPercentage</a></li></ul></li><li></li><li><a href="StatusBarBoss.html">StatusBarBoss</a><ul class='methods'><li data-type='method'><a href="StatusBarBoss.html#draw">draw</a></li><li data-type='method'><a href="StatusBarBoss.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="StatusBarBoss.html#loadImage">loadImage</a></li><li data-type='method'><a href="StatusBarBoss.html#loadImages">loadImages</a></li><li data-type='method'><a href="StatusBarBoss.html#resolveImageIndex">resolveImageIndex</a></li><li data-type='method'><a href="StatusBarBoss.html#setPercentage">setPercentage</a></li></ul></li><li></li><li><a href="StatusBarBottle.html">StatusBarBottle</a><ul class='methods'><li data-type='method'><a href="StatusBarBottle.html#draw">draw</a></li><li data-type='method'><a href="StatusBarBottle.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="StatusBarBottle.html#loadImage">loadImage</a></li><li data-type='method'><a href="StatusBarBottle.html#loadImages">loadImages</a></li><li data-type='method'><a href="StatusBarBottle.html#resolveImageIndex">resolveImageIndex</a></li><li data-type='method'><a href="StatusBarBottle.html#setPercentage">setPercentage</a></li></ul></li><li></li><li><a href="StatusBarCoin.html">StatusBarCoin</a><ul class='methods'><li data-type='method'><a href="StatusBarCoin.html#draw">draw</a></li><li data-type='method'><a href="StatusBarCoin.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="StatusBarCoin.html#loadImage">loadImage</a></li><li data-type='method'><a href="StatusBarCoin.html#loadImages">loadImages</a></li><li data-type='method'><a href="StatusBarCoin.html#resolveImageIndex">resolveImageIndex</a></li><li data-type='method'><a href="StatusBarCoin.html#setPercentage">setPercentage</a></li></ul></li><li></li><li><a href="ThrowableObject.html">ThrowableObject</a><ul class='methods'><li data-type='method'><a href="ThrowableObject.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="ThrowableObject.html#draw">draw</a></li><li data-type='method'><a href="ThrowableObject.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="ThrowableObject.html#hit">hit</a></li><li data-type='method'><a href="ThrowableObject.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="ThrowableObject.html#isColliding">isColliding</a></li><li data-type='method'><a href="ThrowableObject.html#isDead">isDead</a></li><li data-type='method'><a href="ThrowableObject.html#isHurt">isHurt</a></li><li data-type='method'><a href="ThrowableObject.html#loadImage">loadImage</a></li><li data-type='method'><a href="ThrowableObject.html#loadImages">loadImages</a></li><li data-type='method'><a href="ThrowableObject.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="ThrowableObject.html#moveRight">moveRight</a></li><li data-type='method'><a href="ThrowableObject.html#playAnimation">playAnimation</a></li><li data-type='method'><a href="ThrowableObject.html#throw">throw</a></li></ul></li><li></li><li><a href="World.html">World</a><ul class='methods'><li data-type='method'><a href="World.html#addObjectsToMap">addObjectsToMap</a></li><li data-type='method'><a href="World.html#addToMap">addToMap</a></li><li data-type='method'><a href="World.html#checkBottleHitsEndboss">checkBottleHitsEndboss</a></li><li data-type='method'><a href="World.html#checkCharacterDead">checkCharacterDead</a></li><li data-type='method'><a href="World.html#checkChickenKills">checkChickenKills</a></li><li data-type='method'><a href="World.html#checkCollisionCharacterBottle">checkCollisionCharacterBottle</a></li><li data-type='method'><a href="World.html#checkCollisionCharacterCoin">checkCollisionCharacterCoin</a></li><li data-type='method'><a href="World.html#checkCollisions">checkCollisions</a></li><li data-type='method'><a href="World.html#checkEndbossActivation">checkEndbossActivation</a></li><li data-type='method'><a href="World.html#checkEndbossDead">checkEndbossDead</a></li><li data-type='method'><a href="World.html#checkThrowObjects">checkThrowObjects</a></li><li data-type='method'><a href="World.html#createGameOverlay">createGameOverlay</a></li><li data-type='method'><a href="World.html#draw">draw</a></li><li data-type='method'><a href="World.html#flipImage">flipImage</a></li><li data-type='method'><a href="World.html#flipImageBack">flipImageBack</a></li><li data-type='method'><a href="World.html#hitBoss">hitBoss</a></li><li data-type='method'><a href="World.html#run">run</a></li><li data-type='method'><a href="World.html#setWorld">setWorld</a></li><li data-type='method'><a href="World.html#showLoseScreen">showLoseScreen</a></li><li data-type='method'><a href="World.html#showWinScreen">showWinScreen</a></li></ul></li><li></li></ul><h3>Global</h3><ul><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isMuted">isMuted</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#throwBottle">throwBottle</a></li><li><a href="global.html#toggleHelp">toggleHelp</a></li><li><a href="global.html#toggleMusic">toggleMusic</a></li><li><a href="global.html#updateMusicButton">updateMusicButton</a></li><li><a href="global.html#world">world</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">models/world.class.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Defines the {@link World} class.
+ * The main game controller responsible for managing and rendering all entities
+ * within the game world, including the player, enemies, collectibles, background,
+ * and HUD elements. Handles collision detection, camera movement, object updates,
+ * and win/lose conditions.
+ *
+ * @see Character
+ * @see Level
+ * @see StatusBar
+ * @see SoundManager
+ * @see Endboss
+ * @see ThrowableObject
+ * 
+ * @author KW
+ * @version 1.0.0
+ */
+
+/**
+ * Class representing the game world.
+ * Acts as the central logic hub, handling rendering, physics,
+ * input, sound, collisions, and game state updates.
+ *
+ * @class World
+ */
+class World {
+    /**
+     * The main player character instance.
+     * @type {Character}
+     */
+    character = new Character();
+    /**
+     * The current level instance.
+     * @type {Level}
+     */
+    level = level1;
+    /**
+     * The canvas element used for rendering.
+     * @type {HTMLCanvasElement}
+     */
+    canvas;
+    /**
+     * The 2D rendering context for the canvas.
+     * @type {CanvasRenderingContext2D}
+     */
+    ctx;
+    /**
+     * The keyboard input handler.
+     * @type {Keyboard}
+     */
+    keyboard;
+    /**
+     * The horizontal camera offset for side-scrolling.
+     * @type {number}
+     */
+    camera_x = 0;
+    /**
+     * Flag indicating if the game is over.
+     * @type {boolean}
+     */
+    gameOver = false;
+    /**
+     * Player’s health status bar.
+     * @type {StatusBar}
+     */
+    statusBar = new StatusBar();
+    /**
+     * Endboss health status bar.
+     * @type {StatusBarBoss}
+     */
+    statusBarBoss = new StatusBarBoss();
+    /**
+     * Player’s bottle status bar.
+     * @type {StatusBarBottle}
+     */
+    statusBarBottle = new StatusBarBottle();
+    /**
+     * Player’s coin status bar.
+     * @type {StatusBarCoin}
+     */
+    statusBarCoin = new StatusBarCoin();
+    /**
+     * Array of throwable objects currently active in the game (e.g., bottles).
+     * @type {ThrowableObject[]}
+     */
+    throwableObjects = [];
+    /**
+     * Handles all in-game audio playback.
+     * @type {SoundManager}
+     */
+    sound = new SoundManager();
+    /**
+     * Creates a new {@link World} instance.
+     *
+     * @constructor
+     * @param {HTMLCanvasElement} canvas - The canvas used for rendering.
+     * @param {Keyboard} keyboard - The keyboard input controller.
+     * @param {SoundManager} [soundManager] - Optional custom sound manager.
+     */
+    constructor(canvas, keyboard, soundManager) {
+        this.ctx = canvas.getContext('2d');
+        this.canvas = canvas;
+        this.keyboard = keyboard;
+        this.soundManager = soundManager || this.sound;
+        this.draw();
+        this.setWorld();
+        this.run();
+    }
+    /**
+     * Links the character instance to the current world context.
+     * Enables the character to access world-level properties and sounds.
+     *
+     * @returns {void}
+     */
+    setWorld() {
+        this.character.world = this;
+    }
+    /**
+     * Starts the main game loop.
+     * Continuously checks for collisions, object interactions,
+     * and updates the game state at 60 FPS.
+     *
+     * @returns {void}
+     */
+    run() {
+        setInterval(() => {
+            if (this.gameOver) return;
+            this.checkChickenKills();
+            this.checkCollisions();
+            this.checkThrowObjects();
+            this.checkCollisionCharacterCoin();
+            this.checkCollisionCharacterBottle();
+            this.checkEndbossActivation();
+            this.checkBottleHitsEndboss();
+            this.checkEndbossDead();
+            this.checkCharacterDead();
+        }, 1000 / 60);
+    }
+    /**
+     * Handles bottle-throwing mechanics if the player presses the throw key
+     * and has bottles available.
+     *
+     * @returns {void}
+     */
+    checkThrowObjects() {
+        if (this.keyboard.THROW &amp;&amp; !this.character.bottleThrown &amp;&amp; this.character.bottlesCollected > 0) {
+            const bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+            this.throwableObjects.push(bottle);
+            this.character.bottleThrown = true;
+            this.character.bottlesCollected--;
+            this.statusBarBottle.setPercentage(this.character.bottlesCollected * 20);
+            setTimeout(() => (this.character.bottleThrown = false), 500);
+        }
+    }
+    /**
+     * Checks for collisions between the player and enemies.
+     * Applies damage or stomp logic depending on collision direction.
+     *
+     * @returns {void}
+     */
+    checkCollisions() {
+        this.level.enemies.forEach((enemy) => {
+            if (!(enemy instanceof Endboss) &amp;&amp; enemy.chickenIsDead) return;
+            if (!this.character.isColliding(enemy)) return;
+            if (enemy instanceof Endboss) {
+                if (!this.character.isHurt()) {
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
+                }
+            } else {
+                const stompHit =
+                    this.character.speedY &lt; 0 &amp;&amp;
+                    (this.character.y + this.character.height - 20) &lt; (enemy.y + 20);
+                if (!stompHit &amp;&amp; !this.character.isHurt()) {
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
+                }
+            }
+        });
+    }
+    /**
+     * Checks for collisions between the player and coins.
+     * Removes collected coins, plays the coin sound, and updates the HUD.
+     *
+     * @returns {void}
+     */
+    checkCollisionCharacterCoin() {
+        this.level.coins.forEach((coin, index) => {
+            if (this.character.isColliding(coin)) {
+                this.level.coins.splice(index, 1);
+                this.character.coinsCollected++;
+                this.statusBarCoin.setPercentage(this.character.coinsCollected * 20);
+                if (this.soundManager) {
+                    this.soundManager.coinSound.currentTime = 0;
+                    this.soundManager.coinSound.play();
+                }
+            }
+        });
+    }
+    /**
+     * Checks for collisions between the player and bottles.
+     * Removes the collected bottle and updates the HUD and sounds.
+     *
+     * @returns {void}
+     */
+    checkCollisionCharacterBottle() {
+        this.level.bottles.forEach((bottle, index) => {
+            if (this.character.isColliding(bottle)) {
+                this.level.bottles.splice(index, 1);
+                this.character.bottlesCollected++;
+                this.statusBarBottle.setPercentage(this.character.bottlesCollected * 20);
+                this.sound.playBottlePickup();
+            }
+        });
+    }
+    /**
+     * Handles killing chickens when stomped from above.
+     * Plays sounds and removes the defeated enemy after a short delay.
+     *
+     * @returns {void}
+     */
+    checkChickenKills() {
+        this.level.enemies.forEach((enemy) => {
+            if (enemy instanceof Endboss || enemy.chickenIsDead) return;
+            const colliding = this.character.isColliding(enemy);
+            const stompHit =
+                colliding &amp;&amp; this.character.speedY &lt; 0 &amp;&amp;
+                (this.character.y + this.character.height - 20) &lt; (enemy.y + 20);
+            if (!stompHit) return;
+            if (typeof this.character.jump === 'function') this.character.jump();
+            if (typeof enemy.playAnimationChickenDead === 'function') enemy.playAnimationChickenDead();
+            (this.sound?.playChickenDead || this.soundManager?.playChickenDead)?.call(this.soundManager);
+            enemy.chickenIsDead = true;
+            setTimeout(() => {
+                const idx = this.level.enemies.indexOf(enemy);
+                if (idx > -1) this.level.enemies.splice(idx, 1);
+            }, 500);
+        });
+    }
+    /**
+     * Activates the Endboss when the player approaches.
+     * Triggers alert and attack animations and plays corresponding sounds.
+     *
+     * @returns {void}
+     */
+    checkEndbossActivation() {
+        this.level.enemies.forEach(enemy => {
+            if (enemy instanceof Endboss) {
+                const distance = Math.abs(this.character.x - enemy.x);
+                if (distance &lt; 600 &amp;&amp; !enemy.hadFirstContact) {
+                    enemy.hadFirstContact = true;
+                    if (this.soundManager &amp;&amp; !enemy._alertPlayedOnce) {
+                        this.soundManager.playEndbossAlert();
+                        enemy._alertPlayedOnce = true;
+                    }
+                    enemy.i = 5;
+                    enemy.endBossAnimation();
+                    this.soundManager.playEndbossAttack();
+                }
+            }
+        });
+    }
+    /**
+     * Checks if thrown bottles hit the Endboss.
+     * Reduces Endboss energy and updates the health bar.
+     *
+     * @returns {void}
+     */
+    checkBottleHitsEndboss() {
+        this.throwableObjects.forEach((bottle) => {
+            this.level.enemies.forEach((enemy) => {
+                if (enemy instanceof Endboss &amp;&amp; bottle.isColliding(enemy)) {
+                    enemy.hitEndBoss();
+                    this.statusBarBoss.setPercentage(enemy.energyEndBoss);
+                    this.throwableObjects.splice(this.throwableObjects.indexOf(bottle), 1);
+                }
+            });
+        });
+    }
+    /**
+     * Checks whether the Endboss has been defeated and triggers the win screen.
+     *
+     * @returns {void}
+     */
+    checkEndbossDead() {
+        this.level.enemies.forEach((enemy) => {
+            if (enemy instanceof Endboss &amp;&amp; enemy.isDeadEndBoss()) {
+                this.gameOver = true;
+                setTimeout(() => this.showWinScreen(), 1500);
+            }
+        });
+    }
+    /**
+     * Checks if the player has died and triggers the lose screen.
+     *
+     * @returns {void}
+     */
+    checkCharacterDead() {
+        if (this.character?.energy &lt;= 0 &amp;&amp; !this.gameOver) {
+            this.showLoseScreen();
+        }
+    }
+    /**
+     * Creates a full-screen overlay (e.g., win or lose screen).
+     *
+     * @param {string} title - The main message title.
+     * @param {string} subtitle - The subtitle message (optional).
+     * @param {string} color - Background color in RGBA format.
+     * @param {string} [icon=""] - Optional emoji or symbol prefix.
+     * @returns {void}
+     */
+    createGameOverlay(title, subtitle, color, icon = "") {
+        const overlay = document.createElement("div");
+        overlay.classList.add("overlay");
+        if (color) overlay.style.backgroundColor = color;
+        overlay.innerHTML = `
+            &lt;div class="overlay-title">${icon ? icon + " " : ""}${title}&lt;/div>
+            &lt;div class="overlay-subtitle">${subtitle}&lt;/div>
+        `;
+        document.body.appendChild(overlay);
+    }
+    /**
+     * Displays the "YOU WIN" screen and plays the victory sound.
+     *
+     * @returns {void}
+     */
+    showWinScreen() {
+        this.gameOver = true;
+        if (this.soundManager) {
+            this.soundManager.backgroundMusic?.pause();
+            this.soundManager.playGameWin();
+        }
+        this.createGameOverlay("YOU WIN!", "", "rgba(0,0,0,0.8)", "🏆");
+    }
+    /**
+     * Displays the "YOU LOSE" screen and plays the game-over sound.
+     *
+     * @returns {void}
+     */
+    showLoseScreen() {
+        this.gameOver = true;
+        if (this.soundManager) {
+            this.soundManager.backgroundMusic?.pause();
+            this.soundManager.playGameOver();
+        }
+        this.createGameOverlay("YOU LOSE", "Try again", "rgba(0,0,0,0.8)", "❌");
+    }
+    /**
+     * Draws all visible game objects on the canvas.
+     * Handles camera offset and HUD rendering order.
+     *
+     * @returns {void}
+     */
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.translate(this.camera_x, 0);
+        this.addObjectsToMap(this.level.backgroundObjects);
+        this.ctx.translate(-this.camera_x, 0);
+        this.addToMap(this.statusBar);
+        this.addToMap(this.statusBarBoss);
+        this.addToMap(this.statusBarBottle);
+        this.addToMap(this.statusBarCoin);
+        this.ctx.translate(this.camera_x, 0);
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.throwableObjects);
+        this.ctx.translate(-this.camera_x, 0);
+        if (!this.gameOver) {
+            requestAnimationFrame(() => this.draw());
+        }
+    }
+    /**
+     * Draws an array of drawable objects to the map.
+     *
+     * @param {DrawableObject[]} objects - The objects to draw.
+     * @returns {void}
+     */
+    addObjectsToMap(objects) {
+        objects.forEach((o) => this.addToMap(o));
+    }
+    /**
+     * Draws a single object with respect to its mirroring direction.
+     *
+     * @param {DrawableObject} mo - The drawable object.
+     * @returns {void}
+     */
+    addToMap(mo) {
+        if (mo.otherDirection) this.flipImage(mo);
+        mo.draw(this.ctx);
+        if (mo.otherDirection) this.flipImageBack(mo);
+    }
+    /**
+     * Flips an object horizontally for rendering in the opposite direction.
+     *
+     * @param {DrawableObject} mo - The drawable object.
+     * @returns {void}
+     */
+    flipImage(mo) {
+        this.ctx.save();
+        this.ctx.translate(mo.width, 0);
+        this.ctx.scale(-1, 1);
+        mo.x = mo.x * -1;
+    }
+    /**
+     * Restores the original rendering orientation after flipping.
+     *
+     * @param {DrawableObject} mo - The drawable object.
+     * @returns {void}
+     */
+    flipImageBack(mo) {
+        mo.x = mo.x * -1;
+        this.ctx.restore();
+    }
+    /**
+     * Reduces the Endboss’s health and updates the boss status bar.
+     * (Legacy helper method, not actively used in main loop.)
+     *
+     * @returns {void}
+     */
+    hitBoss() {
+        this.endboss.energy -= 20;
+        this.statusBarBoss.setPercentage(this.endboss.energy);
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

@@ -1,51 +1,96 @@
 /**
- * Instance of the first level.
- * Contains enemies, clouds, and background objects.
+ * @fileoverview Defines the first playable level of the game.
+ * Contains all entities such as enemies, clouds, background layers,
+ * bottles, and coins that appear within Level 1.
+ *
+ * The level is constructed by instantiating the {@link Level} class
+ * with five arrays of game objects representing:
+ *   1) Enemies (e.g., Chickens, Endboss)
+ *   2) Clouds (decorative background elements)
+ *   3) Background layers (air and parallax tiles)
+ *   4) Bottles (collectible ammunition)
+ *   5) Coins (collectible items)
+ *
+ * @author KW
+ * @version 1.0.0
+ */
+
+/**
+ * Level 1 – Main instance of the first stage of the game world.
+ *
+ * This instance defines:
+ * - Three standard chickens and one endboss as enemies.
+ * - Four cloud decorations.
+ * - A looping parallax background using layered 719px tiles.
+ * - Two collectible bottles and two collectible coins.
+ *
+ * @constant
  * @type {Level}
  */
 const level1 = new Level(
-    [
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Endboss()
-    ],
-    [
-        new Cloud,
-        new Cloud,
-        new Cloud,
-        new Cloud
-    ],
-    [
-        new BackgroundObject('img/5_background/layers/air.png', -719),
-        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', -719),
-        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', -719),
-        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', -719),
+  /** @type {(Chicken | Endboss)[]} */
+  ([
+    new Chicken(),
+    new Chicken(),
+    new Chicken(),
+    new Endboss()
+  ]),
 
-        new BackgroundObject('img/5_background/layers/air.png', 0),
-        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
-        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
-        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0), 
-        new BackgroundObject('img/5_background/layers/air.png', 719),
-        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719),
-        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719),
-        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719),
+  /** @type {Cloud[]} */
+  ([
+    new Cloud(),
+    new Cloud(),
+    new Cloud(),
+    new Cloud()
+  ]),
 
-        new BackgroundObject('img/5_background/layers/air.png', 719 * 2),
-        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 719 * 2),
-        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 719 * 2),
-        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 719 * 2),
-        new BackgroundObject('img/5_background/layers/air.png', 719 * 3),
-        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719 * 3),
-        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719 * 3),
-        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719 * 3)
-    ],
-    [
-        new Bottle,
-        new Bottle
-    ],
-    [
-        new Coin,
-        new Coin
-    ]
+  /**
+   * Background layers that create the parallax scrolling effect.
+   * Each group of four images (air, third, second, first layer)
+   * forms one full segment of width 719px.
+   * @type {BackgroundObject[]}
+   */
+  ([
+    new BackgroundObject('img/5_background/layers/air.png', -719),
+    new BackgroundObject('img/5_background/layers/3_third_layer/2.png', -719),
+    new BackgroundObject('img/5_background/layers/2_second_layer/2.png', -719),
+    new BackgroundObject('img/5_background/layers/1_first_layer/2.png', -719),
+
+    new BackgroundObject('img/5_background/layers/air.png', 0),
+    new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
+    new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
+    new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0),
+
+    new BackgroundObject('img/5_background/layers/air.png', 719),
+    new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719),
+    new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719),
+    new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719),
+
+    new BackgroundObject('img/5_background/layers/air.png', 719 * 2),
+    new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 719 * 2),
+    new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 719 * 2),
+    new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 719 * 2),
+
+    new BackgroundObject('img/5_background/layers/air.png', 719 * 3),
+    new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719 * 3),
+    new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719 * 3),
+    new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719 * 3)
+  ]),
+
+  /** @type {Bottle[]} */
+  ([
+    new Bottle(),
+    new Bottle(),
+    new Bottle(),
+    new Bottle(),
+    new Bottle()
+  ]),
+
+  /** @type {Coin[]} */
+  ([
+    new Coin(),
+    new Coin(),
+    new Coin(),
+    new Coin()
+  ])
 );

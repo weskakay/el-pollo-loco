@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>models/endboss.class.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a><ul class='methods'><li data-type='method'><a href="BackgroundObject.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="BackgroundObject.html#hit">hit</a></li><li data-type='method'><a href="BackgroundObject.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="BackgroundObject.html#isColliding">isColliding</a></li><li data-type='method'><a href="BackgroundObject.html#isDead">isDead</a></li><li data-type='method'><a href="BackgroundObject.html#isHurt">isHurt</a></li><li data-type='method'><a href="BackgroundObject.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="BackgroundObject.html#moveRight">moveRight</a></li><li data-type='method'><a href="BackgroundObject.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Bottle.html">Bottle</a><ul class='methods'><li data-type='method'><a href="Bottle.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Bottle.html#hit">hit</a></li><li data-type='method'><a href="Bottle.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Bottle.html#isColliding">isColliding</a></li><li data-type='method'><a href="Bottle.html#isDead">isDead</a></li><li data-type='method'><a href="Bottle.html#isHurt">isHurt</a></li><li data-type='method'><a href="Bottle.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Bottle.html#moveRight">moveRight</a></li><li data-type='method'><a href="Bottle.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Character.html">Character</a><ul class='methods'><li data-type='method'><a href="Character.html#animate">animate</a></li><li data-type='method'><a href="Character.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Character.html#hit">hit</a></li><li data-type='method'><a href="Character.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Character.html#isColliding">isColliding</a></li><li data-type='method'><a href="Character.html#isDead">isDead</a></li><li data-type='method'><a href="Character.html#isHurt">isHurt</a></li><li data-type='method'><a href="Character.html#jump">jump</a></li><li data-type='method'><a href="Character.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Character.html#moveRight">moveRight</a></li><li data-type='method'><a href="Character.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Chicken.html">Chicken</a><ul class='methods'><li data-type='method'><a href="Chicken.html#animate">animate</a></li><li data-type='method'><a href="Chicken.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Chicken.html#hit">hit</a></li><li data-type='method'><a href="Chicken.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Chicken.html#isColliding">isColliding</a></li><li data-type='method'><a href="Chicken.html#isDead">isDead</a></li><li data-type='method'><a href="Chicken.html#isHurt">isHurt</a></li><li data-type='method'><a href="Chicken.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Chicken.html#moveRight">moveRight</a></li><li data-type='method'><a href="Chicken.html#playAnimation">playAnimation</a></li><li data-type='method'><a href="Chicken.html#playAnimationChickenDead">playAnimationChickenDead</a></li></ul></li><li></li><li><a href="Cloud.html">Cloud</a><ul class='methods'><li data-type='method'><a href="Cloud.html#animate">animate</a></li><li data-type='method'><a href="Cloud.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Cloud.html#hit">hit</a></li><li data-type='method'><a href="Cloud.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Cloud.html#isColliding">isColliding</a></li><li data-type='method'><a href="Cloud.html#isDead">isDead</a></li><li data-type='method'><a href="Cloud.html#isHurt">isHurt</a></li><li data-type='method'><a href="Cloud.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Cloud.html#moveRight">moveRight</a></li><li data-type='method'><a href="Cloud.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Coin.html">Coin</a><ul class='methods'><li data-type='method'><a href="Coin.html#animate">animate</a></li><li data-type='method'><a href="Coin.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Coin.html#hit">hit</a></li><li data-type='method'><a href="Coin.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Coin.html#isColliding">isColliding</a></li><li data-type='method'><a href="Coin.html#isDead">isDead</a></li><li data-type='method'><a href="Coin.html#isHurt">isHurt</a></li><li data-type='method'><a href="Coin.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Coin.html#moveRight">moveRight</a></li><li data-type='method'><a href="Coin.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="DrawableObject.html">DrawableObject</a><ul class='methods'><li data-type='method'><a href="DrawableObject.html#draw">draw</a></li><li data-type='method'><a href="DrawableObject.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="DrawableObject.html#loadImage">loadImage</a></li><li data-type='method'><a href="DrawableObject.html#loadImages">loadImages</a></li></ul></li><li><a href="Endboss.html">Endboss</a><ul class='methods'><li data-type='method'><a href="Endboss.html#animate">animate</a></li><li data-type='method'><a href="Endboss.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="Endboss.html#endBossAnimation">endBossAnimation</a></li><li data-type='method'><a href="Endboss.html#hit">hit</a></li><li data-type='method'><a href="Endboss.html#hitEndBoss">hitEndBoss</a></li><li data-type='method'><a href="Endboss.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="Endboss.html#isColliding">isColliding</a></li><li data-type='method'><a href="Endboss.html#isDead">isDead</a></li><li data-type='method'><a href="Endboss.html#isDeadEndBoss">isDeadEndBoss</a></li><li data-type='method'><a href="Endboss.html#isHurt">isHurt</a></li><li data-type='method'><a href="Endboss.html#isHurtEndBoss">isHurtEndBoss</a></li><li data-type='method'><a href="Endboss.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="Endboss.html#moveRight">moveRight</a></li><li data-type='method'><a href="Endboss.html#playAnimation">playAnimation</a></li></ul></li><li></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li></li><li><a href="MoveableObject.html">MoveableObject</a><ul class='methods'><li data-type='method'><a href="MoveableObject.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="MoveableObject.html#draw">draw</a></li><li data-type='method'><a href="MoveableObject.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="MoveableObject.html#hit">hit</a></li><li data-type='method'><a href="MoveableObject.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="MoveableObject.html#isColliding">isColliding</a></li><li data-type='method'><a href="MoveableObject.html#isDead">isDead</a></li><li data-type='method'><a href="MoveableObject.html#isHurt">isHurt</a></li><li data-type='method'><a href="MoveableObject.html#loadImage">loadImage</a></li><li data-type='method'><a href="MoveableObject.html#loadImages">loadImages</a></li><li data-type='method'><a href="MoveableObject.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="MoveableObject.html#moveRight">moveRight</a></li><li data-type='method'><a href="MoveableObject.html#playAnimation">playAnimation</a></li></ul></li><li><a href="SoundManager.html">SoundManager</a><ul class='methods'><li data-type='method'><a href="SoundManager.html#playBackground">playBackground</a></li><li data-type='method'><a href="SoundManager.html#playBottlePickup">playBottlePickup</a></li><li data-type='method'><a href="SoundManager.html#playChickenDead">playChickenDead</a></li><li data-type='method'><a href="SoundManager.html#playCoinSound">playCoinSound</a></li><li data-type='method'><a href="SoundManager.html#playEndbossAlert">playEndbossAlert</a></li><li data-type='method'><a href="SoundManager.html#playEndbossAttack">playEndbossAttack</a></li><li data-type='method'><a href="SoundManager.html#playGameOver">playGameOver</a></li><li data-type='method'><a href="SoundManager.html#playGameWin">playGameWin</a></li><li data-type='method'><a href="SoundManager.html#playHurt">playHurt</a></li><li data-type='method'><a href="SoundManager.html#playJump">playJump</a></li><li data-type='method'><a href="SoundManager.html#playThrow">playThrow</a></li><li data-type='method'><a href="SoundManager.html#playWalking">playWalking</a></li><li data-type='method'><a href="SoundManager.html#stopBackground">stopBackground</a></li></ul></li><li></li><li><a href="StatusBar.html">StatusBar</a><ul class='methods'><li data-type='method'><a href="StatusBar.html#draw">draw</a></li><li data-type='method'><a href="StatusBar.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="StatusBar.html#loadImage">loadImage</a></li><li data-type='method'><a href="StatusBar.html#loadImages">loadImages</a></li><li data-type='method'><a href="StatusBar.html#resolveImageIndex">resolveImageIndex</a></li><li data-type='method'><a href="StatusBar.html#setPercentage">setPercentage</a></li></ul></li><li></li><li><a href="StatusBarBoss.html">StatusBarBoss</a><ul class='methods'><li data-type='method'><a href="StatusBarBoss.html#draw">draw</a></li><li data-type='method'><a href="StatusBarBoss.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="StatusBarBoss.html#loadImage">loadImage</a></li><li data-type='method'><a href="StatusBarBoss.html#loadImages">loadImages</a></li><li data-type='method'><a href="StatusBarBoss.html#resolveImageIndex">resolveImageIndex</a></li><li data-type='method'><a href="StatusBarBoss.html#setPercentage">setPercentage</a></li></ul></li><li></li><li><a href="StatusBarBottle.html">StatusBarBottle</a><ul class='methods'><li data-type='method'><a href="StatusBarBottle.html#draw">draw</a></li><li data-type='method'><a href="StatusBarBottle.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="StatusBarBottle.html#loadImage">loadImage</a></li><li data-type='method'><a href="StatusBarBottle.html#loadImages">loadImages</a></li><li data-type='method'><a href="StatusBarBottle.html#resolveImageIndex">resolveImageIndex</a></li><li data-type='method'><a href="StatusBarBottle.html#setPercentage">setPercentage</a></li></ul></li><li></li><li><a href="StatusBarCoin.html">StatusBarCoin</a><ul class='methods'><li data-type='method'><a href="StatusBarCoin.html#draw">draw</a></li><li data-type='method'><a href="StatusBarCoin.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="StatusBarCoin.html#loadImage">loadImage</a></li><li data-type='method'><a href="StatusBarCoin.html#loadImages">loadImages</a></li><li data-type='method'><a href="StatusBarCoin.html#resolveImageIndex">resolveImageIndex</a></li><li data-type='method'><a href="StatusBarCoin.html#setPercentage">setPercentage</a></li></ul></li><li></li><li><a href="ThrowableObject.html">ThrowableObject</a><ul class='methods'><li data-type='method'><a href="ThrowableObject.html#applyGravity">applyGravity</a></li><li data-type='method'><a href="ThrowableObject.html#draw">draw</a></li><li data-type='method'><a href="ThrowableObject.html#drawFrame">drawFrame</a></li><li data-type='method'><a href="ThrowableObject.html#hit">hit</a></li><li data-type='method'><a href="ThrowableObject.html#isAboveGround">isAboveGround</a></li><li data-type='method'><a href="ThrowableObject.html#isColliding">isColliding</a></li><li data-type='method'><a href="ThrowableObject.html#isDead">isDead</a></li><li data-type='method'><a href="ThrowableObject.html#isHurt">isHurt</a></li><li data-type='method'><a href="ThrowableObject.html#loadImage">loadImage</a></li><li data-type='method'><a href="ThrowableObject.html#loadImages">loadImages</a></li><li data-type='method'><a href="ThrowableObject.html#moveLeft">moveLeft</a></li><li data-type='method'><a href="ThrowableObject.html#moveRight">moveRight</a></li><li data-type='method'><a href="ThrowableObject.html#playAnimation">playAnimation</a></li><li data-type='method'><a href="ThrowableObject.html#throw">throw</a></li></ul></li><li></li><li><a href="World.html">World</a><ul class='methods'><li data-type='method'><a href="World.html#addObjectsToMap">addObjectsToMap</a></li><li data-type='method'><a href="World.html#addToMap">addToMap</a></li><li data-type='method'><a href="World.html#checkBottleHitsEndboss">checkBottleHitsEndboss</a></li><li data-type='method'><a href="World.html#checkCharacterDead">checkCharacterDead</a></li><li data-type='method'><a href="World.html#checkChickenKills">checkChickenKills</a></li><li data-type='method'><a href="World.html#checkCollisionCharacterBottle">checkCollisionCharacterBottle</a></li><li data-type='method'><a href="World.html#checkCollisionCharacterCoin">checkCollisionCharacterCoin</a></li><li data-type='method'><a href="World.html#checkCollisions">checkCollisions</a></li><li data-type='method'><a href="World.html#checkEndbossActivation">checkEndbossActivation</a></li><li data-type='method'><a href="World.html#checkEndbossDead">checkEndbossDead</a></li><li data-type='method'><a href="World.html#checkThrowObjects">checkThrowObjects</a></li><li data-type='method'><a href="World.html#createGameOverlay">createGameOverlay</a></li><li data-type='method'><a href="World.html#draw">draw</a></li><li data-type='method'><a href="World.html#flipImage">flipImage</a></li><li data-type='method'><a href="World.html#flipImageBack">flipImageBack</a></li><li data-type='method'><a href="World.html#hitBoss">hitBoss</a></li><li data-type='method'><a href="World.html#run">run</a></li><li data-type='method'><a href="World.html#setWorld">setWorld</a></li><li data-type='method'><a href="World.html#showLoseScreen">showLoseScreen</a></li><li data-type='method'><a href="World.html#showWinScreen">showWinScreen</a></li></ul></li><li></li></ul><h3>Global</h3><ul><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isMuted">isMuted</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#throwBottle">throwBottle</a></li><li><a href="global.html#toggleHelp">toggleHelp</a></li><li><a href="global.html#toggleMusic">toggleMusic</a></li><li><a href="global.html#updateMusicButton">updateMusicButton</a></li><li><a href="global.html#world">world</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">models/endboss.class.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Defines the {@link Endboss} class.
+ * Represents the final boss enemy in the game world.
+ * The Endboss has multiple animation states (walking, alert, attack, hurt, dead)
+ * and reacts to player interactions such as being hit by bottles.
+ *
+ * @extends MoveableObject
+ * @see MoveableObject
+ * @see World
+ * 
+ * @author KW
+ * @version 1.0.0
+ */
+
+/**
+ * Class representing the final boss enemy.
+ * Extends {@link MoveableObject} and manages multiple animation states,
+ * including walking, alert, attack, hurt, and death. The Endboss also
+ * maintains its own health (`energyEndBoss`) and contact status.
+ *
+ * @class Endboss
+ * @extends MoveableObject
+ */
+class Endboss extends MoveableObject {
+    /**
+     * The height of the Endboss sprite in pixels.
+     * @type {number}
+     */
+    height = 400;
+    /**
+     * The width of the Endboss sprite in pixels.
+     * @type {number}
+     */
+    width = 250;
+    /**
+     * The vertical position (Y-axis) of the Endboss on the canvas.
+     * @type {number}
+     */
+    y = 55;
+    /**
+     * Indicates whether the Endboss has already had its first contact
+     * with the player character (starts attack phase).
+     * @type {boolean}
+     */
+    hadFirstContact = false;
+    /**
+     * Current health (energy) of the Endboss, ranging from 0 to 100.
+     * @type {number}
+     */
+    energyEndBoss = 100;
+    /**
+     * Timestamp of the last hit received by the Endboss (in ms).
+     * Used to calculate recent hit detection.
+     * @type {number}
+     */
+    lastHitEndBoss = 0;
+    /**
+     * Internal counter used for alert animation sequence control.
+     * @type {number}
+     */
+    i = 0;
+    /**
+     * Image paths for the walking animation sequence.
+     * @type {string[]}
+     */
+    IMAGES_WALKING = [
+        'img/4_enemie_boss_chicken/1_walk/G1.png',
+        'img/4_enemie_boss_chicken/1_walk/G2.png',
+        'img/4_enemie_boss_chicken/1_walk/G3.png',
+        'img/4_enemie_boss_chicken/1_walk/G4.png'
+    ];
+    /**
+     * Image paths for the alert animation sequence.
+     * @type {string[]}
+     */
+    IMAGES_ALERT = [
+        'img/4_enemie_boss_chicken/2_alert/G5.png',
+        'img/4_enemie_boss_chicken/2_alert/G6.png',
+        'img/4_enemie_boss_chicken/2_alert/G7.png',
+        'img/4_enemie_boss_chicken/2_alert/G8.png',
+        'img/4_enemie_boss_chicken/2_alert/G9.png',
+        'img/4_enemie_boss_chicken/2_alert/G10.png',
+        'img/4_enemie_boss_chicken/2_alert/G11.png',
+        'img/4_enemie_boss_chicken/2_alert/G12.png'
+    ];
+    /**
+     * Image paths for the attack animation sequence.
+     * @type {string[]}
+     */
+    IMAGES_ATTACK = [
+        'img/4_enemie_boss_chicken/3_attack/G13.png',
+        'img/4_enemie_boss_chicken/3_attack/G14.png',
+        'img/4_enemie_boss_chicken/3_attack/G15.png',
+        'img/4_enemie_boss_chicken/3_attack/G16.png',
+        'img/4_enemie_boss_chicken/3_attack/G17.png',
+        'img/4_enemie_boss_chicken/3_attack/G18.png',
+        'img/4_enemie_boss_chicken/3_attack/G19.png',
+        'img/4_enemie_boss_chicken/3_attack/G20.png'
+    ];
+    /**
+     * Image paths for the hurt animation sequence.
+     * @type {string[]}
+     */
+    IMAGES_HURT = [
+        'img/4_enemie_boss_chicken/4_hurt/G21.png',
+        'img/4_enemie_boss_chicken/4_hurt/G22.png',
+        'img/4_enemie_boss_chicken/4_hurt/G23.png'
+    ];
+    /**
+     * Image paths for the dead animation sequence.
+     * @type {string[]}
+     */
+    IMAGES_DEAD = [
+        'img/4_enemie_boss_chicken/5_dead/G24.png',
+        'img/4_enemie_boss_chicken/5_dead/G25.png',
+        'img/4_enemie_boss_chicken/5_dead/G26.png'
+    ];
+    /**
+     * Creates a new {@link Endboss} instance.
+     * Loads all animation images, initializes speed and position,
+     * and starts the animation loop.
+     *
+     * @constructor
+     */
+    constructor() {
+        super().loadImage(this.IMAGES_ALERT[0]);
+        this.loadImages(this.IMAGES_WALKING);
+        this.loadImages(this.IMAGES_ALERT);
+        this.loadImages(this.IMAGES_ATTACK);
+        this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_DEAD);
+        this.speed = 5;
+        this.x = 2500;
+        this.animate();
+    }
+    /**
+     * Reduces the Endboss's energy by a fixed amount (10) when hit.
+     * If energy drops below zero, it is clamped to zero.
+     * Records the timestamp of the hit for visual feedback.
+     *
+     * @returns {void}
+     */
+    hitEndBoss() {
+        this.energyEndBoss -= 10;
+        if (this.energyEndBoss &lt; 0) {
+            this.energyEndBoss = 0;
+        } else {
+            this.lastHitEndBoss = new Date().getTime();
+        }
+    }
+    /**
+     * Determines whether the Endboss has been hit recently.
+     * Used to trigger the "hurt" animation state.
+     *
+     * @returns {boolean} True if the Endboss was hit within the last second.
+     */
+    isHurtEndBoss() {
+        const timePassed = new Date().getTime() - this.lastHitEndBoss;
+        return (timePassed / 1000) &lt; 1;
+    }
+    /**
+     * Checks whether the Endboss is dead (energy has reached 0).
+     *
+     * @returns {boolean} True if the Endboss's energy is zero or below.
+     */
+    isDeadEndBoss() {
+        return this.energyEndBoss &lt;= 0;
+    }
+    /**
+     * Handles the Endboss animation sequence depending on its current state:
+     * - Dead → plays death animation and stops loop
+     * - Hurt → plays hurt animation
+     * - First contact → plays alert animation before attacking
+     * - Attack → plays attack animation and moves left
+     *
+     * @returns {void}
+     */
+    endBossAnimation() {
+        const interval = setInterval(() => {
+            if (this.isDeadEndBoss()) {
+                this.playAnimation(this.IMAGES_DEAD);
+                clearInterval(interval);
+            } else if (this.isHurtEndBoss()) {
+                this.playAnimation(this.IMAGES_HURT);
+            } else if (this.hadFirstContact &amp;&amp; this.i &lt; 15) {
+                this.playAnimation(this.IMAGES_ALERT);
+                this.i++;
+            } else if (this.hadFirstContact) {
+                this.playAnimation(this.IMAGES_ATTACK);
+                this.x -= this.speed;
+            }
+        }, 200);
+    }
+    /**
+     * Animates the Endboss when in idle or walking mode.
+     * The boss only walks before first contact and if not hurt or dead.
+     *
+     * @returns {void}
+     */
+    animate() {
+        setInterval(() => {
+            if (!this.hadFirstContact &amp;&amp; !this.isHurtEndBoss() &amp;&amp; !this.isDeadEndBoss()) {
+                this.playAnimation(this.IMAGES_WALKING);
+            }
+        }, 200);
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

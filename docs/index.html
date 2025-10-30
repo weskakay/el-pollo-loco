@@ -60,30 +60,68 @@
 
 
     <section class="readme usertext">
-        <article><h1>el-pollo-loco</h1>
-<p>My jump-and-run game project: El Pollo Loco</p>
-<p>🐔 El Pollo Loco</p>
-<pre><code>El Pollo Loco is an engaging 2D jump-and-run game built using JavaScript and HTML5 Canvas, demonstrating object-oriented programming (OOP) concepts. The game features dynamic animations, interactive gameplay, sound effects, and responsive design optimized for desktop and mobile (landscape mode).
-</code></pre>
-<p>🎮 Gameplay</p>
-<pre><code>Control your character to jump, run, collect coins, throw bottles, and defeat various enemies to reach the challenging final bos
-</code></pre>
-<p>🖥️ Technologies Used</p>
-<pre><code>- HTML5
-
-- CSS3
-
-- JavaScript (ES6)
-
-- HTML Canvas API
-
-- Object-Oriented Programming
-</code></pre>
-<p>📁 Project Structure</p>
+        <article><h1>🐔 El Pollo Loco</h1>
+<p><strong>A 2D Jump-and-Run Game built with JavaScript &amp; HTML5 Canvas</strong></p>
+<p>El Pollo Loco is a fun and dynamic browser game demonstrating <strong>object-oriented programming (OOP)</strong> concepts in JavaScript.<br>
+Guide your character through a colorful desert world — <strong>run, jump, collect coins, throw bottles,</strong> and defeat enemies to face the mighty <strong>Endboss Chicken!</strong></p>
+<hr>
+<h2>👤 Author</h2>
+<p>Created by Kay W.</p>
+<hr>
+<h2>🎮 Gameplay</h2>
+<p>🕹️ <strong>Controls</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Action</th>
+<th style="text-align:left">Key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Move Right</td>
+<td style="text-align:left">➡️ / D</td>
+</tr>
+<tr>
+<td style="text-align:left">Move Left</td>
+<td style="text-align:left">⬅️ / A</td>
+</tr>
+<tr>
+<td style="text-align:left">Jump</td>
+<td style="text-align:left">J</td>
+</tr>
+<tr>
+<td style="text-align:left">Throw Bottle</td>
+<td style="text-align:left">T</td>
+</tr>
+</tbody>
+</table>
+<p>💡 <em>Tip:</em> Works best in desktop or landscape mobile mode.</p>
+<hr>
+<h2>🧠 Features</h2>
+<p>✅ Object-oriented architecture<br>
+✅ Animated character and enemies<br>
+✅ Collectible coins &amp; bottles<br>
+✅ Health, bottle &amp; coin status bars<br>
+✅ Background music &amp; sound effects (toggleable)<br>
+✅ Responsive layout and canvas scaling<br>
+✅ Parallax scrolling background<br>
+✅ Final Boss fight with alert &amp; attack phases</p>
+<hr>
+<h2>🖥️ Technologies Used</h2>
+<ul>
+<li><strong>HTML5 Canvas API</strong></li>
+<li><strong>CSS3</strong></li>
+<li><strong>JavaScript (ES6)</strong></li>
+<li><strong>Object-Oriented Programming (OOP)</strong></li>
+<li><strong>JSDoc</strong> for documentation</li>
+</ul>
+<hr>
+<h2>📁 Project Structure</h2>
 <pre><code>el-pollo-loco/
 ├── index.html
 ├── style.css
-├├── js/
+├── js/
 │ └── game.js
 ├── levels/
 │ └── level1.js
@@ -97,33 +135,25 @@
 │ ├── keyboard.class.js
 │ ├── level.class.js
 │ ├── moveable-object.class.js
+│ ├── sound-manager.class.js
 │ ├── status-bar.class.js
+│ ├── status-bar-boss.class.js
+│ ├── status-bar-bottle.class.js
+│ ├── status-bar-coin.class.js
 │ ├── throwable-object.class.js
 │ └── world.class.js
-├── img/
-│   └── (game images)
-├── audio/
-│   └── (sound effects and music)
-├── documents/
-│   └── El Pollo Loco Checkliste.pdf
+├── img/ # Game images
+├── audio/ # Sound effects &amp; music
+├── documents/ # Checklist &amp; planning files
+│ └── El Pollo Loco Checkliste.pdf
 └── README.md
 </code></pre>
-<p>✅ Features</p>
-<pre><code>- Animated character and enemies
-
-- Background music &amp; sound effects (toggleable)
-
-- Collectibles (coins and bottles)
-
-- Multiple enemy types and a challenging final boss
-
-- Status bar for health and items
-
-- Responsive and optimized for mobile landscape mode
-</code></pre>
-<p>👤 Author</p>
-<pre><code>Created by Kay W.
-</code></pre></article>
+<hr>
+<h2>📘 Documentation</h2>
+<p>The complete codebase is documented using <strong><a href="https://jsdoc.app/">JSDoc</a></strong> and the <strong>Docdash</strong> template.</p>
+<p>To generate the documentation:</p>
+<pre class="prettyprint source lang-bash"><code>npm install
+npm run docs</code></pre></article>
     </section>
 
 

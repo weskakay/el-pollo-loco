@@ -200,35 +200,39 @@ button:hover {
     margin-bottom: 6px; 
 }
 
-#stage .overlay {
-    position: absolute;
-    inset: 0;
+.overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
     display: grid;
     place-items: center;
-    text-align: center;
-    font-family: sans-serif;
-    color: #fff;
+    width: clamp(260px, 60vw, 640px);
     pointer-events: none;
-    z-index: 3000;
 }
 
-#stage .overlay > .box {
-    width: 60%;
-    max-width: 640px;
+.overlay .box {
     background-color: rgba(0,0,0,0.8);
-    padding: 40px;
     border-radius: 20px;
+    padding: 40px 60px;
+    text-align: center;
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 }
 
-.overlay-title   { 
-    font-size: clamp(28px, 4vw, 56px); 
-    font-weight: 700; 
-    letter-spacing: 2px; 
-    margin-bottom: 10px; 
+.overlay-title {
+    font-size: clamp(28px, 4vw, 56px);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-family: 'Zabras', Arial, sans-serif;
 }
 
-.overlay-subtitle{ 
-    font-size: clamp(14px, 1.8vw, 18px); 
-    opacity: 0.85; 
+.overlay-subtitle {
+    font-size: clamp(14px, 1.8vw, 18px);
+    opacity: 0.9;
+    color: #fff;
+    font-family: 'Zabras', Arial, sans-serif;
+    margin-top: 6px;
 }

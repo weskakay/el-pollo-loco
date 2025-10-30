@@ -7,6 +7,12 @@ Guide your character through a colorful desert world — **run, jump, collect co
 
 ---
 
+## 👤 Author
+
+Created by Kay W.
+
+---
+
 ## 🎮 Gameplay
 
 🕹️ **Controls**
@@ -88,11 +94,3 @@ To generate the documentation:
 ```bash
 npm install
 npm run docs
-
----
-
-## 👤 Author
-
-Created by Kay W.
-
----

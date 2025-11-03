@@ -20,8 +20,8 @@ Created by Kay W.
 |:--|:--|
 | Move Right | ➡️ / D |
 | Move Left | ⬅️ / A |
-| Jump | J |
-| Throw Bottle | T |
+| Jump | ⬆️ / W |
+| Throw Bottle | F |
 
 💡 *Tip:* Works best in desktop or landscape mobile mode.
 
@@ -54,6 +54,8 @@ Created by Kay W.
 
     el-pollo-loco/
     ├── index.html
+    ├─ legalNotice.html
+    ├─ privacyPolicy.html  
     ├── style.css
     ├── js/
     │ └── game.js

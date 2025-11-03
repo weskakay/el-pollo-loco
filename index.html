@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="img/8_coin/coin_2.png" />
-
+    
     <script src="models/drawable-object.class.js"></script>
     <script src="models/moveable-object.class.js"></script>
     <script src="models/sound-manager.class.js"></script>
@@ -30,35 +30,40 @@
     <script src="levels/level1.js"></script>
     <script src="js/game.js" defer></script>
     </head>
-
 <body>
     <div id="stage">
         <canvas id="canvas" width="720" height="480" class="hidden-placeholder"></canvas>
         <div class="ui">
-        <div id="start-screen" class="start-screen">
-            <button onclick="startGame()">START</button>
-        </div>
-        <div id="loading-screen" class="loading-screen d-none">
-            <div class="loading-box">
-                LOADING<span class="dots">...</span>
+            <div id="start-screen" class="start-screen">
+                <button onclick="startGame()">START</button>
+            </div>
+            <div id="loading-screen" class="loading-screen d-none">
+                <div class="loading-box">
+                    LOADING<span class="dots">...</span>
+                </div>
+            </div>
+            <div class="start-controls">
+                <button id="reset-btn" class="d-none" onclick="resetGame()">🔁 RESET</button>
+                <button id="music-btn" class="d-none" onclick="toggleMusic()">🎵 MUSIC: ON</button>
+                <button id="help-btn" onclick="toggleHelp()">❔ HELP</button>
+            </div>
+            <div id="help-screen" class="help-screen d-none">
+                    <p><strong>CONTROL:</strong></p>
+                    <ul>
+                        <li>➡️ / D – Move right</li>
+                        <li>⬅️ / A – Move left</li>
+                        <li>⬆️ / W – Jump</li>
+                        <li>F – Throw bottle</li>
+                    </ul>
             </div>
         </div>
-        <div class="start-controls">
-            <button id="reset-btn" class="d-none" onclick="resetGame()">🔁 RESET</button>
-            <button id="music-btn" class="d-none" onclick="toggleMusic()">🎵 MUSIC: ON</button>
-            <button id="help-btn" onclick="toggleHelp()">❔ HELP</button>
-        </div>
-        <div id="help-screen" class="help-screen d-none">
-            
-                <p><strong>CONTROL:</strong></p>
-                <ul>
-                    <li>➡️ / D – Move right</li>
-                    <li>⬅️ / A – Move left</li>
-                    <li>J – JUMP</li>
-                    <li>T – Throw bottle</li>
-                </ul>
-            
-        </div>
     </div>
+    <footer id="footer">
+        <a href="./legalNotice.html">Legal Notice</a>
+        <span class="sep">|</span>
+        <a href="./privacyPolicy.html">Privacy Policy</a>
+        <span class="sep">|</span>
+        <a href="https://github.com/weskakay/el-pollo-loco">GitHub</a>
+    </footer>
 </body>
 </html>

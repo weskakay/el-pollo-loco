@@ -148,15 +148,9 @@ window.addEventListener("keydown", (e) => {
         keyboard.LEFT = true;
     }
     if (e.code == "ArrowUp" || e.code == "KeyW") {
-        keyboard.UP = true;
+        keyboard.JUMP = true;
     }
-    if (e.code == "ArrowDown" || e.code == "KeyS") {
-        keyboard.DOWN = true;
-    }
-    if (e.code == "KeyJ") {
-        keyboard.SPACE = true;
-    }
-    if (e.code == "KeyT") {
+    if (e.code == "KeyF") {
         keyboard.THROW = true;
         throwBottle();
     }
@@ -178,15 +172,9 @@ window.addEventListener("keyup", (e) => {
         keyboard.LEFT = false;
     }
     if (e.code == "ArrowUp" || e.code == "KeyW") {
-        keyboard.UP = false;
+        keyboard.JUMP = false;
     }
-    if (e.code == "ArrowDown" || e.code == "KeyS") {
-        keyboard.DOWN = false;
-    }
-    if (e.code == "KeyJ") {
-        keyboard.SPACE = false;
-    }
-    if (e.code == "KeyT") {
+    if (e.code == "KeyF") {
         keyboard.THROW = false;
     }
 });

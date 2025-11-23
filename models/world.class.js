@@ -85,6 +85,28 @@ class World {
      */
     throwableObjects = [];
     /**
+     * Current number of bottles available to throw.
+     * @type {number}
+     */
+    bottlesAmmo = 0;
+    /**
+     * Timestamp of the last bottle throw in milliseconds.
+     * Used to enforce a throw cooldown.
+     * @type {number}
+     */
+    lastThrowAt = 0;
+    /**
+     * Minimum delay between two throws in milliseconds.
+     * @type {number}
+     */
+    throwCooldownMs = 300;
+    /**
+     * Tracks the previous pressed state of the throw key.
+     * Used to detect a rising edge for THROW input.
+     * @type {boolean}
+     */
+    throwPressedPrev = false;
+    /**
      * Handles all in-game audio playback.
      * @type {SoundManager}
      */
@@ -127,7 +149,7 @@ class World {
             if (this.gameOver) return;
             this.checkChickenKills();
             this.checkCollisions();
-            this.checkThrowObjects();
+            this.handleThrowInput();
             this.checkCollisionCharacterCoin();
             this.checkCollisionCharacterBottle();
             this.checkEndbossActivation();
@@ -136,22 +158,70 @@ class World {
             this.checkCharacterDead();
         }, 1000 / 60);
     }
+
     /**
-     * Handles bottle-throwing mechanics if the player presses the throw key
-     * and has bottles available.
+     * Handles throw input based on keyboard state.
+     * Only allows throwing if:
+     * - throw key changed from not pressed to pressed (rising edge),
+     * - cooldown has passed since the last throw,
+     * - at least one bottle is available.
      *
      * @returns {void}
      */
-    checkThrowObjects() {
-        if (this.keyboard.THROW && !this.character.bottleThrown && this.character.bottlesCollected > 0) {
-            const bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
-            this.throwableObjects.push(bottle);
-            this.character.bottleThrown = true;
-            this.character.bottlesCollected--;
-            this.statusBarBottle.setPercentage(this.character.bottlesCollected * 20);
-            setTimeout(() => (this.character.bottleThrown = false), 500);
+    handleThrowInput() {
+        const now = Date.now();
+        const pressed = this.keyboard.THROW === true;
+        const risingEdge = pressed && !this.throwPressedPrev;
+        const cooledDown = (now - this.lastThrowAt) >= this.throwCooldownMs;
+
+        if (risingEdge && cooledDown && this.bottlesAmmo > 0) {
+            this.spawnBottle();
+            this.bottlesAmmo--;
+            this.updateBottleBar();
+            this.lastThrowAt = now;
+        }
+
+        this.throwPressedPrev = pressed;
+    }
+
+    /**
+     * Spawns a new throwable bottle in front of the character.
+     * The spawn position is offset from the character position
+     * and depends on the facing direction.
+     *
+     * @returns {void}
+     */
+    spawnBottle() {
+        const facing = this.character.otherDirection ? -1 : 1;
+        const spawnX = this.character.x + facing * 60;
+        const spawnY = this.character.y + 80;
+
+        const bottle = new ThrowableObject(spawnX, spawnY, facing);
+        this.throwableObjects.push(bottle);
+
+        if (this.sound && typeof this.sound.playThrow === 'function') {
+            this.sound.playThrow();
         }
     }
+    
+    /**
+     * Updates the bottle status bar based on the current ammo value.
+     * Assumes the bar uses five discrete steps mapped to 0–100%.
+     *
+     * @returns {void}
+     */
+    updateBottleBar() {
+        if (!this.statusBarBottle || typeof this.statusBarBottle.setPercentage !== 'function') {
+            return;
+        }
+
+        const maxDisplayBottles = 5;
+        const clamped = Math.max(0, Math.min(this.bottlesAmmo, maxDisplayBottles));
+        const percentage = (clamped / maxDisplayBottles) * 100;
+
+        this.statusBarBottle.setPercentage(percentage);
+    }
+
     /**
      * Checks for collisions between the player and enemies.
      * Applies damage or stomp logic depending on collision direction.
@@ -199,20 +269,30 @@ class World {
     }
     /**
      * Checks for collisions between the player and bottles.
-     * Removes the collected bottle and updates the HUD and sounds.
+     * Increments bottle ammo, updates the HUD and removes picked bottles.
      *
-     * @returns {void}
+     * @returns {void}s
      */
     checkCollisionCharacterBottle() {
         this.level.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle)) {
                 this.level.bottles.splice(index, 1);
-                this.character.bottlesCollected++;
-                this.statusBarBottle.setPercentage(this.character.bottlesCollected * 20);
-                this.sound.playBottlePickup();
+
+                this.bottlesAmmo++;
+
+                if (typeof this.character.bottlesCollected === 'number') {
+                    this.character.bottlesCollected++;
+                }
+
+                this.updateBottleBar();
+
+                if (this.sound && typeof this.sound.playBottlePickup === 'function') {
+                    this.sound.playBottlePickup();
+                }
             }
         });
     }
+
     /**
      * Handles killing chickens when stomped from above.
      * Plays sounds and removes the defeated enemy after a short delay.
@@ -237,6 +317,7 @@ class World {
             }, 500);
         });
     }
+
     /**
      * Activates the Endboss when the player approaches.
      * Triggers alert and attack animations and plays corresponding sounds.
@@ -260,6 +341,7 @@ class World {
             }
         });
     }
+
     /**
      * Checks if thrown bottles hit the Endboss.
      * Reduces Endboss energy and updates the health bar.
@@ -277,6 +359,7 @@ class World {
             });
         });
     }
+
     /**
      * Checks whether the Endboss has been defeated and triggers the win screen.
      *
@@ -290,6 +373,7 @@ class World {
             }
         });
     }
+
     /**
      * Checks if the player has died and triggers the lose screen.
      *
@@ -300,6 +384,7 @@ class World {
             this.showLoseScreen();
         }
     }
+
     /**
      * Creates a full-screen overlay (e.g., win or lose screen).
      *
@@ -319,6 +404,7 @@ class World {
         `;
         document.body.appendChild(overlay);
     }
+
     /**
      * Displays the "YOU WIN" screen and plays the victory sound.
      *
@@ -332,6 +418,7 @@ class World {
         }
         this.createGameOverlay("YOU WIN!", "", "rgba(0,0,0,0.8)", "🏆");
     }
+
     /**
      * Displays the "YOU LOSE" screen and plays the game-over sound.
      *
@@ -345,6 +432,7 @@ class World {
         }
         this.createGameOverlay("YOU LOSE", "Try again", "rgba(0,0,0,0.8)", "❌");
     }
+
     /**
      * Draws all visible game objects on the canvas.
      * Handles camera offset and HUD rendering order.
@@ -374,6 +462,7 @@ class World {
             requestAnimationFrame(() => this.draw());
         }
     }
+
     /**
      * Draws an array of drawable objects to the map.
      *
@@ -383,6 +472,7 @@ class World {
     addObjectsToMap(objects) {
         objects.forEach((o) => this.addToMap(o));
     }
+
     /**
      * Draws a single object with respect to its mirroring direction.
      *
@@ -394,6 +484,7 @@ class World {
         mo.draw(this.ctx);
         if (mo.otherDirection) this.flipImageBack(mo);
     }
+
     /**
      * Flips an object horizontally for rendering in the opposite direction.
      *
@@ -406,6 +497,7 @@ class World {
         this.ctx.scale(-1, 1);
         mo.x = mo.x * -1;
     }
+
     /**
      * Restores the original rendering orientation after flipping.
      *
@@ -416,6 +508,7 @@ class World {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
+    
     /**
      * Reduces the Endboss’s health and updates the boss status bar.
      * (Legacy helper method, not actively used in main loop.)

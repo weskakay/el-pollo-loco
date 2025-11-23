@@ -116,23 +116,6 @@ function toggleHelp() {
 }
 
 /**
- * Throws a bottle object from the character's position,
- * if the world instance is initialized.
- * 
- * Creates a new {@link ThrowableObject} and pushes it
- * into the {@link World.throwableObjects} array.
- *
- * @returns {void}
- */
-function throwBottle() {
-    if (world) {
-        let bottle = new ThrowableObject(world.character.x + 100, world.character.y + 100);
-        world.throwableObjects.push(bottle);
-        world.sound.playThrow();
-    }
-}
-
-/**
  * Handles keydown events for player input.
  * Activates corresponding movement or action flags
  * in the {@link Keyboard} instance.
@@ -152,7 +135,6 @@ window.addEventListener("keydown", (e) => {
     }
     if (e.code == "KeyF") {
         keyboard.THROW = true;
-        throwBottle();
     }
 });
 

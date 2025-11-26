@@ -221,4 +221,17 @@ class Character extends MoveableObject {
         this.speedY = 30;
         this.world.sound.playJump();
     }
+
+    /**
+     * Applies heavy damage when hit by the end boss.
+     * Internally uses the normal hit logic multiple times.
+     *
+     * @param {number} [multiplier=3] - How many normal hits to apply.
+     * @returns {void}
+     */
+    hitByEndboss(multiplier = 3) {
+        for (let i = 0; i < multiplier; i++) {
+            this.hit();
+        }
+    }
 }

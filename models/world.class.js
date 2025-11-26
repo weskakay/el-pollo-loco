@@ -80,11 +80,11 @@ class World {
      */
     statusBarCoin = new StatusBarCoin();
     /**
- * Maximum number of coins that can be collected in the current level.
- * Used to map coin progress to the HUD percentage dynamically.
- * @type {number}
- */
-maxCoinsInLevel = 0;
+     * Maximum number of coins that can be collected in the current level.
+     * Used to map coin progress to the HUD percentage dynamically.
+     * @type {number}
+     */
+    maxCoinsInLevel = 0;
     /**
      * Array of throwable objects currently active in the game (e.g., bottles).
      * @type {ThrowableObject[]}
@@ -113,11 +113,11 @@ maxCoinsInLevel = 0;
      */
     throwPressedPrev = false;
     /**
- * Maximum number of bottles that can be collected in the current level.
- * Used to map bottle ammo to the HUD percentage dynamically.
- * @type {number}
- */
-maxBottlesInLevel = 0;
+     * Maximum number of bottles that can be collected in the current level.
+     * Used to map bottle ammo to the HUD percentage dynamically.
+     * @type {number}
+     */
+    maxBottlesInLevel = 0;
     /**
      * Handles all in-game audio playback.
      * @type {SoundManager}
@@ -210,80 +210,78 @@ maxBottlesInLevel = 0;
     }
 
     /**
- * Spawns a new throwable bottle near the character's hand.
- *
- * @returns {void}
- */
-spawnBottle() {
-    const facingLeft = this.character.otherDirection === true;
+     * Spawns a new throwable bottle near the character's hand.
+     *
+     * @returns {void}
+     */
+    spawnBottle() {
+        const facingLeft = this.character.otherDirection === true;
 
-    // Horizontal offset in front of the character
-    const offsetX = facingLeft ? -40 : 40;
-    // Slightly above the feet, roughly hand height
-    const offsetY = 40;
+        // Horizontal offset in front of the character
+        const offsetX = facingLeft ? -40 : 40;
+        // Slightly above the feet, roughly hand height
+        const offsetY = 40;
 
-    const spawnX = this.character.x + offsetX;
-    const spawnY = this.character.y + offsetY;
+        const spawnX = this.character.x + offsetX;
+        const spawnY = this.character.y + offsetY;
 
-    const bottle = new ThrowableObject(spawnX, spawnY);
-    bottle.otherDirection = facingLeft;
+        const bottle = new ThrowableObject(spawnX, spawnY);
+        bottle.otherDirection = facingLeft;
 
-    this.throwableObjects.push(bottle);
+        this.throwableObjects.push(bottle);
 
-    if (this.sound && typeof this.sound.playThrow === 'function') {
-        this.sound.playThrow();
+        if (this.sound && typeof this.sound.playThrow === 'function') {
+            this.sound.playThrow();
+        }
     }
-}
 
     /**
- * Updates the coin status bar based on collected coins.
- * Maps collected coins to 0–100% using the maximum coin count
- * defined by the current level.
- *
- * @returns {void}
- */
-updateCoinBar() {
-    if (!this.statusBarCoin || typeof this.statusBarCoin.setPercentage !== 'function') {
-        return;
+     * Updates the coin status bar based on collected coins.
+     * Maps collected coins to 0–100% using the maximum coin count
+     * defined by the current level.
+     *
+     * @returns {void}
+     */
+    updateCoinBar() {
+        if (!this.statusBarCoin || typeof this.statusBarCoin.setPercentage !== 'function') {
+            return;
+        }
+
+        if (this.maxCoinsInLevel <= 0) {
+            this.statusBarCoin.setPercentage(0);
+            return;
+        }
+
+        const collected = Math.max(0, Math.min(this.character.coinsCollected, this.maxCoinsInLevel));
+        const percentage = (collected / this.maxCoinsInLevel) * 100;
+
+        this.statusBarCoin.setPercentage(percentage);
     }
 
-    if (this.maxCoinsInLevel <= 0) {
-        this.statusBarCoin.setPercentage(0);
-        return;
-    }
-
-    const collected = Math.max(0, Math.min(this.character.coinsCollected, this.maxCoinsInLevel));
-    const percentage = (collected / this.maxCoinsInLevel) * 100;
-
-    this.statusBarCoin.setPercentage(percentage);
-}
-
-    
     /**
- * Updates the bottle status bar based on the current ammo value.
- * Maps the current ammo to 0–100% using the maximum bottle count
- * defined by the current level.
- *
- * @returns {void}
- */
-updateBottleBar() {
-    if (!this.statusBarBottle || typeof this.statusBarBottle.setPercentage !== 'function') {
-        return;
+     * Updates the bottle status bar based on the current ammo value.
+     * Maps the current ammo to 0–100% using the maximum bottle count
+     * defined by the current level.
+     *
+     * @returns {void}
+     */
+    updateBottleBar() {
+        if (!this.statusBarBottle || typeof this.statusBarBottle.setPercentage !== 'function') {
+            return;
+        }
+
+        // If the level does not define any bottles, show 0%
+        if (this.maxBottlesInLevel <= 0) {
+            this.statusBarBottle.setPercentage(0);
+            return;
+        }
+
+        // Clamp ammo in case of logic glitches
+        const clampedAmmo = Math.max(0, Math.min(this.bottlesAmmo, this.maxBottlesInLevel));
+        const percentage = (clampedAmmo / this.maxBottlesInLevel) * 100;
+
+        this.statusBarBottle.setPercentage(percentage);
     }
-
-    // If the level does not define any bottles, show 0%
-    if (this.maxBottlesInLevel <= 0) {
-        this.statusBarBottle.setPercentage(0);
-        return;
-    }
-
-    // Clamp ammo in case of logic glitches
-    const clampedAmmo = Math.max(0, Math.min(this.bottlesAmmo, this.maxBottlesInLevel));
-    const percentage = (clampedAmmo / this.maxBottlesInLevel) * 100;
-
-    this.statusBarBottle.setPercentage(percentage);
-}
-
 
     /**
      * Checks for collisions between the player and enemies.
@@ -297,7 +295,7 @@ updateBottleBar() {
             if (!this.character.isColliding(enemy)) return;
             if (enemy instanceof Endboss) {
                 if (!this.character.isHurt()) {
-                    this.character.hit();
+                    this.character.hitByEndboss();
                     this.statusBar.setPercentage(this.character.energy);
                 }
             } else {
@@ -318,53 +316,52 @@ updateBottleBar() {
      * @returns {void}
      */
     checkCollisionCharacterCoin() {
-    this.level.coins.forEach((coin, index) => {
-        if (this.character.isColliding(coin)) {
-            this.level.coins.splice(index, 1);
+        this.level.coins.forEach((coin, index) => {
+            if (this.character.isColliding(coin)) {
+                this.level.coins.splice(index, 1);
 
-            this.character.coinsCollected++;
+                this.character.coinsCollected++;
 
-            this.updateCoinBar();
+                this.updateCoinBar();
 
-            if (this.soundManager) {
-                this.soundManager.coinSound.currentTime = 0;
-                this.soundManager.coinSound.play();
+                if (this.soundManager) {
+                    this.soundManager.coinSound.currentTime = 0;
+                    this.soundManager.coinSound.play();
+                }
             }
-        }
-    });
-}
+        });
+    }
 
     /**
- * Checks for collisions between the player and bottles.
- * Increments bottle ammo, updates the HUD and removes picked bottles.
- *
- * @returns {void}
- */
-checkCollisionCharacterBottle() {
-    this.level.bottles.forEach((bottle, index) => {
-        if (this.character.isColliding(bottle)) {
-            this.level.bottles.splice(index, 1);
+     * Checks for collisions between the player and bottles.
+     * Increments bottle ammo, updates the HUD and removes picked bottles.
+     *
+     * @returns {void}
+     */
+    checkCollisionCharacterBottle() {
+        this.level.bottles.forEach((bottle, index) => {
+            if (this.character.isColliding(bottle)) {
+                this.level.bottles.splice(index, 1);
 
-            this.bottlesAmmo++;
+                this.bottlesAmmo++;
 
-            // Ensure ammo does not exceed the maximum defined for this level
-            if (this.maxBottlesInLevel > 0) {
-                this.bottlesAmmo = Math.min(this.bottlesAmmo, this.maxBottlesInLevel);
+                // Ensure ammo does not exceed the maximum defined for this level
+                if (this.maxBottlesInLevel > 0) {
+                    this.bottlesAmmo = Math.min(this.bottlesAmmo, this.maxBottlesInLevel);
+                }
+
+                if (typeof this.character.bottlesCollected === 'number') {
+                    this.character.bottlesCollected++;
+                }
+
+                this.updateBottleBar();
+
+                if (this.sound && typeof this.sound.playBottlePickup === 'function') {
+                    this.sound.playBottlePickup();
+                }
             }
-
-            if (typeof this.character.bottlesCollected === 'number') {
-                this.character.bottlesCollected++;
-            }
-
-            this.updateBottleBar();
-
-            if (this.sound && typeof this.sound.playBottlePickup === 'function') {
-                this.sound.playBottlePickup();
-            }
-        }
-    });
-}
-
+        });
+    }
 
     /**
      * Handles killing chickens when stomped from above.
@@ -484,23 +481,22 @@ checkCollisionCharacterBottle() {
      * @returns {void}
      */
     showWinScreen() {
-    this.gameOver = true;
+        this.gameOver = true;
 
-    const coinsTotal = this.maxCoinsInLevel || 0;
-    const bottlesTotal = this.maxBottlesInLevel || 0;
-    const coinsCollected = this.character.coinsCollected || 0;
-    const bottlesCollected = this.character.bottlesCollected || 0;
+        const coinsTotal = this.maxCoinsInLevel || 0;
+        const bottlesTotal = this.maxBottlesInLevel || 0;
+        const coinsCollected = this.character.coinsCollected || 0;
+        const bottlesCollected = this.character.bottlesCollected || 0;
 
-    const subtitle = `Coins: ${coinsCollected} / ${coinsTotal} · Bottles: ${bottlesCollected} / ${bottlesTotal}`;
+        const subtitle = `Coins: ${coinsCollected} / ${coinsTotal} · Bottles: ${bottlesCollected} / ${bottlesTotal}`;
 
-    if (this.soundManager) {
-        this.soundManager.backgroundMusic?.pause();
-        this.soundManager.playGameWin();
+        if (this.soundManager) {
+            this.soundManager.backgroundMusic?.pause();
+            this.soundManager.playGameWin();
+        }
+
+        this.createGameOverlay("YOU WIN!", subtitle, "rgba(0,0,0,0.8)", "🏆");
     }
-
-    this.createGameOverlay("YOU WIN!", subtitle, "rgba(0,0,0,0.8)", "🏆");
-}
-
 
     /**
      * Displays the "YOU LOSE" screen and plays the game-over sound.
@@ -508,23 +504,22 @@ checkCollisionCharacterBottle() {
      * @returns {void}
      */
     showLoseScreen() {
-    this.gameOver = true;
+        this.gameOver = true;
 
-    const coinsTotal = this.maxCoinsInLevel || 0;
-    const bottlesTotal = this.maxBottlesInLevel || 0;
-    const coinsCollected = this.character.coinsCollected || 0;
-    const bottlesCollected = this.character.bottlesCollected || 0;
+        const coinsTotal = this.maxCoinsInLevel || 0;
+        const bottlesTotal = this.maxBottlesInLevel || 0;
+        const coinsCollected = this.character.coinsCollected || 0;
+        const bottlesCollected = this.character.bottlesCollected || 0;
 
-    const subtitle = `Try again<br>Coins: ${coinsCollected} / ${coinsTotal} · Bottles: ${bottlesCollected} / ${bottlesTotal}`;
+        const subtitle = `Try again<br>Coins: ${coinsCollected} / ${coinsTotal} · Bottles: ${bottlesCollected} / ${bottlesTotal}`;
 
-    if (this.soundManager) {
-        this.soundManager.backgroundMusic?.pause();
-        this.soundManager.playGameOver();
+        if (this.soundManager) {
+            this.soundManager.backgroundMusic?.pause();
+            this.soundManager.playGameOver();
+        }
+
+        this.createGameOverlay("YOU LOSE", subtitle, "rgba(0,0,0,0.8)", "❌");
     }
-
-    this.createGameOverlay("YOU LOSE", subtitle, "rgba(0,0,0,0.8)", "❌");
-}
-
 
     /**
      * Draws all visible game objects on the canvas.

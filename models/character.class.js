@@ -29,37 +29,44 @@ class Character extends MoveableObject {
      * @type {number}
      */
     height = 250;
+
     /**
      * Initial vertical position of the character.
      * @type {number}
      */
-    y = 120;
+    y = 180;
+
     /**
      * Horizontal walking speed of the character.
      * @type {number}
      */
     speed = 6;
+
     /**
      * Tracks how long the character has been standing still (in ms).
      * After 5000ms, the sleeping animation is triggered.
      * @type {number}
      */
     standingTime = 0;
+
     /**
      * Total number of coins collected by the player.
      * @type {number}
      */
     coinsCollected = 0;
+
     /**
      * Total number of bottles collected by the player.
      * @type {number}
      */
     bottlesCollected = 0;
+
     /**
      * Indicates whether a bottle has been thrown.
      * @type {boolean}
      */
     bottleThrown = false;
+
     /**
      * Animation frames for idle/standing state.
      * @type {string[]}
@@ -76,6 +83,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/idle/I-9.png',
         'img/2_character_pepe/1_idle/idle/I-10.png'
     ];
+
     /**
      * Animation frames for sleeping state.
      * @type {string[]}
@@ -92,6 +100,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/long_idle/I-19.png',
         'img/2_character_pepe/1_idle/long_idle/I-20.png'
     ];
+
     /**
      * Animation frames for walking state.
      * @type {string[]}
@@ -104,6 +113,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/2_walk/W-25.png',
         'img/2_character_pepe/2_walk/W-26.png'
     ];
+
     /**
      * Animation frames for jumping state.
      * @type {string[]}
@@ -119,6 +129,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/3_jump/J-38.png',
         'img/2_character_pepe/3_jump/J-39.png'
     ];
+
     /**
      * Animation frames for the dead state.
      * @type {string[]}
@@ -132,6 +143,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/5_dead/D-56.png',
         'img/2_character_pepe/5_dead/D-57.png'
     ];
+
     /**
      * Animation frames for the hurt state.
      * @type {string[]}
@@ -141,12 +153,14 @@ class Character extends MoveableObject {
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png'
     ];
+
     /**
      * Reference to the active game world instance.
      * Used to access keyboard input, sound manager, and camera.
      * @type {World}
      */
     world;
+
     /**
      * Creates a new {@link Character} instance.
      * Loads all animation images, applies gravity, and starts animation loops.
@@ -161,9 +175,13 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+
+        this.groundY = this.y;
+
         this.applyGravity();
         this.animate();
     }
+
     /**
      * Main animation loop for the character.
      * Handles movement (left/right/jump) and switches animations
@@ -173,25 +191,49 @@ class Character extends MoveableObject {
      */
     animate() {
         setInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            if (!this.world || this.world.gameOver) {
+                if (this.world && this.world.sound && typeof this.world.sound.stopWalking === "function") {
+                    this.world.sound.stopWalking();
+                }
+                return;
+            }
+
+            const movingRight = this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
+            const movingLeft  = this.world.keyboard.LEFT  && this.x > 0;
+
+            const walking = (movingRight || movingLeft) && !this.isAboveGround();
+
+            if (movingRight) {
                 this.moveRight();
                 this.otherDirection = false;
-                this.world.sound.playWalking();
-                this.standingTime = 0;
-            }   
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true;
-                this.world.sound.playWalking();
                 this.standingTime = 0;
             }
+
+            if (movingLeft) {
+                this.moveLeft();
+                this.otherDirection = true;
+                this.standingTime = 0;
+            }
+
+            if (walking) {
+                this.world.sound.playWalking();
+            } else {
+                this.world.sound.stopWalking();
+            }
+
             if (this.world.keyboard.JUMP && !this.isAboveGround()) {
                 this.jump();
                 this.standingTime = 0;
             }
+
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
+
         setInterval(() => {
+            if (!this.world || this.world.gameOver) {
+                return;
+            }
+
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
@@ -211,6 +253,8 @@ class Character extends MoveableObject {
             }
         }, 100);
     }
+
+
     /**
      * Makes the character jump by applying upward velocity
      * and triggering the jump sound effect.
@@ -218,8 +262,19 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     jump() {
-        this.speedY = 30;
+        this.speedY = 25;
+        this.currentImage = 0;
         this.world.sound.playJump();
+    }
+
+    /**
+     * Small bounce when landing on an enemy (e.g. chicken).
+     * Prevents a full "double jump" but gives feedback on stomp.
+     *
+     * @returns {void}
+     */
+    bounceOnEnemy() {
+        this.speedY = 10;
     }
 
     /**

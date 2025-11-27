@@ -35,7 +35,7 @@ class Bottle extends MoveableObject {
      * The vertical position (y-axis) where bottles rest on the ground.
      * @type {number}
      */
-    y = 360;
+    y = 350;
     /**
      * Indicates whether the bottle has already been thrown.
      * Used to prevent multiple throws from the same instance.

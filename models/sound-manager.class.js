@@ -11,8 +11,7 @@
  * @see Character
  * @see Endboss
  * 
- * @author KW
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 /**
@@ -23,73 +22,50 @@
  * @class SoundManager
  */
 class SoundManager {
-    /**
-     * Background music for continuous playback during gameplay.
-     * @type {HTMLAudioElement}
-     */
+    /** @type {HTMLAudioElement} */
     backgroundMusic = new Audio('audio/music.mp3');
-    /**
-     * Sound played when the player is hurt.
-     * @type {HTMLAudioElement}
-     */
+
+    /** @type {HTMLAudioElement} */
     hurtSound = new Audio('audio/ouch.mp3');
-    /**
-     * Sound played when the player jumps.
-     * @type {HTMLAudioElement}
-     */
+
+    /** @type {HTMLAudioElement} */
     jumpSound = new Audio('audio/jump.mp3');
-    /**
-     * Sound played when the player throws a bottle.
-     * @type {HTMLAudioElement}
-     */
+
+    /** @type {HTMLAudioElement} */
     throwSound = new Audio('audio/throw.mp3');
-    /**
-     * Looping sound for player walking/running movement.
-     * @type {HTMLAudioElement}
-     */
+
+    /** @type {HTMLAudioElement} */
     walkingSound = new Audio('audio/running.mp3');
 
-    /**
-     * Alert sound when the Endboss becomes active.
-     * @type {HTMLAudioElement}
-     */
+    /** @type {boolean} */
+    walkingSoundActive = false;
+
+    /** @type {HTMLAudioElement} */
     endbossAlertSound = new Audio('audio/endboss_alert.mp3');
 
-    /**
-     * Attack sound triggered when the Endboss attacks.
-     * @type {HTMLAudioElement}
-     */
+    /** @type {HTMLAudioElement} */
     endbossAttackSound = new Audio('audio/endboss_attack.mp3');
 
-    /**
-     * Sound played when the player loses the game.
-     * @type {HTMLAudioElement}
-     */
+    /** @type {HTMLAudioElement} */
     gameOverSound = new Audio('audio/gameover.mp3');
 
-    /**
-     * Sound played when the player wins the game.
-     * @type {HTMLAudioElement}
-     */
+    /** @type {HTMLAudioElement} */
     gameWinSound = new Audio('audio/gamewin.mp3');
 
-    /**
-     * Sound played when a chicken enemy dies.
-     * @type {HTMLAudioElement}
-     */
+    /** @type {HTMLAudioElement} */
     chickenDeadSound = new Audio('audio/chicken.mp3');
 
-    /**
-     * Sound effect for collecting a coin.
-     * @type {HTMLAudioElement}
-     */
+    /** @type {HTMLAudioElement} */
     coinSound = new Audio('audio/coin.wav');
 
-    /**
-     * Sound effect for picking up a bottle.
-     * @type {HTMLAudioElement}
-     */
+    /** @type {HTMLAudioElement} */
     bottlePickupSound = new Audio('audio/bottle.mp3');
+
+    /** @type {HTMLAudioElement} */
+    snoreSound = new Audio('audio/snore.mp3');
+
+    /** @type {boolean} */
+    snoreSoundActive = false;
 
     /**
      * Initializes a new {@link SoundManager} instance.
@@ -100,18 +76,28 @@ class SoundManager {
     constructor() {
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.2;
+
         this.walkingSound.volume = 0.3;
+        this.walkingSound.loop = true;
+
         this.jumpSound.volume = 0.07;
         this.hurtSound.volume = 0.5;
         this.throwSound.volume = 0.5;
+
         this.endbossAlertSound.volume = 0.6;
         this.endbossAttackSound.volume = 0.6;
+
         this.gameOverSound.volume = 0.5;
         this.gameWinSound.volume = 0.5;
+
         this.coinSound.volume = 0.5;
         this.chickenDeadSound.volume = 0.5;
         this.bottlePickupSound.volume = 0.5;
+
+        this.snoreSound.loop = true;
+        this.snoreSound.volume = 0.3;
     }
+
     /**
      * Starts background music playback if not muted.
      * @returns {void}
@@ -119,6 +105,7 @@ class SoundManager {
     playBackground() {
         if (!isMuted) this.backgroundMusic.play();
     }
+
     /**
      * Pauses the background music playback.
      * @returns {void}
@@ -126,6 +113,7 @@ class SoundManager {
     stopBackground() {
         this.backgroundMusic.pause();
     }
+
     /**
      * Plays the hurt sound effect.
      * @returns {void}
@@ -136,6 +124,7 @@ class SoundManager {
             this.hurtSound.play();
         }
     }
+
     /**
      * Plays the jump sound effect.
      * @returns {void}
@@ -146,6 +135,7 @@ class SoundManager {
             this.jumpSound.play();
         }
     }
+
     /**
      * Plays the bottle throw sound effect.
      * @returns {void}
@@ -156,16 +146,36 @@ class SoundManager {
             this.throwSound.play();
         }
     }
+
     /**
-     * Plays the walking/running sound effect.
+     * Starts the walking/running loop sound if not active.
      * @returns {void}
      */
     playWalking() {
-        if (!isMuted) {
-            this.walkingSound.currentTime = 0;
-            this.walkingSound.play();
+        if (isMuted) {
+            this.stopWalking();
+            return;
+        }
+        if (!this.walkingSoundActive) {
+            this.walkingSoundActive = true;
+            const playPromise = this.walkingSound.play();
+            if (playPromise && typeof playPromise.catch === "function") {
+                playPromise.catch(() => {});
+            }
         }
     }
+
+    /**
+     * Stops the walking loop and resets playback.
+     * @returns {void}
+     */
+    stopWalking() {
+        if (!this.walkingSoundActive) return;
+        this.walkingSound.pause();
+        this.walkingSound.currentTime = 0;
+        this.walkingSoundActive = false;
+    }
+
     /**
      * Plays the game-over sound effect.
      * @returns {void}
@@ -176,18 +186,24 @@ class SoundManager {
             this.gameOverSound.play();
         }
     }
+
     /**
      * Plays the victory sound when the player wins.
      * @returns {void}
      */
     playGameWin() {
-        if (!isMuted) {
-            this.gameWinSound.currentTime = 0;
-            this.gameWinSound.play();
+        if (isMuted) return;
+
+        this.gameWinSound.currentTime = 0;
+        const playPromise = this.gameWinSound.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch(() => {});
         }
     }
+
+
     /**
-     * Plays the Endboss alert sound (when the boss becomes active).
+     * Plays the Endboss alert sound.
      * @returns {void}
      */
     playEndbossAlert() {
@@ -196,6 +212,7 @@ class SoundManager {
             this.endbossAlertSound.play();
         }
     }
+
     /**
      * Plays the Endboss attack sound.
      * @returns {void}
@@ -206,6 +223,7 @@ class SoundManager {
             this.endbossAttackSound.play();
         }
     }
+
     /**
      * Plays the coin collection sound.
      * @returns {void}
@@ -216,6 +234,7 @@ class SoundManager {
             this.coinSound.play();
         }
     }
+
     /**
      * Plays the bottle pickup sound.
      * @returns {void}
@@ -226,6 +245,7 @@ class SoundManager {
             this.bottlePickupSound.play();
         }
     }
+
     /**
      * Plays the chicken death sound effect.
      * @returns {void}
@@ -235,5 +255,17 @@ class SoundManager {
             this.chickenDeadSound.currentTime = 0;
             this.chickenDeadSound.play();
         }
+    }
+
+    /**
+     * Stops all Endboss-related audio.
+     * @returns {void}
+     */
+    stopEndbossSounds() {
+        this.endbossAlertSound.pause();
+        this.endbossAlertSound.currentTime = 0;
+
+        this.endbossAttackSound.pause();
+        this.endbossAttackSound.currentTime = 0;
     }
 }

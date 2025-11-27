@@ -30,12 +30,12 @@ class Chicken extends MoveableObject {
      * Chicken width in pixels.
      * @type {number}
      */
-    width = 70;
+    width = 80;
     /**
      * Chicken's fixed vertical position (ground level).
      * @type {number}
      */
-    y = 370;
+    y = 365;
     /**
      * Sound effect played when the chicken dies.
      * @type {HTMLAudioElement}
@@ -79,12 +79,22 @@ class Chicken extends MoveableObject {
      * @returns {void}
      */
     playAnimationChickenDead() {
+        if (this.chickenIsDead) return;
+
+        this.chickenIsDead = true;
         this.loadImage(this.IMAGES_DEAD[0] || this.IMAGES_DEAD);
-        this.chickenSound.play();
+
+        if (!isMuted && !this.deathSoundPlayed) {
+            this.deathSoundPlayed = true;
+            this.chickenSound.currentTime = 0;
+            this.chickenSound.play();
+        }
+
         setTimeout(() => {
             this.IMAGES_DEAD = [];
         }, 500);
     }
+
     /**
      * Handles the chicken's continuous animation:
      * - Moves the chicken to the left.

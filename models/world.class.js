@@ -370,21 +370,27 @@ class World {
      * @returns {void}
      */
     checkChickenKills() {
-        this.level.enemies.forEach((enemy) => {
-            if (enemy instanceof Endboss || enemy.chickenIsDead) return;
-            const colliding = this.character.isColliding(enemy);
+        this.level.enemies.forEach((enemy, index) => {
+            if (!(enemy instanceof Chicken) || enemy.chickenIsDead) return;
+
             const stompHit =
-                colliding && this.character.speedY < 0 &&
-                (this.character.y + this.character.height - 20) < (enemy.y + 20);
+                this.character.isAboveGround() &&
+                this.character.speedY < 0 && 
+                this.character.isColliding(enemy);
+
             if (!stompHit) return;
-            if (typeof this.character.jump === 'function') this.character.jump();
-            if (typeof enemy.playAnimationChickenDead === 'function') enemy.playAnimationChickenDead();
-            (this.sound?.playChickenDead || this.soundManager?.playChickenDead)?.call(this.soundManager);
-            enemy.chickenIsDead = true;
+
+            if (typeof this.character.bounceOnEnemy === 'function') {
+                this.character.bounceOnEnemy();
+            } else {
+                this.character.speedY = 10;
+            }
+
+            enemy.playAnimationChickenDead();
+            
             setTimeout(() => {
-                const idx = this.level.enemies.indexOf(enemy);
-                if (idx > -1) this.level.enemies.splice(idx, 1);
-            }, 500);
+                this.level.enemies = this.level.enemies.filter(e => e !== enemy);
+            }, 300);
         });
     }
 
@@ -430,16 +436,28 @@ class World {
         });
     }
 
-    /**
-     * Checks whether the Endboss has been defeated and triggers the win screen.
+        /**
+     * Checks whether the Endboss has been defeated and triggers the win flow.
      *
      * @returns {void}
      */
     checkEndbossDead() {
         this.level.enemies.forEach((enemy) => {
-            if (enemy instanceof Endboss && enemy.isDeadEndBoss()) {
-                this.gameOver = true;
-                setTimeout(() => this.showWinScreen(), 1500);
+            if (enemy instanceof Endboss && enemy.isDeadEndBoss() && !enemy.winHandled) {
+                enemy.winHandled = true;
+
+                if (this.soundManager) {
+                    this.soundManager.stopEndbossSounds();
+                    this.soundManager.backgroundMusic?.pause();
+                    this.soundManager.playGameWin(); // Win-Sound SOFORT
+                }
+
+                if (!enemy.deathAnimationStarted) {
+                    enemy.currentImage = 0;
+                    enemy.deathAnimationStarted = true;
+                }
+
+                setTimeout(() => this.showWinScreen(), 800); // 0.8s für Death-Animation
             }
         });
     }
@@ -465,15 +483,21 @@ class World {
      * @returns {void}
      */
     createGameOverlay(title, subtitle, color, icon = "") {
-        const overlay = document.createElement("div");
-        overlay.classList.add("overlay");
-        if (color) overlay.style.backgroundColor = color;
-        overlay.innerHTML = `
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+
+    // optional: Farbe an die Box geben, nicht an das Overlay selbst
+    overlay.innerHTML = `
+        <div class="box" style="${color ? `background-color:${color};` : ""}">
             <div class="overlay-title">${icon ? icon + " " : ""}${title}</div>
             <div class="overlay-subtitle">${subtitle}</div>
-        `;
-        document.body.appendChild(overlay);
-    }
+        </div>
+    `;
+
+    const stage = document.getElementById("stage") || document.body;
+    stage.appendChild(overlay);
+}
+
 
     /**
      * Displays the "YOU WIN" screen and plays the victory sound.
@@ -491,8 +515,8 @@ class World {
         const subtitle = `Coins: ${coinsCollected} / ${coinsTotal} · Bottles: ${bottlesCollected} / ${bottlesTotal}`;
 
         if (this.soundManager) {
-            this.soundManager.backgroundMusic?.pause();
-            this.soundManager.playGameWin();
+            this.soundManager.stopEndbossSounds();
+            
         }
 
         this.createGameOverlay("YOU WIN!", subtitle, "rgba(0,0,0,0.8)", "🏆");
@@ -514,6 +538,7 @@ class World {
         const subtitle = `Try again<br>Coins: ${coinsCollected} / ${coinsTotal} · Bottles: ${bottlesCollected} / ${bottlesTotal}`;
 
         if (this.soundManager) {
+            this.soundManager.stopEndbossSounds();
             this.soundManager.backgroundMusic?.pause();
             this.soundManager.playGameOver();
         }

@@ -45,7 +45,7 @@ class Endboss extends MoveableObject {
      * Adjust this if he appears too high or too low.
      * @type {number}
      */
-    y = 55;
+    y = 45;
 
     /**
      * Stores the default ground Y position for the boss.
@@ -96,7 +96,7 @@ class Endboss extends MoveableObject {
      * This defines how “close” the boss will stand when attacking.
      * @type {number}
      */
-    stopDistance = 60;
+    stopDistance = 30;
 
     /**
      * Duration of the alert phase in milliseconds.
@@ -473,31 +473,36 @@ class Endboss extends MoveableObject {
      * Plays the correct animation based on the current boss state and damage.
      *
      * Priority:
-     *  1. Dead  → {@link IMAGES_DEAD}
-     *  2. Hurt  → {@link IMAGES_HURT}
-     *  3. Idle  (no contact yet) → {@link IMAGES_WALKING}
-     *  4. Alert → {@link IMAGES_ALERT}
-     *  5. Attack (default) → {@link IMAGES_ATTACK}
+     *  1. Dead
+     *  2. Hurt
+     *  3. Idle (before contact)
+     *  4. Alert
+     *  5. Attack
      *
      * @returns {void}
      */
     updateAnimation() {
         if (this.isDeadEndBoss()) {
-            return this.playAnimation(this.IMAGES_DEAD);
+            this.playAnimation(this.IMAGES_DEAD);
+            return;
         }
 
         if (this.isHurtEndBoss()) {
-            return this.playAnimation(this.IMAGES_HURT);
+            this.playAnimation(this.IMAGES_HURT);
+            return;
         }
 
         if (!this.hadFirstContact) {
-            return this.playAnimation(this.IMAGES_WALKING);
+            this.playAnimation(this.IMAGES_WALKING);
+            return;
         }
 
         if (this.state === "alert") {
-            return this.playAnimation(this.IMAGES_ALERT);
+            this.playAnimation(this.IMAGES_ALERT);
+            return;
         }
 
         this.playAnimation(this.IMAGES_ATTACK);
     }
+
 }

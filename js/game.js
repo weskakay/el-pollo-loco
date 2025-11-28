@@ -46,7 +46,7 @@ function startGame() {
     document.getElementById('canvas').classList.remove('hidden-placeholder');
     document.getElementById('reset-btn').classList.remove('d-none');
     document.getElementById('music-btn').classList.remove('d-none');
-    
+    document.getElementById('help-btn').classList.remove('d-none'); 
     setTimeout(() => {
         document.getElementById('loading-screen').classList.add('d-none');
         document.getElementById('canvas').classList.remove('d-none');
@@ -55,13 +55,47 @@ function startGame() {
 }
 
 /**
- * Reloads the entire page to reset the game state.
+ * Resets the game state without reloading the page.
+ * - Closes overlays & help.
+ * - Stops all relevant sounds.
+ * - Marks the current world as finished.
+ * - Creates a fresh World instance.
  *
  * @returns {void}
  */
 function resetGame() {
-    location.reload();
+    const helpScreen = document.getElementById('help-screen');
+    if (helpScreen) {
+        helpScreen.classList.add('d-none');
+    }
+
+    document.querySelectorAll('.overlay').forEach((overlay) => overlay.remove());
+
+    if (world) {
+        world.gameOver = true;
+
+        if (world.sound) {
+            if (typeof world.sound.stopBackground === 'function') {
+                world.sound.stopBackground();
+            }
+            if (typeof world.sound.stopWalking === 'function') {
+                world.sound.stopWalking();
+            }
+        }
+
+        if (world.soundManager && typeof world.soundManager.stopEndbossSounds === 'function') {
+            world.soundManager.stopEndbossSounds();
+        }
+    }
+
+    if (typeof createLevel1 === 'function') {
+        level1 = createLevel1();
+    }
+
+    init();
 }
+
+
 
 /**
  * Initializes the game world by:
@@ -75,7 +109,9 @@ function resetGame() {
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    world.sound.playBackground();
+    if (!isMuted && world.sound && typeof world.sound.playBackground === 'function') {
+        world.sound.playBackground();
+    }
     updateMusicButton();
 }
 

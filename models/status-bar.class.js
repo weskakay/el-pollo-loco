@@ -31,12 +31,12 @@ class StatusBar extends DrawableObject {
      * @type {string[]}
      */
     IMAGES = [
-        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',   // 0%
-        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',  // 20%
-        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',  // 40%
-        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',  // 60%
-        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',  // 80%
-        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'  // 100%
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
     ];
     /**
      * Current percentage displayed by the status bar.

@@ -95,7 +95,7 @@ class SoundManager {
         this.bottlePickupSound.volume = 0.5;
 
         this.snoreSound.loop = true;
-        this.snoreSound.volume = 0.3;
+        this.snoreSound.volume = 0.5;
     }
 
     /**
@@ -268,4 +268,41 @@ class SoundManager {
         this.endbossAttackSound.pause();
         this.endbossAttackSound.currentTime = 0;
     }
+
+        /**
+     * Starts the snore sound loop while the character is sleeping.
+     * Respects the global isMuted flag.
+     *
+     * @returns {void}
+     */
+    playSnore() {
+        if (isMuted) {
+            this.stopSnore();
+            return;
+        }
+
+        if (!this.snoreSoundActive) {
+            this.snoreSoundActive = true;
+            this.snoreSound.currentTime = 0;
+
+            const playPromise = this.snoreSound.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch(() => {});
+            }
+        }
+    }
+
+    /**
+     * Stops the snore sound loop and resets playback position.
+     *
+     * @returns {void}
+     */
+    stopSnore() {
+        if (!this.snoreSoundActive) return;
+
+        this.snoreSound.pause();
+        this.snoreSound.currentTime = 0;
+        this.snoreSoundActive = false;
+    }
+
 }

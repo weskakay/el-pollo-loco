@@ -13,7 +13,7 @@
  * @see MoveableObject
  * 
  * @author KW
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 /**
@@ -48,6 +48,18 @@ class Character extends MoveableObject {
      * @type {number}
      */
     standingTime = 0;
+
+    /**
+     * Time the character has been idle (in milliseconds).
+     * @type {number}
+     */
+    idleTime = 0;
+
+    /**
+     * Indicates whether the character is currently sleeping.
+     * @type {boolean}
+     */
+    isSleeping = false;
 
     /**
      * Total number of coins collected by the player.
@@ -183,77 +195,282 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Main animation loop for the character.
-     * Handles movement (left/right/jump) and switches animations
-     * depending on player input and current state (dead, hurt, idle, etc.).
+     * Starts the movement and animation loops for the character.
      *
      * @returns {void}
      */
     animate() {
+        this.startMovementLoop();
+        this.startAnimationLoop();
+    }
+
+    /**
+     * Sets up the main movement loop (position, input, camera, walking sound).
+     *
+     * @returns {void}
+     */
+    startMovementLoop() {
         setInterval(() => {
             if (!this.world || this.world.gameOver) {
-                if (this.world && this.world.sound && typeof this.world.sound.stopWalking === "function") {
-                    this.world.sound.stopWalking();
-                }
+                this.stopWalkingSound();
                 return;
             }
 
             const movingRight = this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
-            const movingLeft  = this.world.keyboard.LEFT  && this.x > 0;
+            const movingLeft = this.world.keyboard.LEFT && this.x > 0;
+            const isWalking = movingRight || movingLeft;
 
-            const walking = (movingRight || movingLeft) && !this.isAboveGround();
-
-            if (movingRight) {
-                this.moveRight();
-                this.otherDirection = false;
-                this.standingTime = 0;
-            }
-
-            if (movingLeft) {
-                this.moveLeft();
-                this.otherDirection = true;
-                this.standingTime = 0;
-            }
-
-            if (walking) {
-                this.world.sound.playWalking();
-            } else {
-                this.world.sound.stopWalking();
-            }
-
-            if (this.world.keyboard.JUMP && !this.isAboveGround()) {
-                this.jump();
-                this.standingTime = 0;
-            }
-
-            this.world.camera_x = -this.x + 100;
+            this.updateHorizontalMovement(movingRight, movingLeft);
+            this.updateWalkingSound(isWalking);
+            this.handleJumpInput();
+            this.updateCameraPosition();
         }, 1000 / 60);
+    }
 
+    /**
+     * Sets up the main animation loop (visual state, sleep, snore).
+     *
+     * @returns {void}
+     */
+    startAnimationLoop() {
         setInterval(() => {
             if (!this.world || this.world.gameOver) {
+                this.resetSleepState();
                 return;
             }
 
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
-            } else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else if (this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING);
-                this.standingTime = 0;
-            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                this.playAnimation(this.IMAGES_WALKING);
-                this.standingTime = 0;
-            } else {
-                this.playAnimation(this.IMAGES_STANDING);
-                this.standingTime += 150;
-                if (this.standingTime >= 5000) {
-                    this.playAnimation(this.IMAGES_SLEEPING);
-                }
-            }
+            this.updateAnimationState();
         }, 100);
     }
 
+    /**
+     * Updates the horizontal movement based on keyboard input.
+     *
+     * @param {boolean} movingRight
+     * @param {boolean} movingLeft
+     * @returns {void}
+     */
+    updateHorizontalMovement(movingRight, movingLeft) {
+        if (movingRight) {
+            this.moveRight();
+            this.otherDirection = false;
+            this.resetStandingTime();
+        }
+
+        if (movingLeft) {
+            this.moveLeft();
+            this.otherDirection = true;
+            this.resetStandingTime();
+        }
+    }
+
+    /**
+     * Updates the walking sound based on the movement state.
+     *
+     * @param {boolean} isWalking
+     * @returns {void}
+     */
+    updateWalkingSound(isWalking) {
+        if (!this.world || !this.world.sound) {
+            return;
+        }
+
+        const shouldPlayWalking = isWalking && !this.isAboveGround();
+
+        if (shouldPlayWalking) {
+            this.world.sound.playWalking();
+        } else {
+            this.world.sound.stopWalking();
+        }
+    }
+
+    /**
+     * Handles jump input and triggers a jump if possible.
+     *
+     * @returns {void}
+     */
+    handleJumpInput() {
+        if (this.world.keyboard.JUMP && !this.isAboveGround()) {
+            this.jump();
+            this.resetStandingTime();
+        }
+    }
+
+    /**
+     * Updates the camera position based on the character position.
+     *
+     * @returns {void}
+     */
+    updateCameraPosition() {
+        this.world.camera_x = -this.x + 100;
+    }
+
+    /**
+     * Handles animation state when the game is over or world is missing.
+     *
+     * @returns {void}
+     */
+    resetSleepState() {
+        if (this.world && this.world.sound && typeof this.world.sound.stopSnore === "function") {
+            this.world.sound.stopSnore();
+        }
+        this.isSleeping = false;
+        this.standingTime = 0;
+    }
+
+    /**
+     * Updates the current animation state based on character status.
+     *
+     * @returns {void}
+     */
+    updateAnimationState() {
+        if (this.isDead()) {
+            this.handleDeadState();
+            return;
+        }
+
+        if (this.isHurt()) {
+            this.handleHurtState();
+            return;
+        }
+
+        if (this.isAboveGround()) {
+            this.handleAirState();
+            return;
+        }
+
+        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            this.handleWalkingState();
+            return;
+        }
+
+        this.handleIdleState();
+    }
+
+    /**
+     * Handles the dead animation state.
+     *
+     * @returns {void}
+     */
+    handleDeadState() {
+        this.stopSnoreIfNecessary();
+        this.isSleeping = false;
+        this.standingTime = 0;
+        this.playAnimation(this.IMAGES_DEAD);
+    }
+
+    /**
+     * Handles the hurt animation state.
+     *
+     * @returns {void}
+     */
+    handleHurtState() {
+        this.stopSnoreIfNecessary();
+        this.isSleeping = false;
+        this.standingTime = 0;
+        this.playAnimation(this.IMAGES_HURT);
+    }
+
+    /**
+     * Handles the jumping (airborne) animation state.
+     *
+     * @returns {void}
+     */
+    handleAirState() {
+        this.stopSnoreIfNecessary();
+        this.isSleeping = false;
+        this.standingTime = 0;
+        this.playAnimation(this.IMAGES_JUMPING);
+    }
+
+    /**
+     * Handles the walking animation state.
+     *
+     * @returns {void}
+     */
+    handleWalkingState() {
+        this.stopSnoreIfNecessary();
+        this.isSleeping = false;
+        this.standingTime = 0;
+        this.playAnimation(this.IMAGES_WALKING);
+    }
+
+    /**
+     * Handles the idle and sleeping animation states.
+     *
+     * @returns {void}
+     */
+    handleIdleState() {
+        this.standingTime += 150;
+
+        if (this.standingTime >= 5000) {
+            this.enterSleepState();
+        } else {
+            this.exitSleepState();
+            this.playAnimation(this.IMAGES_STANDING);
+        }
+    }
+
+    /**
+     * Resets the standing time counter.
+     *
+     * @returns {void}
+     */
+    resetStandingTime() {
+        this.standingTime = 0;
+    }
+
+    /**
+     * Enters the sleeping state and starts the snore sound.
+     *
+     * @returns {void}
+     */
+    enterSleepState() {
+        this.isSleeping = true;
+
+        if (this.world && this.world.sound && typeof this.world.sound.playSnore === "function") {
+            this.world.sound.playSnore();
+        }
+
+        this.playAnimation(this.IMAGES_SLEEPING);
+    }
+
+    /**
+     * Exits the sleeping state and stops the snore sound.
+     *
+     * @returns {void}
+     */
+    exitSleepState() {
+        if (!this.isSleeping) {
+            this.stopSnoreIfNecessary();
+            return;
+        }
+
+        this.isSleeping = false;
+        this.stopSnoreIfNecessary();
+    }
+
+    /**
+     * Stops the snore sound if it is currently active.
+     *
+     * @returns {void}
+     */
+    stopSnoreIfNecessary() {
+        if (this.world && this.world.sound && typeof this.world.sound.stopSnore === "function") {
+            this.world.sound.stopSnore();
+        }
+    }
+
+    /**
+     * Stops the walking sound if available.
+     *
+     * @returns {void}
+     */
+    stopWalkingSound() {
+        if (this.world && this.world.sound && typeof this.world.sound.stopWalking === "function") {
+            this.world.sound.stopWalking();
+        }
+    }
 
     /**
      * Makes the character jump by applying upward velocity

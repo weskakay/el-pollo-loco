@@ -29,12 +29,12 @@ class StatusBarBoss extends DrawableObject {
      * @type {string[]}
      */
     IMAGES = [
-        'img/7_statusbars/2_statusbar_endboss/blue/blue0.png',   // 0%
-        'img/7_statusbars/2_statusbar_endboss/blue/blue20.png',  // 20%
-        'img/7_statusbars/2_statusbar_endboss/blue/blue40.png',  // 40%
-        'img/7_statusbars/2_statusbar_endboss/blue/blue60.png',  // 60%
-        'img/7_statusbars/2_statusbar_endboss/blue/blue80.png',  // 80%
-        'img/7_statusbars/2_statusbar_endboss/blue/blue100.png'  // 100%
+        'img/7_statusbars/2_statusbar_endboss/blue/blue0.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue20.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue40.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue60.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue80.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue100.png'
     ];
     /**
      * Current health percentage of the Endboss (0–100).

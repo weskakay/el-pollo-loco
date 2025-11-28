@@ -103,11 +103,9 @@ class Chicken extends MoveableObject {
      * @returns {void}
      */
     animate() {
-        // Movement loop
         setInterval(() => {
             this.moveLeft();
         }, 1000 / 60);
-        // Animation frame loop
         setInterval(() => {
             if (!this.chickenIsDead) {
                 this.playAnimation(this.IMAGES_WALKING);

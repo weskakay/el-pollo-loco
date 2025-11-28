@@ -449,7 +449,7 @@ class World {
                 if (this.soundManager) {
                     this.soundManager.stopEndbossSounds();
                     this.soundManager.backgroundMusic?.pause();
-                    this.soundManager.playGameWin(); // Win-Sound SOFORT
+                    this.soundManager.playGameWin();
                 }
 
                 if (!enemy.deathAnimationStarted) {
@@ -457,7 +457,7 @@ class World {
                     enemy.deathAnimationStarted = true;
                 }
 
-                setTimeout(() => this.showWinScreen(), 800); // 0.8s für Death-Animation
+                setTimeout(() => this.showWinScreen(), 800);
             }
         });
     }
@@ -483,21 +483,18 @@ class World {
      * @returns {void}
      */
     createGameOverlay(title, subtitle, color, icon = "") {
-    const overlay = document.createElement("div");
-    overlay.classList.add("overlay");
+        const overlay = document.createElement("div");
+        overlay.classList.add("overlay");
+        overlay.innerHTML = `
+            <div class="box" style="${color ? `background-color:${color};` : ""}">
+                <div class="overlay-title">${icon ? icon + " " : ""}${title}</div>
+                <div class="overlay-subtitle">${subtitle}</div>
+            </div>
+        `;
 
-    // optional: Farbe an die Box geben, nicht an das Overlay selbst
-    overlay.innerHTML = `
-        <div class="box" style="${color ? `background-color:${color};` : ""}">
-            <div class="overlay-title">${icon ? icon + " " : ""}${title}</div>
-            <div class="overlay-subtitle">${subtitle}</div>
-        </div>
-    `;
-
-    const stage = document.getElementById("stage") || document.body;
-    stage.appendChild(overlay);
-}
-
+        const stage = document.getElementById("stage") || document.body;
+        stage.appendChild(overlay);
+    }
 
     /**
      * Displays the "YOU WIN" screen and plays the victory sound.

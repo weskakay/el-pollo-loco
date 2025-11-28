@@ -345,7 +345,6 @@ class Endboss extends MoveableObject {
     updateBehaviour() {
         if (this.isDeadEndBoss()) return;
 
-        // SAFER access to global `world`
         let character = null;
         if (typeof world !== 'undefined' && world && world.character) {
             character = world.character;

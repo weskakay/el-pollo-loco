@@ -55,7 +55,7 @@ class StatusBarBottle extends DrawableObject {
         this.y = 50;
         this.width = 200;
         this.height = 60;
-        this.setPercentage(100);
+        this.setPercentage(0);
     }
     /**
      * Updates the displayed percentage and selects the corresponding image.
@@ -82,7 +82,7 @@ class StatusBarBottle extends DrawableObject {
             return 3;
         } else if (this.percentage > 40) {
             return 2;
-        } else if (this.percentage > 20) {
+        } else if (this.percentage > 0) {
             return 1;
         } else {
             return 0;

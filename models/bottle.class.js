@@ -9,7 +9,7 @@
  * @see World
  * 
  * @author KW
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 /**
@@ -23,30 +23,64 @@
 class Bottle extends MoveableObject {
     /**
      * The width of the bottle sprite in pixels.
+     * This defines the visual size on the canvas.
      * @type {number}
      */
     width = 80;
+
     /**
      * The height of the bottle sprite in pixels.
+     * This defines the visual size on the canvas.
      * @type {number}
      */
     height = 80;
+
     /**
      * The vertical position (y-axis) where bottles rest on the ground.
      * @type {number}
      */
     y = 350;
+
     /**
      * Indicates whether the bottle has already been thrown.
      * Used to prevent multiple throws from the same instance.
      * @type {boolean}
      */
     isThrown = false;
+
     /**
      * Indicates whether the bottle has been collected by the player.
      * @type {boolean}
      */
     collected = false;
+
+    /**
+     * Collision hitbox offset on the X-axis, relative to the bottle's x position.
+     * Used to shrink and center the pickup area inside the sprite.
+     * @type {number}
+     */
+    collisionOffsetX = 15;
+
+    /**
+     * Collision hitbox offset on the Y-axis, relative to the bottle's y position.
+     * @type {number}
+     */
+    collisionOffsetY = 10;
+
+    /**
+     * Collision hitbox width in pixels.
+     * Smaller than the visual width to avoid early pickups via Pepe's shadow/belly.
+     * @type {number}
+     */
+    collisionWidth = 50;
+
+    /**
+     * Collision hitbox height in pixels.
+     * Slightly smaller than the sprite height.
+     * @type {number}
+     */
+    collisionHeight = 70;
+
     /**
      * Image paths for the bottle’s animation or states.
      * @type {string[]}
@@ -54,6 +88,7 @@ class Bottle extends MoveableObject {
     IMAGES = [
         'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
     ];
+
     /**
      * Creates a new {@link Bottle} instance and places it at a random horizontal position.
      * The bottle is loaded with its ground image and prepared for rendering.

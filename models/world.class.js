@@ -13,7 +13,7 @@
  * @see ThrowableObject
  * 
  * @author KW
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 /**
@@ -195,19 +195,23 @@ class World {
      */
     handleThrowInput() {
         const now = Date.now();
-        const pressed = this.keyboard.THROW === true;
-        const risingEdge = pressed && !this.throwPressedPrev;
-        const cooledDown = (now - this.lastThrowAt) >= this.throwCooldownMs;
+        const rising = this.keyboard.THROW && !this.throwPressedPrev;
+        const cooled = now - this.lastThrowAt >= this.throwCooldownMs;
 
-        if (risingEdge && cooledDown && this.bottlesAmmo > 0) {
+        if (rising && cooled && this.bottlesAmmo > 0) {
+            this.character.isSleeping = false;
+            this.character.stopSnoreIfNecessary?.();
+            this.character.resetStandingTime?.();
+
             this.spawnBottle();
             this.bottlesAmmo--;
             this.updateBottleBar();
             this.lastThrowAt = now;
         }
 
-        this.throwPressedPrev = pressed;
+        this.throwPressedPrev = this.keyboard.THROW;
     }
+
 
     /**
      * Spawns a new throwable bottle near the character's hand.
@@ -329,34 +333,99 @@ class World {
 
 
     /**
-     * Checks for collisions between the player and bottles.
-     * Increments bottle ammo, updates the HUD and removes picked bottles.
+     * Checks for collisions between the player and bottles
+     * and updates ammo, HUD and sounds accordingly.
      *
      * @returns {void}
      */
     checkCollisionCharacterBottle() {
-        this.level.bottles.forEach((bottle, index) => {
-            if (this.character.isColliding(bottle)) {
-                this.level.bottles.splice(index, 1);
-
-                this.bottlesAmmo++;
-
-                if (this.maxBottlesInLevel > 0) {
-                    this.bottlesAmmo = Math.min(this.bottlesAmmo, this.maxBottlesInLevel);
-                }
-
-                if (typeof this.character.bottlesCollected === 'number') {
-                    this.character.bottlesCollected++;
-                }
-
-                this.updateBottleBar();
-
-                if (this.sound && typeof this.sound.playBottlePickup === 'function') {
-                    this.sound.playBottlePickup();
-                }
+        this.level.bottles = this.level.bottles.filter((bottle) => {
+            if (!this.isBottlePickupCollision(bottle)) {
+                return true;
             }
+
+            this.handleBottlePickup();
+            return false;
         });
     }
+
+    /**
+     * Returns the character's effective collision hitbox.
+     *
+     * @returns {{left:number,right:number,top:number,bottom:number}}
+     */
+    getCharacterHitbox() {
+        const left = this.character.x + 60;
+        const right = this.character.x + 60 + this.character.width - 105;
+        const top = this.character.y + 130;
+        const bottom = this.character.y + this.character.height;
+
+        return { left, right, top, bottom };
+    }
+
+    /**
+     * Returns the bottle's effective collision hitbox,
+     * using its collision offsets if defined.
+     *
+     * @param {Bottle} bottle - The bottle to compute the hitbox for.
+     * @returns {{left:number,right:number,top:number,bottom:number}}
+     */
+    getBottleHitbox(bottle) {
+        const offsetX = bottle.collisionOffsetX || 0;
+        const offsetY = bottle.collisionOffsetY || 0;
+        const width = bottle.collisionWidth || bottle.width;
+        const height = bottle.collisionHeight || bottle.height;
+
+        const left = bottle.x + offsetX;
+        const top = bottle.y + offsetY;
+        const right = left + width;
+        const bottom = top + height;
+
+        return { left, right, top, bottom };
+    }
+
+    /**
+     * Determines whether the character collides with the given bottle.
+     *
+     * @param {Bottle} bottle - The bottle to check.
+     * @returns {boolean} True if a pickup collision is detected.
+     */
+    isBottlePickupCollision(bottle) {
+        const c = this.getCharacterHitbox();
+        const b = this.getBottleHitbox(bottle);
+
+        return (
+            c.right > b.left &&
+            c.bottom > b.top &&
+            c.left < b.right &&
+            c.top < b.bottom
+        );
+    }
+
+    /**
+     * Applies game logic when a bottle is picked up:
+     * ammo, counters, HUD and sound.
+     *
+     * @returns {void}
+     */
+    handleBottlePickup() {
+        this.bottlesAmmo++;
+
+        if (this.maxBottlesInLevel > 0) {
+            this.bottlesAmmo = Math.min(this.bottlesAmmo, this.maxBottlesInLevel);
+        }
+
+        if (typeof this.character.bottlesCollected === 'number') {
+            this.character.bottlesCollected++;
+        }
+
+        this.updateBottleBar();
+
+        if (this.sound && typeof this.sound.playBottlePickup === 'function') {
+            this.sound.playBottlePickup();
+        }
+    }
+
 
     /**
      * Handles killing chickens when stomped from above.
@@ -431,7 +500,7 @@ class World {
         });
     }
 
-        /**
+    /**
      * Checks whether the Endboss has been defeated and triggers the win flow.
      *
      * @returns {void}

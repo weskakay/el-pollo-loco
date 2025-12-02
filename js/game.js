@@ -198,18 +198,6 @@ function initTouchControls() {
         return;
     }
 
-    const isTouchDevice =
-        ('ontouchstart' in window) ||
-        (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) ||
-        (navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 0);
-
-    if (!isTouchDevice) {
-        mobileControls.classList.add('d-none');
-        return;
-    }
-
-    mobileControls.classList.remove('d-none');
-
     const bindButton = (btn, keyFlag) => {
         const setFlag = (value) => {
             keyboard[keyFlag] = value;

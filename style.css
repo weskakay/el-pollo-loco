@@ -264,3 +264,135 @@ button:hover {
     opacity: 0.6;
     color: #ffc400;
 }
+
+/* MOBILE CONTROLS */
+
+.mobile-controls {
+    position: absolute;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 50;
+}
+
+.mobile-left {
+    pointer-events: none;
+}
+
+.mobile-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.mobile-jump {
+    margin-left: 42px;
+}
+
+.mobile-row {
+    display: flex;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.mobile-btn {
+    pointer-events: auto;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.20);
+    backdrop-filter: blur(6px); 
+    color: white;
+    font-size: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: transform 0.1s ease, background 0.2s ease;
+}
+
+.mobile-btn:active {
+    transform: scale(0.92);
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.mobile-btn img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+}
+
+.mobile-throw img {
+    width: 60px;
+    height: 60px;
+}
+
+@media (pointer: fine) {
+    .mobile-controls {
+        display: none !important;
+    }
+}
+
+@media (pointer: coarse) {
+    .mobile-controls {
+        display: flex;
+    }
+
+    #help-btn {
+        display: none !important;
+    }
+
+    #stage .start-controls {
+        bottom: 1.5%;
+        gap: 8px;
+    }
+
+    #stage .start-controls button {
+        font-size: 12px;
+        padding: 4px 10px;
+        min-width: 70px;
+        border-radius: 8px;
+    }
+}
+
+/* ROTATE OVERLAY / PORTRAIT-SPERRE */
+
+.rotate-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 1);
+    color: #fff;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.rotate-box {
+    padding: 24px 32px;
+    border-radius: 16px;
+    background: rgba(20, 20, 20, 0.95);
+    text-align: center;
+    max-width: 340px;
+    font-size: 1rem;
+}
+
+@media (orientation: portrait) and (pointer: coarse) {
+    .rotate-overlay {
+        display: flex;
+    }
+}
+
+@media (orientation: landscape) {
+    .rotate-overlay {
+        display: none !important;
+    }
+}

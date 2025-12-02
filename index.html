@@ -29,7 +29,7 @@
     <script src="models/endboss.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="js/game.js" defer></script>
-    </head>
+</head>
 <body>
     <div id="stage">
         <canvas id="canvas" width="720" height="480" class="hidden-placeholder"></canvas>
@@ -37,33 +37,65 @@
             <div id="start-screen" class="start-screen">
                 <button onclick="startGame()">START</button>
             </div>
+
             <div id="loading-screen" class="loading-screen d-none">
                 <div class="loading-box">
-                    LOADING<span class="dots">...</span>
+                    LOADING<span class="dots">.</span>
                 </div>
             </div>
+
             <div class="start-controls">
                 <button id="reset-btn" class="d-none" onclick="resetGame()">🔁 RESET</button>
                 <button id="music-btn" class="d-none" onclick="toggleMusic()">🎵 MUSIC: ON</button>
                 <button id="help-btn" class="d-none" onclick="toggleHelp()">❔ HELP</button>
             </div>
+
             <div id="help-screen" class="help-screen d-none">
-                    <p><strong>CONTROL:</strong></p>
-                    <ul>
-                        <li>➡️ / D – Move right</li>
-                        <li>⬅️ / A – Move left</li>
-                        <li>⬆️ / W – Jump</li>
-                        <li>F – Throw bottle</li>
-                    </ul>
+                <p><strong>CONTROL:</strong></p>
+                <ul>
+                    <li>➡️ / D – Move right</li>
+                    <li>⬅️ / A – Move left</li>
+                    <li>⬆️ / W – Jump</li>
+                    <li>F – Throw bottle</li>
+                </ul>
             </div>
+
+            <div id="mobile-controls" class="mobile-controls d-none">
+
+                <div class="mobile-left">
+                    <button id="btn-throw" class="mobile-btn mobile-throw">
+                        <img src="img/6_salsa_bottle/salsa_bottle.png" alt="throw">
+                    </button>
+                </div>
+
+                <div class="mobile-right">
+                    <div class="mobile-row">
+                        <button id="btn-jump" class="mobile-btn mobile-jump">⬆️</button>
+                    </div>
+
+                    <div class="mobile-row">
+                        <button id="btn-left" class="mobile-btn mobile-left-btn">⬅️</button>
+                        <button id="btn-right" class="mobile-btn mobile-right-btn">➡️</button>
+                    </div>
+                </div>
+
+            </div>
+
+            
         </div>
     </div>
+    <div id="rotate-overlay" class="rotate-overlay ">
+        <div class="rotate-box">
+            <p>Bitte drehe dein Gerät ins Querformat 📱↻</p>
+        </div>
+    </div>
+
     <footer id="footer">
         <a href="./legalNotice.html">Legal Notice</a>
         <span class="sep">|</span>
         <a href="./privacyPolicy.html">Privacy Policy</a>
         <span class="sep">|</span>
-        <a href="https://github.com/weskakay/el-pollo-loco">GitHub</a>
+        <a href="https://github.com/weskakay/el-pollo-loco" target="_blank" rel="noopener noreferrer">GitHub</a>
     </footer>
 </body>
 </html>

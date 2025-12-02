@@ -4,7 +4,7 @@
  * This file acts as the entry point for El Pollo Loco.
  * 
  * @author KW
- * @version 1.1.0
+ * @version 1.2.0
  */
 
 /**
@@ -30,6 +30,12 @@ let keyboard = new Keyboard();
  * @type {boolean}
  */
 let isMuted = false;
+
+/**
+ * Flag to ensure touch controls are only initialized once.
+ * @type {boolean}
+ */
+let touchControlsInitialized = false;
 
 try {
     const storedMute = localStorage.getItem('soundMuted');
@@ -57,6 +63,7 @@ function startGame() {
     document.getElementById('reset-btn').classList.remove('d-none');
     document.getElementById('music-btn').classList.remove('d-none');
     document.getElementById('help-btn').classList.remove('d-none');
+
     setTimeout(() => {
         document.getElementById('loading-screen').classList.add('d-none');
         document.getElementById('canvas').classList.remove('d-none');
@@ -111,6 +118,7 @@ function resetGame() {
  * - Creating a new {@link World} instance.
  * - Applying persisted mute state.
  * - Updating the music button text.
+ * - Setting up touch controls (once).
  *
  * @returns {void}
  */
@@ -125,6 +133,7 @@ function init() {
     }
 
     updateMusicButton();
+    initTouchControls();
 }
 
 /**
@@ -171,6 +180,66 @@ function toggleHelp() {
 }
 
 /**
+ * Initializes touch controls for mobile / touch devices.
+ * Binds the on-screen buttons to the same flags used by the keyboard.
+ *
+ * @returns {void}
+ */
+function initTouchControls() {
+    if (touchControlsInitialized) return;
+
+    const mobileControls = document.getElementById('mobile-controls');
+    const leftBtn = document.getElementById('btn-left');
+    const rightBtn = document.getElementById('btn-right');
+    const jumpBtn = document.getElementById('btn-jump');
+    const throwBtn = document.getElementById('btn-throw');
+
+    if (!mobileControls || !leftBtn || !rightBtn || !jumpBtn || !throwBtn) {
+        return;
+    }
+
+    const isTouchDevice =
+        ('ontouchstart' in window) ||
+        (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) ||
+        (navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 0);
+
+    if (!isTouchDevice) {
+        mobileControls.classList.add('d-none');
+        return;
+    }
+
+    mobileControls.classList.remove('d-none');
+
+    const bindButton = (btn, keyFlag) => {
+        const setFlag = (value) => {
+            keyboard[keyFlag] = value;
+        };
+
+        btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            setFlag(true);
+        });
+
+        btn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            setFlag(false);
+        });
+
+        btn.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            setFlag(false);
+        });
+    };
+
+    bindButton(leftBtn, 'LEFT');
+    bindButton(rightBtn, 'RIGHT');
+    bindButton(jumpBtn, 'JUMP');
+    bindButton(throwBtn, 'THROW');
+
+    touchControlsInitialized = true;
+}
+
+/**
  * Handles keydown events for player input.
  * Activates corresponding movement or action flags
  * in the {@link Keyboard} instance.
@@ -214,5 +283,4 @@ window.addEventListener('keyup', (e) => {
     if (e.code === 'KeyF') {
         keyboard.THROW = false;
     }
-}
-);
+});

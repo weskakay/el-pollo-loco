@@ -10,8 +10,8 @@
  * @see World
  * @see Character
  * @see Endboss
- * 
- * @version 1.1.0
+ *
+ * @version 1.3.0
  */
 
 /**
@@ -22,6 +22,12 @@
  * @class SoundManager
  */
 class SoundManager {
+    /**
+     * Collection of all audio elements for global mute handling.
+     * @type {HTMLAudioElement[]}
+     */
+    allSounds = [];
+
     /** @type {HTMLAudioElement} */
     backgroundMusic = new Audio('audio/music.mp3');
 
@@ -69,7 +75,8 @@ class SoundManager {
 
     /**
      * Initializes a new {@link SoundManager} instance.
-     * Configures volume levels and enables looping for background music.
+     * Configures volume levels and looping flags and registers
+     * all sounds for global mute handling.
      *
      * @constructor
      */
@@ -96,6 +103,59 @@ class SoundManager {
 
         this.snoreSound.loop = true;
         this.snoreSound.volume = 0.5;
+
+        this.allSounds = [
+            this.backgroundMusic,
+            this.hurtSound,
+            this.jumpSound,
+            this.throwSound,
+            this.walkingSound,
+            this.endbossAlertSound,
+            this.endbossAttackSound,
+            this.gameOverSound,
+            this.gameWinSound,
+            this.chickenDeadSound,
+            this.coinSound,
+            this.bottlePickupSound,
+            this.snoreSound
+        ];
+    }
+
+    /**
+     * Applies the global mute state to all registered sounds
+     * and stops looping sounds when muted.
+     *
+     * @returns {void}
+     */
+    applyMuteStateToAll() {
+        this.allSounds.forEach((sound) => {
+            sound.muted = isMuted;
+        });
+
+        if (isMuted) {
+            this.stopWalking();
+            this.stopSnore();
+            this.stopBackground();
+            this.stopEndbossSounds();
+        }
+    }
+
+    /**
+     * Sets the global mute state and updates all managed audio elements.
+     * Also starts or stops the background music accordingly.
+     *
+     * @param {boolean} muted - New mute state to apply.
+     * @returns {void}
+     */
+    setMuted(muted) {
+        isMuted = muted;
+        this.applyMuteStateToAll();
+
+        if (muted) {
+            this.stopBackground();
+        } else {
+            this.playBackground();
+        }
     }
 
     /**
@@ -103,7 +163,12 @@ class SoundManager {
      * @returns {void}
      */
     playBackground() {
-        if (!isMuted) this.backgroundMusic.play();
+        if (!isMuted) {
+            const playPromise = this.backgroundMusic.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch(() => {});
+            }
+        }
     }
 
     /**
@@ -159,7 +224,7 @@ class SoundManager {
         if (!this.walkingSoundActive) {
             this.walkingSoundActive = true;
             const playPromise = this.walkingSound.play();
-            if (playPromise && typeof playPromise.catch === "function") {
+            if (playPromise && typeof playPromise.catch === 'function') {
                 playPromise.catch(() => {});
             }
         }
@@ -196,11 +261,10 @@ class SoundManager {
 
         this.gameWinSound.currentTime = 0;
         const playPromise = this.gameWinSound.play();
-        if (playPromise && typeof playPromise.catch === "function") {
+        if (playPromise && typeof playPromise.catch === 'function') {
             playPromise.catch(() => {});
         }
     }
-
 
     /**
      * Plays the Endboss alert sound.
@@ -269,7 +333,7 @@ class SoundManager {
         this.endbossAttackSound.currentTime = 0;
     }
 
-        /**
+    /**
      * Starts the snore sound loop while the character is sleeping.
      * Respects the global isMuted flag.
      *
@@ -304,5 +368,4 @@ class SoundManager {
         this.snoreSound.currentTime = 0;
         this.snoreSoundActive = false;
     }
-
 }

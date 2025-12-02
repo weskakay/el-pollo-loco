@@ -216,10 +216,7 @@ class World {
      */
     spawnBottle() {
         const facingLeft = this.character.otherDirection === true;
-
-        // Horizontal offset in front of the character
         const offsetX = facingLeft ? -40 : 40;
-        // Slightly above the feet, roughly hand height
         const offsetY = 40;
 
         const spawnX = this.character.x + offsetX;
@@ -270,13 +267,11 @@ class World {
             return;
         }
 
-        // If the level does not define any bottles, show 0%
         if (this.maxBottlesInLevel <= 0) {
             this.statusBarBottle.setPercentage(0);
             return;
         }
 
-        // Clamp ammo in case of logic glitches
         const clampedAmmo = Math.max(0, Math.min(this.bottlesAmmo, this.maxBottlesInLevel));
         const percentage = (clampedAmmo / this.maxBottlesInLevel) * 100;
 
@@ -309,6 +304,7 @@ class World {
             }
         });
     }
+        
     /**
      * Checks for collisions between the player and coins.
      * Removes collected coins, plays the coin sound, and updates the HUD.
@@ -324,13 +320,13 @@ class World {
 
                 this.updateCoinBar();
 
-                if (this.soundManager) {
-                    this.soundManager.coinSound.currentTime = 0;
-                    this.soundManager.coinSound.play();
+                if (this.soundManager && typeof this.soundManager.playCoinSound === 'function') {
+                    this.soundManager.playCoinSound();
                 }
             }
         });
     }
+
 
     /**
      * Checks for collisions between the player and bottles.
@@ -345,7 +341,6 @@ class World {
 
                 this.bottlesAmmo++;
 
-                // Ensure ammo does not exceed the maximum defined for this level
                 if (this.maxBottlesInLevel > 0) {
                     this.bottlesAmmo = Math.min(this.bottlesAmmo, this.maxBottlesInLevel);
                 }

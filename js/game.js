@@ -4,7 +4,7 @@
  * This file acts as the entry point for El Pollo Loco.
  * 
  * @author KW
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 /**
@@ -31,6 +31,16 @@ let keyboard = new Keyboard();
  */
 let isMuted = false;
 
+try {
+    const storedMute = localStorage.getItem('soundMuted');
+    if (storedMute === 'true') {
+        isMuted = true;
+    } else if (storedMute === 'false') {
+        isMuted = false;
+    }
+} catch (e) {
+}
+
 /**
  * Starts the game:
  * - Hides the start screen.
@@ -46,7 +56,7 @@ function startGame() {
     document.getElementById('canvas').classList.remove('hidden-placeholder');
     document.getElementById('reset-btn').classList.remove('d-none');
     document.getElementById('music-btn').classList.remove('d-none');
-    document.getElementById('help-btn').classList.remove('d-none'); 
+    document.getElementById('help-btn').classList.remove('d-none');
     setTimeout(() => {
         document.getElementById('loading-screen').classList.add('d-none');
         document.getElementById('canvas').classList.remove('d-none');
@@ -95,13 +105,11 @@ function resetGame() {
     init();
 }
 
-
-
 /**
  * Initializes the game world by:
  * - Linking the canvas and keyboard.
  * - Creating a new {@link World} instance.
- * - Starting background music.
+ * - Applying persisted mute state.
  * - Updating the music button text.
  *
  * @returns {void}
@@ -109,26 +117,35 @@ function resetGame() {
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    if (!isMuted && world.sound && typeof world.sound.playBackground === 'function') {
+
+    if (world && world.sound && typeof world.sound.setMuted === 'function') {
+        world.sound.setMuted(isMuted);
+    } else if (!isMuted && world && world.sound && typeof world.sound.playBackground === 'function') {
         world.sound.playBackground();
     }
+
     updateMusicButton();
 }
 
 /**
- * Toggles background music on or off.
+ * Toggles background music and sound effects on or off.
+ * Persists the state in localStorage and updates the button label.
  *
  * @returns {void}
  */
 function toggleMusic() {
     isMuted = !isMuted;
-    updateMusicButton();
 
-    if (isMuted) {
-        world.sound.stopBackground();
-    } else {
-        world.sound.playBackground();
+    try {
+        localStorage.setItem('soundMuted', isMuted ? 'true' : 'false');
+    } catch (e) {
     }
+
+    if (world && world.sound && typeof world.sound.setMuted === 'function') {
+        world.sound.setMuted(isMuted);
+    }
+
+    updateMusicButton();
 }
 
 /**
@@ -138,8 +155,10 @@ function toggleMusic() {
  * @returns {void}
  */
 function updateMusicButton() {
-    const btn = document.getElementById('music-btn');
-    btn.textContent = isMuted ? '🔇 MUSIC: OFF' : '🎵 MUSIC: ON';
+    const musicBtn = document.getElementById('music-btn');
+    if (!musicBtn) return;
+
+    musicBtn.innerText = isMuted ? '🔇 MUSIC: OFF' : '🎵 MUSIC: ON';
 }
 
 /**
@@ -159,17 +178,17 @@ function toggleHelp() {
  * @param {KeyboardEvent} e - The keydown event object.
  * @returns {void}
  */
-window.addEventListener("keydown", (e) => {
-    if (e.code == "ArrowRight" || e.code == "KeyD") {
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'ArrowRight' || e.code === 'KeyD') {
         keyboard.RIGHT = true;
     }
-    if (e.code == "ArrowLeft" || e.code == "KeyA") {
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
         keyboard.LEFT = true;
     }
-    if (e.code == "ArrowUp" || e.code == "KeyW") {
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') {
         keyboard.JUMP = true;
     }
-    if (e.code == "KeyF") {
+    if (e.code === 'KeyF') {
         keyboard.THROW = true;
     }
 });
@@ -182,17 +201,18 @@ window.addEventListener("keydown", (e) => {
  * @param {KeyboardEvent} e - The keyup event object.
  * @returns {void}
  */
-window.addEventListener("keyup", (e) => {
-    if (e.code == "ArrowRight" || e.code == "KeyD") {
+window.addEventListener('keyup', (e) => {
+    if (e.code === 'ArrowRight' || e.code === 'KeyD') {
         keyboard.RIGHT = false;
     }
-    if (e.code == "ArrowLeft" || e.code == "KeyA") {
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
         keyboard.LEFT = false;
     }
-    if (e.code == "ArrowUp" || e.code == "KeyW") {
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') {
         keyboard.JUMP = false;
     }
-    if (e.code == "KeyF") {
+    if (e.code === 'KeyF') {
         keyboard.THROW = false;
     }
-});
+}
+);

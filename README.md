@@ -13,15 +13,21 @@ Created by Kay W.
 
 ---
 
-## 🎮 Gameplay
+## 🎮 Gameplay & Controls
 
-🕹️ **Controls**
+### 🕹️ Desktop
 | Action | Key |
-|:--|:--|
+|-------|-----|
 | Move Right | ➡️ / D |
 | Move Left | ⬅️ / A |
 | Jump | ⬆️ / W |
 | Throw Bottle | F |
+| Toggle Music | Button in UI |
+| Reset Game | Button in UI |
+| Help | Help Button |
+
+### 📱 Mobile Controls
+Automatically activated on smartphones / touch devices
 
 💡 *Tip:* Works best in desktop or landscape mobile mode.
 
@@ -53,18 +59,18 @@ Created by Kay W.
 ## 📁 Project Structure
 
     el-pollo-loco/
+    │
     ├── index.html
-    ├─ legalNotice.html
-    ├─ privacyPolicy.html  
     ├── style.css
     ├── js/
     │ └── game.js
-    ├── levels/
-    │ └── level1.js
+    │
     ├── models/
     │ ├── background-object.class.js
+    │ ├── bottle.class.js
     │ ├── character.class.js
     │ ├── chicken.class.js
+    │ ├── small-chicken.class.js <-- NEW
     │ ├── cloud.class.js
     │ ├── drawable-object.class.js
     │ ├── endboss.class.js
@@ -78,11 +84,16 @@ Created by Kay W.
     │ ├── status-bar-coin.class.js
     │ ├── throwable-object.class.js
     │ └── world.class.js
-    ├── img/ # Game images
-    ├── audio/ # Sound effects & music
-    ├── documents/ # Checklist & planning files
-    │ └── El Pollo Loco Checkliste.pdf
-    └── README.md
+    │
+    ├── levels/
+    │ └── level1.js
+    │
+    ├── img/
+    ├── audio/
+    │ ├── small_chicken.mp3
+    │
+    └── documents/
+    └── El Pollo Loco Checkliste.pdf
 
 
 ---

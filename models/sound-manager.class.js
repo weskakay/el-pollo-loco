@@ -10,8 +10,9 @@
  * @see World
  * @see Character
  * @see Endboss
+ * @see SmallChicken
  *
- * @version 1.3.0
+ * @version 1.4.0
  */
 
 /**
@@ -62,6 +63,9 @@ class SoundManager {
     chickenDeadSound = new Audio('audio/chicken.mp3');
 
     /** @type {HTMLAudioElement} */
+    smallChickenDeadSound = new Audio('audio/small_chicken.mp3');
+
+    /** @type {HTMLAudioElement} */
     coinSound = new Audio('audio/coin.wav');
 
     /** @type {HTMLAudioElement} */
@@ -99,6 +103,7 @@ class SoundManager {
 
         this.coinSound.volume = 0.5;
         this.chickenDeadSound.volume = 0.5;
+        this.smallChickenDeadSound.volume = 0.5;
         this.bottlePickupSound.volume = 0.5;
 
         this.snoreSound.loop = true;
@@ -115,6 +120,7 @@ class SoundManager {
             this.gameOverSound,
             this.gameWinSound,
             this.chickenDeadSound,
+            this.smallChickenDeadSound,
             this.coinSound,
             this.bottlePickupSound,
             this.snoreSound
@@ -320,6 +326,18 @@ class SoundManager {
             this.chickenDeadSound.play();
         }
     }
+
+    /**
+     * Plays the small chicken death sound effect.
+     * @returns {void}
+     */
+    playSmallChickenDead() {
+        if (!isMuted) {
+            this.smallChickenDeadSound.currentTime = 0;
+            this.smallChickenDeadSound.play();
+        }
+    }
+
 
     /**
      * Stops all Endboss-related audio.

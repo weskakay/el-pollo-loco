@@ -428,21 +428,29 @@ class World {
 
 
     /**
-     * Handles killing chickens when stomped from above.
+     * Handles killing chickens (normal + small) when stomped from above.
      * Plays sounds and removes the defeated enemy after a short delay.
      *
      * @returns {void}
      */
     checkChickenKills() {
-        this.level.enemies.forEach((enemy, index) => {
-            if (!(enemy instanceof Chicken) || enemy.chickenIsDead) return;
+        this.level.enemies.forEach((enemy) => {
+            const isChicken =
+                enemy instanceof Chicken ||
+                enemy instanceof SmallChicken;
+
+            if (!isChicken || enemy.chickenIsDead) {
+                return;
+            }
 
             const stompHit =
                 this.character.isAboveGround() &&
-                this.character.speedY < 0 && 
+                this.character.speedY < 0 &&
                 this.character.isColliding(enemy);
 
-            if (!stompHit) return;
+            if (!stompHit) {
+                return;
+            }
 
             if (typeof this.character.bounceOnEnemy === 'function') {
                 this.character.bounceOnEnemy();
@@ -451,7 +459,7 @@ class World {
             }
 
             enemy.playAnimationChickenDead();
-            
+
             setTimeout(() => {
                 this.level.enemies = this.level.enemies.filter(e => e !== enemy);
             }, 300);

@@ -68,34 +68,48 @@ Guide your character through a colorful desert world — <strong>run, jump, coll
 <h2>👤 Author</h2>
 <p>Created by Kay W.</p>
 <hr>
-<h2>🎮 Gameplay</h2>
-<p>🕹️ <strong>Controls</strong></p>
+<h2>🎮 Gameplay &amp; Controls</h2>
+<h3>🕹️ Desktop</h3>
 <table>
 <thead>
 <tr>
-<th style="text-align:left">Action</th>
-<th style="text-align:left">Key</th>
+<th>Action</th>
+<th>Key</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left">Move Right</td>
-<td style="text-align:left">➡️ / D</td>
+<td>Move Right</td>
+<td>➡️ / D</td>
 </tr>
 <tr>
-<td style="text-align:left">Move Left</td>
-<td style="text-align:left">⬅️ / A</td>
+<td>Move Left</td>
+<td>⬅️ / A</td>
 </tr>
 <tr>
-<td style="text-align:left">Jump</td>
-<td style="text-align:left">⬆️ / W</td>
+<td>Jump</td>
+<td>⬆️ / W</td>
 </tr>
 <tr>
-<td style="text-align:left">Throw Bottle</td>
-<td style="text-align:left">F</td>
+<td>Throw Bottle</td>
+<td>F</td>
+</tr>
+<tr>
+<td>Toggle Music</td>
+<td>Button in UI</td>
+</tr>
+<tr>
+<td>Reset Game</td>
+<td>Button in UI</td>
+</tr>
+<tr>
+<td>Help</td>
+<td>Help Button</td>
 </tr>
 </tbody>
 </table>
+<h3>📱 Mobile Controls</h3>
+<p>Automatically activated on smartphones / touch devices</p>
 <p>💡 <em>Tip:</em> Works best in desktop or landscape mobile mode.</p>
 <hr>
 <h2>🧠 Features</h2>
@@ -119,18 +133,18 @@ Guide your character through a colorful desert world — <strong>run, jump, coll
 <hr>
 <h2>📁 Project Structure</h2>
 <pre><code>el-pollo-loco/
+│
 ├── index.html
-├─ legalNotice.html
-├─ privacyPolicy.html  
 ├── style.css
 ├── js/
 │ └── game.js
-├── levels/
-│ └── level1.js
+│
 ├── models/
 │ ├── background-object.class.js
+│ ├── bottle.class.js
 │ ├── character.class.js
 │ ├── chicken.class.js
+│ ├── small-chicken.class.js &lt;-- NEW
 │ ├── cloud.class.js
 │ ├── drawable-object.class.js
 │ ├── endboss.class.js
@@ -144,11 +158,16 @@ Guide your character through a colorful desert world — <strong>run, jump, coll
 │ ├── status-bar-coin.class.js
 │ ├── throwable-object.class.js
 │ └── world.class.js
-├── img/ # Game images
-├── audio/ # Sound effects &amp; music
-├── documents/ # Checklist &amp; planning files
-│ └── El Pollo Loco Checkliste.pdf
-└── README.md
+│
+├── levels/
+│ └── level1.js
+│
+├── img/
+├── audio/
+│ ├── small_chicken.mp3
+│
+└── documents/
+└── El Pollo Loco Checkliste.pdf
 </code></pre>
 <hr>
 <h2>📘 Documentation</h2>

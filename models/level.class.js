@@ -52,7 +52,7 @@ class Level {
      * Used to limit camera movement and player progression.
      * @type {number}
      */
-    level_end_x = 2200;
+    level_end_x = 2500;
     /**
      * Creates a new {@link Level} instance.
      *

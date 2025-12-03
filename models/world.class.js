@@ -212,21 +212,23 @@ class World {
         this.throwPressedPrev = this.keyboard.THROW;
     }
 
-
     /**
-     * Spawns a new throwable bottle near the character's hand.
+     * Spawns a new throwable bottle at Pepe's hand position.
+     *
+     * The spawn position is calculated relativ to the character's
+     * width/height so it stays correct even if the sprite size changes.
      *
      * @returns {void}
      */
     spawnBottle() {
         const facingLeft = this.character.otherDirection === true;
-        const offsetX = facingLeft ? -40 : 40;
-        const offsetY = 40;
 
-        const spawnX = this.character.x + offsetX;
-        const spawnY = this.character.y + offsetY;
+        const handY = this.character.y + this.character.height * 0.45;
+        const handX = facingLeft
+            ? this.character.x + this.character.width * 0.2
+            : this.character.x + this.character.width * 0.8;
 
-        const bottle = new ThrowableObject(spawnX, spawnY);
+        const bottle = new ThrowableObject(handX, handY);
         bottle.otherDirection = facingLeft;
 
         this.throwableObjects.push(bottle);

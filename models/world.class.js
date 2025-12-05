@@ -971,11 +971,15 @@ class World {
      */
     restartBackgroundMusic() {
         if (!this.soundManager || !this.soundManager.backgroundMusic) return;
+
         try {
             this.soundManager.backgroundMusic.currentTime = 0;
             this.soundManager.backgroundMusic.play();
-        } catch (e) {}
+        } catch (error) {
+            console.error('Error while restarting background music:', error);
+        }
     }
+
 
     /**
      * Switches to the given level number and resets state.

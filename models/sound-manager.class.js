@@ -172,10 +172,13 @@ class SoundManager {
         if (!isMuted) {
             const playPromise = this.backgroundMusic.play();
             if (playPromise && typeof playPromise.catch === 'function') {
-                playPromise.catch(() => {});
+                playPromise.catch((error) => {
+                    console.error('Error while starting background music playback:', error);
+                });
             }
         }
     }
+
 
     /**
      * Pauses the background music playback.

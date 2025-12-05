@@ -44,8 +44,10 @@ try {
     } else if (storedMute === 'false') {
         isMuted = false;
     }
-} catch (e) {
+} catch (error) {
+    console.error('Failed to read soundMuted from localStorage:', error);
 }
+
 
 /**
  * Starts the game:
@@ -147,7 +149,8 @@ function toggleMusic() {
 
     try {
         localStorage.setItem('soundMuted', isMuted ? 'true' : 'false');
-    } catch (e) {
+    } catch (error) {
+        console.error('Failed to store soundMuted in localStorage:', error);
     }
 
     if (world && world.sound && typeof world.sound.setMuted === 'function') {

@@ -134,4 +134,4 @@ function createLevel2() {
  *
  * @type {Level}
  */
-let level2 = createLevel2();
+let level2;

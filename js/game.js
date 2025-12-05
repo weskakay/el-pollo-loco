@@ -107,10 +107,6 @@ function resetGame() {
         }
     }
 
-    if (typeof createLevel1 === 'function') {
-        level1 = createLevel1();
-    }
-
     init();
 }
 

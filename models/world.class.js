@@ -34,7 +34,7 @@ class World {
      * The current level instance.
      * @type {Level}
      */
-    level = level1;
+    level = null;
 
     /**
      * Tracks the current active level number.
@@ -168,6 +168,7 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.soundManager = soundManager || this.sound;
+        this.selectLevel(this.currentLevel);
         this.updateLevelLimits();
         this.initLevelLabel();
         this.draw();

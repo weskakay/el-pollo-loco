@@ -1,44 +1,34 @@
 /**
- * @fileoverview Defines the first playable level of the game.
- * Contains all entities such as enemies, clouds, background layers,
- * bottles, and coins that appear within Level 1.
- *
- * The level is constructed by instantiating the {@link Level} class
- * with five arrays of game objects representing:
- *   1) Enemies (e.g., Chickens, SmallChickens, Endboss)
- *   2) Clouds (decorative background elements)
- *   3) Background layers (air and parallax tiles)
- *   4) Bottles (collectible ammunition)
- *   5) Coins (collectible items)
+ * @fileoverview Defines the second playable level of the game.
+ * Similar to Level 1 but with adjusted difficulty,
+ * enemy placement and collectibles.
  *
  * @author KW
- * @version 1.0.1
+ * @version 1.0.0
  */
 
 /**
- * Creates a new instance of Level 1.
+ * Creates a new instance of Level 2.
  *
- * This function encapsulates all entities that belong to Level 1 and returns
- * a fresh {@link Level} object. It is used both on initial load and when
- * resetting the game without reloading the page.
- *
- * @returns {Level} A new Level 1 instance.
+ * @returns {Level} A new Level 2 instance.
  */
-function createLevel1() {
+function createLevel2() {
     return new Level(
 
         /**
-         * Enemies appearing in Level 1.
-         * Includes Chickens, SmallChickens and the Endboss.
+         * Enemies appearing in Level 2.
+         * Slightly harder: more chickens + two endbosses.
          * @type {Array<Chicken | SmallChicken | Endboss>}
          */
         [
+            
             new SmallChicken(),
             new SmallChicken(),
             new SmallChicken(),
             new SmallChicken(),
             new SmallChicken(),
-
+            new SmallChicken(),
+            new SmallChicken(),
             new Chicken(),
             new Chicken(),
             new Chicken(),
@@ -46,8 +36,9 @@ function createLevel1() {
             new Chicken(),
             new Chicken(),
             new Chicken(),
-
-            new Endboss()
+            new Chicken(),
+            new Endboss(719 * 2.5),
+            new Endboss(719 * 4.1)
         ],
 
         /**
@@ -55,6 +46,8 @@ function createLevel1() {
          * @type {Cloud[]}
          */
         [
+            new Cloud(),
+            new Cloud(),
             new Cloud(),
             new Cloud(),
             new Cloud(),
@@ -101,9 +94,15 @@ function createLevel1() {
 
             // Segment 4
             new BackgroundObject('img/5_background/layers/air.png', 719 * 4),
-            new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 719 * 4),
-            new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 719 * 4),
-            new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 719 * 4)
+            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719 * 4),
+            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719 * 4),
+            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719 * 4),
+
+            // Segment 5
+            new BackgroundObject('img/5_background/layers/air.png', 719 * 5),
+            new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 719 * 5),
+            new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 719 * 5),
+            new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 719 * 5)
         ],
 
         /**
@@ -111,17 +110,11 @@ function createLevel1() {
          * @type {Bottle[]}
          */
         [
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle()
+            new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(),
+            new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(),
+            new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(),
+            new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(),
+            new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle()
         ],
 
         /**
@@ -129,23 +122,16 @@ function createLevel1() {
          * @type {Coin[]}
          */
         [
-            new Coin(),
-            new Coin(),
-            new Coin(),
-            new Coin(),
-            new Coin()
+            new Coin(), new Coin(), new Coin(), new Coin(), new Coin(),
+            new Coin(), new Coin(), new Coin(), new Coin(), new Coin(),
+            new Coin(), new Coin(), new Coin()
         ]
     );
 }
 
 /**
- * Level 1 – current instance of the first stage of the game world.
- *
- * This variable holds the active instance of Level 1 used by the {@link World}
- * class. On game reset, this reference is reassigned to a fresh instance
- * created by {@link createLevel1}, so all enemies, bottles, coins,
- * and background objects are restored to their initial state.
+ * Level 2 – instance of the second stage of the game world.
  *
  * @type {Level}
  */
-let level1 = createLevel1();
+let level2 = createLevel2();

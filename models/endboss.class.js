@@ -240,7 +240,7 @@ class Endboss extends MoveableObject {
      *
      * @constructor
      */
-    constructor() {
+    constructor(startX = 2500) {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_ALERT);
@@ -248,7 +248,7 @@ class Endboss extends MoveableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
 
-        this.x = 2500;
+        this.x = startX;
         this.baseY = this.y;
         this.speed = this.attackSpeed;
 

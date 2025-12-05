@@ -29,7 +29,7 @@ class SmallChicken extends MoveableObject {
      * Small chicken vertical position (ground).
      * @type {number}
      */
-    y = 380;
+    y = 370;
 
     /**
      * Sound effect when the small chicken dies.

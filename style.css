@@ -300,15 +300,13 @@ button:hover {
 /* MOBILE CONTROLS */
 
 .mobile-controls {
-    position: absolute;
-    bottom: 16px;
-    left: 0;
-    right: 0;
-    padding: 0 20px;
-    display: flex;
+    margin: 12px auto 0;
+    width: min(92vw, 92vh * (16/9), 1100px);
+    display: none; 
     justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
     pointer-events: none;
-    z-index: 50;
 }
 
 .mobile-left {
@@ -399,6 +397,175 @@ button:hover {
         bottom: 14px; 
         left: 14px;
     }
+}
+
+@media (pointer: coarse) and (max-height: 420px) {
+    .mobile-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 26px;
+    }
+
+    .mobile-btn img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .mobile-throw img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .mobile-row { gap: 8px; }
+    .mobile-right { gap: 8px; }
+}
+
+@media (pointer: coarse) and (max-height: 620px) {
+    .mobile-controls {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        width: min(100vw, 1100px);
+        padding: 0 16px;
+        z-index: 6000;
+    }
+}
+
+@media (pointer: coarse) and (min-width: 1050px) and (max-width: 1150px) and (min-height: 680px) and (max-height: 760px) {
+    .mobile-right {
+        transform: translateY(-18px);
+    }
+}
+
+@media (pointer: coarse) and (min-width: 1080px) and (max-width: 1160px) and (min-height: 700px) and (max-height: 740px) {
+    .mobile-controls {
+        margin-top: 0;
+        transform: translateY(-50px);
+    }
+
+    .mobile-right {
+        transform: translateY(-26px);
+    }
+
+    .mobile-left {
+        transform: translateY(-18px);
+    }
+}
+
+@media (pointer: coarse) and (min-width: 1100px) and (min-height: 700px) {
+    .mobile-btn {
+        width: 88px;
+        height: 88px;
+        font-size: 40px;
+    }
+
+    .mobile-btn img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .mobile-throw img {
+        width: 68px;
+        height: 68px;
+    }
+
+    .mobile-row {
+        gap: 16px;
+    }
+
+    .mobile-right {
+        gap: 16px;
+    }
+}
+
+@media (pointer: coarse) and (min-width: 1200px) and (min-height: 800px) {
+    .mobile-btn {
+        width: 92px;
+        height: 92px;
+        font-size: 42px;
+    }
+
+    .mobile-btn img {
+        width: 52px;
+        height: 52px;
+    }
+
+    .mobile-throw img {
+        width: 74px;
+        height: 74px;
+    }
+
+    .mobile-row { gap: 18px; }
+    .mobile-right { gap: 18px; }
+}
+
+@media (pointer: coarse) and (min-width: 1200px) and (max-width: 1350px) and (min-height: 760px) and (max-height: 840px) {
+    .mobile-controls {
+        margin-top: 0;
+        transform: translateY(-30px);
+    }
+}
+
+@media (pointer: coarse) and (min-width: 1500px) and (min-height: 1000px) {
+    .mobile-controls {
+        width: min(96vw, 1600px);
+        padding: 0 60px;
+    }
+
+    .mobile-btn {
+        width: 96px;
+        height: 96px;
+        font-size: 44px;
+    }
+
+    .mobile-btn img {
+        width: 54px;
+        height: 54px;
+    }
+
+    .mobile-throw img {
+        width: 78px;
+        height: 78px;
+    }
+}
+
+@media (pointer: coarse) and (min-width: 1600px) and (min-height: 1100px) {
+    .mobile-controls {
+        width: min(96vw, 1400px);
+        padding: 0 42px;
+    }
+
+    #stage {
+        width: min(96vw, 96vh * (16/9), 1400px);
+    }
+}
+
+@media (pointer: coarse) and (min-width: 1650px) and (min-height: 1200px) {
+    .mobile-controls {
+        width: min(96vw, 1700px);
+        padding: 0 120px;          
+    }
+
+    .mobile-btn {
+        width: 132px;
+        height: 132px;
+        font-size: 58px;
+    }
+
+    .mobile-btn img {
+        width: 74px;
+        height: 74px;
+    }
+
+    .mobile-throw img {
+        width: 104px;
+        height: 104px;
+    }
+
+    .mobile-row { gap: 26px; }
+    .mobile-right { gap: 26px; }
 }
 
 /* ROTATE OVERLAY */

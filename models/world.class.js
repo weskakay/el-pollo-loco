@@ -11,18 +11,11 @@
  * @see SoundManager
  * @see Endboss
  * @see ThrowableObject
- * 
+ *
  * @author KW
- * @version 1.1.0
+ * @version 1.1.1
  */
 
-/**
- * Class representing the game world.
- * Acts as the central logic hub, handling rendering, physics,
- * input, sound, collisions, and game state updates.
- *
- * @class World
- */
 class World {
     /**
      * The main player character instance.
@@ -32,7 +25,7 @@ class World {
 
     /**
      * The current level instance.
-     * @type {Level}
+     * @type {Level|null}
      */
     level = null;
 
@@ -72,6 +65,13 @@ class World {
      * @type {boolean}
      */
     gameOver = false;
+
+    /**
+     * Main loop interval id (60 FPS).
+     * Used to stop the loop on reset.
+     * @type {number|null}
+     */
+    runIntervalId = null;
 
     /**
      * Player’s health status bar.
@@ -145,7 +145,7 @@ class World {
 
     /**
      * DOM element showing the current level (e.g. "LVL 1").
-     * @type {HTMLDivElement | null}
+     * @type {HTMLDivElement|null}
      */
     levelLabelEl = null;
 
@@ -168,12 +168,13 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.soundManager = soundManager || this.sound;
+
         this.selectLevel(this.currentLevel);
         this.updateLevelLimits();
         this.initLevelLabel();
-        this.draw();
         this.setWorld();
         this.run();
+        this.draw();
     }
 
     /**
@@ -204,14 +205,23 @@ class World {
     initLevelLabel() {
         const stage = document.getElementById('stage');
         if (!stage) return;
-        let label = stage.querySelector('.level-indicator');
-        if (!label) {
-            label = document.createElement('div');
-            label.classList.add('level-indicator');
-            stage.appendChild(label);
-        }
-        this.levelLabelEl = label;
+        this.levelLabelEl = this.getOrCreateLevelLabel(stage);
         this.updateLevelLabel();
+    }
+
+    /**
+     * Finds an existing level label or creates a new one.
+     *
+     * @param {HTMLElement} stage
+     * @returns {HTMLDivElement}
+     */
+    getOrCreateLevelLabel(stage) {
+        let label = stage.querySelector('.level-indicator');
+        if (label) return /** @type {HTMLDivElement} */ (label);
+        label = document.createElement('div');
+        label.classList.add('level-indicator');
+        stage.appendChild(label);
+        return /** @type {HTMLDivElement} */ (label);
     }
 
     /**
@@ -225,23 +235,43 @@ class World {
     }
 
     /**
-     * Starts the main game loop.
+     * Starts the main game loop (60 FPS).
      *
      * @returns {void}
      */
     run() {
-        setInterval(() => {
+        this.runIntervalId = setInterval(() => {
             if (this.gameOver) return;
-            this.checkChickenKills();
-            this.checkCollisions();
-            this.handleThrowInput();
-            this.checkCollisionCharacterCoin();
-            this.checkCollisionCharacterBottle();
-            this.checkEndbossActivation();
-            this.checkBottleHitsEndboss();
-            this.checkEndbossDead();
-            this.checkCharacterDead();
+            this.tick();
         }, 1000 / 60);
+    }
+
+    /**
+     * Stops the main game loop interval.
+     * Call this on reset to avoid multiple loops running.
+     *
+     * @returns {void}
+     */
+    stopRunLoop() {
+        if (this.runIntervalId) clearInterval(this.runIntervalId);
+        this.runIntervalId = null;
+    }
+
+    /**
+     * One logic tick of the world (called by run loop).
+     *
+     * @returns {void}
+     */
+    tick() {
+        this.checkChickenKills();
+        this.checkCollisions();
+        this.handleThrowInput();
+        this.checkCollisionCharacterCoin();
+        this.checkCollisionCharacterBottle();
+        this.checkEndbossActivation();
+        this.checkBottleHitsEndboss();
+        this.checkEndbossDead();
+        this.checkCharacterDead();
     }
 
     /**
@@ -253,16 +283,36 @@ class World {
         const now = Date.now();
         const rising = this.keyboard.THROW && !this.throwPressedPrev;
         const cooled = now - this.lastThrowAt >= this.throwCooldownMs;
+
         if (rising && cooled && this.bottlesAmmo > 0) {
-            this.character.isSleeping = false;
-            this.character.stopSnoreIfNecessary?.();
-            this.character.resetStandingTime?.();
+            this.prepareCharacterForThrow();
             this.spawnBottle();
-            this.bottlesAmmo--;
-            this.updateBottleBar();
+            this.consumeBottleAmmo();
             this.lastThrowAt = now;
         }
+
         this.throwPressedPrev = this.keyboard.THROW;
+    }
+
+    /**
+     * Resets idle/sleep state so throwing always works instantly.
+     *
+     * @returns {void}
+     */
+    prepareCharacterForThrow() {
+        this.character.isSleeping = false;
+        this.character.stopSnoreIfNecessary?.();
+        this.character.resetStandingTime?.();
+    }
+
+    /**
+     * Applies ammo decrease and HUD update after a throw.
+     *
+     * @returns {void}
+     */
+    consumeBottleAmmo() {
+        this.bottlesAmmo--;
+        this.updateBottleBar();
     }
 
     /**
@@ -273,15 +323,27 @@ class World {
     spawnBottle() {
         const facingLeft = this.character.otherDirection === true;
         const handY = this.character.y + this.character.height * 0.45;
-        const handX = facingLeft
-            ? this.character.x + this.character.width * 0.2
-            : this.character.x + this.character.width * 0.8;
+        const handX = this.getHandX(facingLeft);
+
         const bottle = new ThrowableObject(handX, handY);
         bottle.otherDirection = facingLeft;
         this.throwableObjects.push(bottle);
+
         if (this.sound && typeof this.sound.playThrow === 'function') {
             this.sound.playThrow();
         }
+    }
+
+    /**
+     * Calculates the bottle start X based on direction.
+     *
+     * @param {boolean} facingLeft
+     * @returns {number}
+     */
+    getHandX(facingLeft) {
+        return facingLeft
+            ? this.character.x + this.character.width * 0.2
+            : this.character.x + this.character.width * 0.8;
     }
 
     /**
@@ -290,19 +352,11 @@ class World {
      * @returns {void}
      */
     updateCoinBar() {
-        if (!this.statusBarCoin || typeof this.statusBarCoin.setPercentage !== 'function') {
-            return;
-        }
-        if (this.maxCoinsInLevel <= 0) {
-            this.statusBarCoin.setPercentage(0);
-            return;
-        }
-        const collected = Math.max(
-            0,
-            Math.min(this.character.coinsCollected, this.maxCoinsInLevel)
-        );
-        const percentage = (collected / this.maxCoinsInLevel) * 100;
-        this.statusBarCoin.setPercentage(percentage);
+        if (!this.canSetPercentage(this.statusBarCoin)) return;
+        this.statusBarCoin.setPercentage(this.computeProgressPercent(
+            this.character.coinsCollected,
+            this.maxCoinsInLevel
+        ));
     }
 
     /**
@@ -311,19 +365,34 @@ class World {
      * @returns {void}
      */
     updateBottleBar() {
-        if (!this.statusBarBottle || typeof this.statusBarBottle.setPercentage !== 'function') {
-            return;
-        }
-        if (this.maxBottlesInLevel <= 0) {
-            this.statusBarBottle.setPercentage(0);
-            return;
-        }
-        const clampedAmmo = Math.max(
-            0,
-            Math.min(this.bottlesAmmo, this.maxBottlesInLevel)
-        );
-        const percentage = (clampedAmmo / this.maxBottlesInLevel) * 100;
-        this.statusBarBottle.setPercentage(percentage);
+        if (!this.canSetPercentage(this.statusBarBottle)) return;
+        this.statusBarBottle.setPercentage(this.computeProgressPercent(
+            this.bottlesAmmo,
+            this.maxBottlesInLevel
+        ));
+    }
+
+    /**
+     * Checks if a status bar supports setPercentage.
+     *
+     * @param {*} bar
+     * @returns {boolean}
+     */
+    canSetPercentage(bar) {
+        return !!(bar && typeof bar.setPercentage === 'function');
+    }
+
+    /**
+     * Computes a 0..100 progress percent from value/max, clamped safely.
+     *
+     * @param {number} value
+     * @param {number} max
+     * @returns {number}
+     */
+    computeProgressPercent(value, max) {
+        if (max <= 0) return 0;
+        const clamped = Math.max(0, Math.min(value || 0, max));
+        return (clamped / max) * 100;
     }
 
     /**
@@ -346,16 +415,31 @@ class World {
      * @returns {boolean}
      */
     shouldSkipEnemyCollision(enemy) {
-        if (!(enemy instanceof Endboss) && enemy.chickenIsDead) {
-            return true;
-        }
-        if (enemy instanceof Endboss) {
-            const isDeadFn = enemy.isDeadEndBoss?.bind(enemy);
-            if (typeof isDeadFn === 'function' && isDeadFn()) {
-                return true;
-            }
-        }
+        if (this.isDeadChicken(enemy)) return true;
+        if (this.isDeadEndboss(enemy)) return true;
         return false;
+    }
+
+    /**
+     * Checks if an enemy is a dead chicken type.
+     *
+     * @param {MoveableObject} enemy
+     * @returns {boolean}
+     */
+    isDeadChicken(enemy) {
+        return !(enemy instanceof Endboss) && enemy.chickenIsDead;
+    }
+
+    /**
+     * Checks if an enemy is a dead endboss.
+     *
+     * @param {MoveableObject} enemy
+     * @returns {boolean}
+     */
+    isDeadEndboss(enemy) {
+        if (!(enemy instanceof Endboss)) return false;
+        const isDeadFn = enemy.isDeadEndBoss?.bind(enemy);
+        return typeof isDeadFn === 'function' ? isDeadFn() : false;
     }
 
     /**
@@ -365,11 +449,8 @@ class World {
      * @returns {void}
      */
     handleEnemyCollision(enemy) {
-        if (enemy instanceof Endboss) {
-            this.applyEndbossCollision();
-        } else {
-            this.applyChickenCollision(enemy);
-        }
+        if (enemy instanceof Endboss) return this.applyEndbossCollision();
+        this.applyChickenCollision(enemy);
     }
 
     /**
@@ -393,6 +474,7 @@ class World {
         const stompHit =
             this.character.speedY < 0 &&
             (this.character.y + this.character.height - 20) < (enemy.y + 20);
+
         if (!stompHit && !this.character.isHurt()) {
             this.character.hit();
             this.statusBar.setPercentage(this.character.energy);
@@ -410,9 +492,7 @@ class World {
             this.level.coins.splice(index, 1);
             this.character.coinsCollected++;
             this.updateCoinBar();
-            if (this.soundManager?.playCoinSound) {
-                this.soundManager.playCoinSound();
-            }
+            this.soundManager?.playCoinSound?.();
         });
     }
 
@@ -469,12 +549,7 @@ class World {
     isBottlePickupCollision(bottle) {
         const c = this.getCharacterHitbox();
         const b = this.getBottleHitbox(bottle);
-        return (
-            c.right > b.left &&
-            c.bottom > b.top &&
-            c.left < b.right &&
-            c.top < b.bottom
-        );
+        return c.right > b.left && c.bottom > b.top && c.left < b.right && c.top < b.bottom;
     }
 
     /**
@@ -484,16 +559,26 @@ class World {
      */
     handleBottlePickup() {
         this.bottlesAmmo++;
-        if (this.maxBottlesInLevel > 0) {
-            this.bottlesAmmo = Math.min(this.bottlesAmmo, this.maxBottlesInLevel);
-        }
+        this.bottlesAmmo = this.clampAmmo(this.bottlesAmmo, this.maxBottlesInLevel);
+
         if (typeof this.character.bottlesCollected === 'number') {
             this.character.bottlesCollected++;
         }
+
         this.updateBottleBar();
-        if (this.sound?.playBottlePickup) {
-            this.sound.playBottlePickup();
-        }
+        this.sound?.playBottlePickup?.();
+    }
+
+    /**
+     * Clamps ammo between 0 and max (if max > 0).
+     *
+     * @param {number} ammo
+     * @param {number} max
+     * @returns {number}
+     */
+    clampAmmo(ammo, max) {
+        if (max <= 0) return Math.max(0, ammo);
+        return Math.max(0, Math.min(ammo, max));
     }
 
     /**
@@ -516,9 +601,7 @@ class World {
      * @returns {boolean}
      */
     isChickenAlive(enemy) {
-        const isChicken =
-            enemy instanceof Chicken ||
-            enemy instanceof SmallChicken;
+        const isChicken = enemy instanceof Chicken || enemy instanceof SmallChicken;
         return isChicken && !enemy.chickenIsDead;
     }
 
@@ -529,11 +612,7 @@ class World {
      * @returns {boolean}
      */
     isStompKill(enemy) {
-        return (
-            this.character.isAboveGround() &&
-            this.character.speedY < 0 &&
-            this.character.isColliding(enemy)
-        );
+        return this.character.isAboveGround() && this.character.speedY < 0 && this.character.isColliding(enemy);
     }
 
     /**
@@ -543,12 +622,9 @@ class World {
      * @returns {void}
      */
     resolveChickenKill(enemy) {
-        if (typeof this.character.bounceOnEnemy === 'function') {
-            this.character.bounceOnEnemy();
-        } else {
-            this.character.speedY = 10;
-        }
+        this.character.bounceOnEnemy?.();
         enemy.playAnimationChickenDead();
+
         setTimeout(() => {
             this.level.enemies = this.level.enemies.filter(e => e !== enemy);
         }, 300);
@@ -576,9 +652,7 @@ class World {
     stopAllSoundsOnWin() {
         if (!this.soundManager) return;
         this.soundManager.stopEndbossSounds?.();
-        if (this.soundManager.backgroundMusic) {
-            this.soundManager.backgroundMusic.pause();
-        }
+        this.soundManager.backgroundMusic?.pause();
         this.soundManager.playGameWin?.();
     }
 
@@ -590,17 +664,46 @@ class World {
     checkEndbossActivation() {
         this.level.enemies.forEach(enemy => {
             if (!(enemy instanceof Endboss)) return;
-            const distance = Math.abs(this.character.x - enemy.x);
-            if (distance >= 600 || enemy.hadFirstContact) return;
-            enemy.hadFirstContact = true;
-            if (this.soundManager && !enemy._alertPlayedOnce) {
-                this.soundManager.playEndbossAlert();
-                enemy._alertPlayedOnce = true;
-            }
-            enemy.i = 5;
-            enemy.endBossAnimation();
-            this.soundManager?.playEndbossAttack?.();
+            if (!this.shouldActivateEndboss(enemy)) return;
+            this.activateEndboss(enemy);
         });
+    }
+
+    /**
+     * Checks whether an endboss should be activated.
+     *
+     * @param {Endboss} enemy
+     * @returns {boolean}
+     */
+    shouldActivateEndboss(enemy) {
+        const distance = Math.abs(this.character.x - enemy.x);
+        return distance < 600 && !enemy.hadFirstContact;
+    }
+
+    /**
+     * Activates an endboss (first contact).
+     *
+     * @param {Endboss} enemy
+     * @returns {void}
+     */
+    activateEndboss(enemy) {
+        enemy.hadFirstContact = true;
+        this.playEndbossAlertOnce(enemy);
+        enemy.i = 5;
+        enemy.endBossAnimation();
+        this.soundManager?.playEndbossAttack?.();
+    }
+
+    /**
+     * Plays the alert sound only once per endboss.
+     *
+     * @param {Endboss} enemy
+     * @returns {void}
+     */
+    playEndbossAlertOnce(enemy) {
+        if (!this.soundManager || enemy._alertPlayedOnce) return;
+        this.soundManager.playEndbossAlert();
+        enemy._alertPlayedOnce = true;
     }
 
     /**
@@ -637,9 +740,11 @@ class World {
     checkEndbossDead() {
         const endbosses = this.getAllEndbosses();
         if (endbosses.length === 0) return;
+
         const anyNewlyDead = this.handleDeadEndbosses(endbosses);
         if (!anyNewlyDead) return;
         if (!this.areAllEndbossesDead(endbosses)) return;
+
         this.stopAllSoundsOnWin();
         setTimeout(() => this.showWinScreen(), 800);
     }
@@ -652,18 +757,40 @@ class World {
      */
     handleDeadEndbosses(endbosses) {
         let anyNewlyDead = false;
+
         endbosses.forEach((endboss) => {
-            const isDeadFn = endboss.isDeadEndBoss?.bind(endboss);
-            const isDead = typeof isDeadFn === 'function' ? isDeadFn() : false;
-            if (!isDead || endboss.deathHandled) return;
-            endboss.deathHandled = true;
-            endboss.currentImage = 0;
-            endboss.deathAnimationStarted = true;
+            if (!this.isEndbossNewlyDead(endboss)) return;
+            this.markEndbossDeadHandled(endboss);
             this.removeEndbossAfterDelay(endboss, 1000);
-            anyNewlyDead = true;
             this.soundManager?.stopEndbossSounds?.();
+            anyNewlyDead = true;
         });
+
         return anyNewlyDead;
+    }
+
+    /**
+     * Checks if an endboss is dead and not handled yet.
+     *
+     * @param {Endboss} endboss
+     * @returns {boolean}
+     */
+    isEndbossNewlyDead(endboss) {
+        const isDeadFn = endboss.isDeadEndBoss?.bind(endboss);
+        const isDead = typeof isDeadFn === 'function' ? isDeadFn() : false;
+        return isDead && !endboss.deathHandled;
+    }
+
+    /**
+     * Marks endboss as handled and prepares death animation state.
+     *
+     * @param {Endboss} endboss
+     * @returns {void}
+     */
+    markEndbossDeadHandled(endboss) {
+        endboss.deathHandled = true;
+        endboss.currentImage = 0;
+        endboss.deathAnimationStarted = true;
     }
 
     /**
@@ -702,15 +829,40 @@ class World {
     createGameOverlay(title, subtitle, color, icon = "") {
         const overlay = document.createElement("div");
         overlay.classList.add("overlay");
-        overlay.innerHTML = `
-            <div class="box" style="${color ? `background-color:${color};` : ""}">
-                <div class="overlay-title">${icon ? icon + " " : ""}${title}</div>
+        overlay.innerHTML = this.getOverlayHtml(title, subtitle, color, icon);
+        this.appendOverlay(overlay);
+        return overlay;
+    }
+
+    /**
+     * Builds the HTML for the overlay box.
+     *
+     * @param {string} title
+     * @param {string} subtitle
+     * @param {string} color
+     * @param {string} icon
+     * @returns {string}
+     */
+    getOverlayHtml(title, subtitle, color, icon) {
+        const style = color ? `background-color:${color};` : "";
+        const prefix = icon ? icon + " " : "";
+        return `
+            <div class="box" style="${style}">
+                <div class="overlay-title">${prefix}${title}</div>
                 <div class="overlay-subtitle">${subtitle}</div>
             </div>
         `;
+    }
+
+    /**
+     * Appends overlay to stage (or body fallback).
+     *
+     * @param {HTMLDivElement} overlay
+     * @returns {void}
+     */
+    appendOverlay(overlay) {
         const stage = document.getElementById("stage") || document.body;
         stage.appendChild(overlay);
-        return overlay;
     }
 
     /**
@@ -733,13 +885,14 @@ class World {
      */
     showWinScreen() {
         this.gameOver = true;
-        const subtitle = this.getWinSubtitle();
+
         const overlay = this.createGameOverlay(
             "YOU WIN!",
-            subtitle,
+            this.getWinSubtitle(),
             "rgba(0,0,0,0.8)",
             "🏆"
         );
+
         if (this.currentLevel === 1) {
             this.addNextLevelButton(overlay);
         }
@@ -754,15 +907,18 @@ class World {
     addNextLevelButton(overlay) {
         const box = overlay.querySelector(".box");
         if (!box) return;
+
         const btn = document.createElement("button");
         btn.textContent = "Next Level";
         btn.classList.add("overlay-button");
+
         btn.addEventListener("click", () => {
             overlay.remove();
             this.switchToLevel(2);
             this.gameOver = false;
             this.draw();
         });
+
         box.appendChild(btn);
     }
 
@@ -786,15 +942,16 @@ class World {
      */
     showLoseScreen() {
         this.gameOver = true;
-        const subtitle = this.getLoseSubtitle();
+
         if (this.soundManager) {
             this.soundManager.stopEndbossSounds?.();
             this.soundManager.backgroundMusic?.pause();
             this.soundManager.playGameOver?.();
         }
+
         this.createGameOverlay(
             "YOU LOSE",
-            subtitle,
+            this.getLoseSubtitle(),
             "rgba(0,0,0,0.8)",
             "❌"
         );
@@ -809,9 +966,7 @@ class World {
         this.clearCanvas();
         this.drawWorldLayer();
         this.drawHudLayer();
-        if (!this.gameOver) {
-            requestAnimationFrame(() => this.draw());
-        }
+        if (!this.gameOver) requestAnimationFrame(() => this.draw());
     }
 
     /**
@@ -899,16 +1054,6 @@ class World {
     }
 
     /**
-     * Reduces the Endboss’s health and updates the boss bar.
-     *
-     * @returns {void}
-     */
-    hitBoss() {
-        this.endboss.energy -= 20;
-        this.statusBarBoss.setPercentage(this.endboss.energy);
-    }
-
-    /**
      * Selects the new level instance and updates currentLevel.
      *
      * @param {number} levelNumber
@@ -919,11 +1064,11 @@ class World {
             level2 = createLevel2();
             this.level = level2;
             this.currentLevel = 2;
-        } else {
-            level1 = createLevel1();
-            this.level = level1;
-            this.currentLevel = 1;
+            return;
         }
+        level1 = createLevel1();
+        this.level = level1;
+        this.currentLevel = 1;
     }
 
     /**
@@ -980,7 +1125,6 @@ class World {
             console.error('Error while restarting background music:', error);
         }
     }
-
 
     /**
      * Switches to the given level number and resets state.

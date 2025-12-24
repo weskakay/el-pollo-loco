@@ -14,7 +14,7 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    overflow: hidden;
+    overflow-y: auto;
     font-family: 'Zabras', Arial, sans-serif;
 }
 
@@ -59,7 +59,6 @@ body {
     z-index: 1600;
 }
 
-
 /* === COMMON === */
 
 .d-none {
@@ -74,7 +73,7 @@ canvas {
 
 canvas.hidden-placeholder {
     visibility: hidden;
-    height: 540px;
+    
 }
 
 button {
@@ -252,7 +251,6 @@ button:hover {
     font-family: 'Zabras', Arial, sans-serif;
 }
 
-
 .overlay-button {
     margin-top: 16px;
     padding: 8px 20px;
@@ -427,7 +425,7 @@ button:hover {
         left: 50%;
         transform: translateX(-50%);
         margin: 0;
-        width: min(100vw, 1100px);
+        width: min(100%, 1100px);
         padding: 0 16px;
         z-index: 6000;
     }

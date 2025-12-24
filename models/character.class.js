@@ -2,7 +2,7 @@
  * @fileoverview Defines the {@link Character} class.
  * Represents the main player character of the game, controlling
  * movement, animations, input handling, and interactions such as jumping.
- * 
+ *
  * The character reacts to keyboard input, switches animation states
  * (walking, jumping, idle, sleeping, hurt, dead), and updates the
  * world camera based on movement.
@@ -11,9 +11,9 @@
  * @see World
  * @see Keyboard
  * @see MoveableObject
- * 
+ *
  * @author KW
- * @version 1.1.0
+ * @version 1.2.0
  */
 
 /**
@@ -78,6 +78,18 @@ class Character extends MoveableObject {
      * @type {boolean}
      */
     bottleThrown = false;
+
+    /**
+     * Stores the interval id for the 60 FPS movement loop.
+     * @type {number|null}
+     */
+    movementIntervalId = null;
+
+    /**
+     * Stores the interval id for the animation update loop.
+     * @type {number|null}
+     */
+    animationIntervalId = null;
 
     /**
      * Animation frames for idle/standing state.
@@ -205,42 +217,87 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Sets up the main movement loop (position, input, camera, walking sound).
+     * Starts the main movement loop of the character.
+     * Handles keyboard input, movement, camera updates
+     * and walking sound playback at 60 FPS.
      *
      * @returns {void}
      */
     startMovementLoop() {
-        setInterval(() => {
-            if (!this.world || this.world.gameOver) {
-                this.stopWalkingSound();
-                return;
-            }
+        this.movementIntervalId = setInterval(() => {
+            if (this.shouldSkipMovementLoop()) return;
 
-            const movingRight = this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
-            const movingLeft = this.world.keyboard.LEFT && this.x > 0;
-            const isWalking = movingRight || movingLeft;
-
-            this.updateHorizontalMovement(movingRight, movingLeft);
-            this.updateWalkingSound(isWalking);
+            const movement = this.getMovementState();
+            this.updateHorizontalMovement(movement.movingRight, movement.movingLeft);
+            this.updateWalkingSound(movement.isWalking);
             this.handleJumpInput();
             this.updateCameraPosition();
         }, 1000 / 60);
     }
 
     /**
-     * Sets up the main animation loop (visual state, sleep, snore).
+     * Starts the animation loop of the character.
+     * Updates the visual animation state (idle, walk,
+     * jump, hurt, dead, sleeping).
      *
      * @returns {void}
      */
     startAnimationLoop() {
-        setInterval(() => {
-            if (!this.world || this.world.gameOver) {
-                this.resetSleepState();
-                return;
-            }
-
+        this.animationIntervalId = setInterval(() => {
+            if (this.shouldSkipAnimationLoop()) return;
             this.updateAnimationState();
         }, 100);
+    }
+
+    /**
+     * Determines whether the movement loop should be skipped.
+     * Stops walking sound when the game is over or the world
+     * reference is missing.
+     *
+     * @returns {boolean} True if the loop should be skipped.
+     */
+    shouldSkipMovementLoop() {
+        if (this.world && !this.world.gameOver) return false;
+        this.stopWalkingSound();
+        return true;
+    }
+
+    /**
+     * Determines whether the animation loop should be skipped.
+     * Resets sleep state when the game is over or inactive.
+     *
+     * @returns {boolean} True if the loop should be skipped.
+     */
+    shouldSkipAnimationLoop() {
+        if (this.world && !this.world.gameOver) return false;
+        this.resetSleepState();
+        return true;
+    }
+
+    /**
+     * Calculates the current horizontal movement state
+     * based on keyboard input and level boundaries.
+     *
+     * @returns {{movingRight: boolean, movingLeft: boolean, isWalking: boolean}}
+     */
+    getMovementState() {
+        const movingRight = this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
+        const movingLeft = this.world.keyboard.LEFT && this.x > 0;
+        return { movingRight, movingLeft, isWalking: movingRight || movingLeft };
+    }
+
+    /**
+     * Stops all active character intervals.
+     * Used on game reset or when reinitializing the world
+     * to prevent multiple running loops.
+     *
+     * @returns {void}
+     */
+    stopLoops() {
+        if (this.movementIntervalId) clearInterval(this.movementIntervalId);
+        if (this.animationIntervalId) clearInterval(this.animationIntervalId);
+        this.movementIntervalId = null;
+        this.animationIntervalId = null;
     }
 
     /**
@@ -271,12 +328,9 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     updateWalkingSound(isWalking) {
-        if (!this.world || !this.world.sound) {
-            return;
-        }
+        if (!this.world || !this.world.sound) return;
 
         const shouldPlayWalking = isWalking && !this.isAboveGround();
-
         if (shouldPlayWalking) {
             this.world.sound.playWalking();
         } else {
@@ -324,26 +378,10 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     updateAnimationState() {
-        if (this.isDead()) {
-            this.handleDeadState();
-            return;
-        }
-
-        if (this.isHurt()) {
-            this.handleHurtState();
-            return;
-        }
-
-        if (this.isAboveGround()) {
-            this.handleAirState();
-            return;
-        }
-
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-            this.handleWalkingState();
-            return;
-        }
-
+        if (this.isDead()) return this.handleDeadState();
+        if (this.isHurt()) return this.handleHurtState();
+        if (this.isAboveGround()) return this.handleAirState();
+        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) return this.handleWalkingState();
         this.handleIdleState();
     }
 
@@ -405,10 +443,11 @@ class Character extends MoveableObject {
 
         if (this.standingTime >= 5000) {
             this.enterSleepState();
-        } else {
-            this.exitSleepState();
-            this.playAnimation(this.IMAGES_STANDING);
+            return;
         }
+
+        this.exitSleepState();
+        this.playAnimation(this.IMAGES_STANDING);
     }
 
     /**

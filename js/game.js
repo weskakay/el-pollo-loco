@@ -2,9 +2,9 @@
  * @fileoverview Main game control file.
  * Handles initialization, event listeners, and high-level game flow.
  * This file acts as the entry point for El Pollo Loco.
- * 
+ *
  * @author KW
- * @version 1.2.0
+ * @version 1.3.0
  */
 
 /**
@@ -48,7 +48,6 @@ try {
     console.error('Failed to read soundMuted from localStorage:', error);
 }
 
-
 /**
  * Starts the game:
  * - Hides the start screen.
@@ -75,39 +74,78 @@ function startGame() {
 
 /**
  * Resets the game state without reloading the page.
- * - Closes overlays & help.
+ * - Hides help and removes overlays.
+ * - Stops world loop + character loops.
  * - Stops all relevant sounds.
- * - Marks the current world as finished.
- * - Creates a fresh World instance.
+ * - Re-initializes the world.
  *
  * @returns {void}
  */
 function resetGame() {
-    const helpScreen = document.getElementById('help-screen');
-    if (helpScreen) {
-        helpScreen.classList.add('d-none');
-    }
-
-    document.querySelectorAll('.overlay').forEach((overlay) => overlay.remove());
+    hideHelpScreen();
+    removeOverlays();
 
     if (world) {
-        world.gameOver = true;
-
-        if (world.sound) {
-            if (typeof world.sound.stopBackground === 'function') {
-                world.sound.stopBackground();
-            }
-            if (typeof world.sound.stopWalking === 'function') {
-                world.sound.stopWalking();
-            }
-        }
-
-        if (world.soundManager && typeof world.soundManager.stopEndbossSounds === 'function') {
-            world.soundManager.stopEndbossSounds();
-        }
+        stopWorld(world);
+        stopWorldSounds(world);
+        stopEndbossSounds(world);
     }
 
     init();
+}
+
+/**
+ * Hides the help screen if it exists.
+ *
+ * @returns {void}
+ */
+function hideHelpScreen() {
+    document.getElementById('help-screen')?.classList.add('d-none');
+}
+
+/**
+ * Removes all current overlay elements from the DOM.
+ *
+ * @returns {void}
+ */
+function removeOverlays() {
+    document.querySelectorAll('.overlay').forEach((overlay) => overlay.remove());
+}
+
+/**
+ * Stops the current world instance safely:
+ * - Marks it as game over
+ * - Stops the world run loop interval
+ * - Stops the character movement/animation loops
+ *
+ * @param {World} worldInstance - The active world instance.
+ * @returns {void}
+ */
+function stopWorld(worldInstance) {
+    worldInstance.gameOver = true;
+    worldInstance.stopRunLoop?.();
+    worldInstance.character?.stopLoops?.();
+}
+
+/**
+ * Stops general world sounds (background, walking).
+ *
+ * @param {World} worldInstance - The active world instance.
+ * @returns {void}
+ */
+function stopWorldSounds(worldInstance) {
+    worldInstance.sound?.stopBackground?.();
+    worldInstance.sound?.stopWalking?.();
+}
+
+/**
+ * Stops endboss-related sounds if the sound manager supports it.
+ *
+ * @param {World} worldInstance - The active world instance.
+ * @returns {void}
+ */
+function stopEndbossSounds(worldInstance) {
+    worldInstance.soundManager?.stopEndbossSounds?.();
 }
 
 /**
@@ -187,44 +225,70 @@ function toggleHelp() {
 function initTouchControls() {
     if (touchControlsInitialized) return;
 
+    const buttons = getTouchButtons();
+    if (!buttons) return;
+
+    bindTouchButtons(buttons);
+    touchControlsInitialized = true;
+}
+
+/**
+ * Collects all required touch control elements.
+ *
+ * @returns {{leftBtn:HTMLElement,rightBtn:HTMLElement,jumpBtn:HTMLElement,throwBtn:HTMLElement}|null}
+ */
+function getTouchButtons() {
     const mobileControls = document.getElementById('mobile-controls');
     const leftBtn = document.getElementById('btn-left');
     const rightBtn = document.getElementById('btn-right');
     const jumpBtn = document.getElementById('btn-jump');
     const throwBtn = document.getElementById('btn-throw');
 
-    if (!mobileControls || !leftBtn || !rightBtn || !jumpBtn || !throwBtn) {
-        return;
-    }
-
-    const bindButton = (btn, keyFlag) => {
-        const setFlag = (value) => {
-            keyboard[keyFlag] = value;
-        };
-
-        btn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            setFlag(true);
-        });
-
-        btn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            setFlag(false);
-        });
-
-        btn.addEventListener('touchcancel', (e) => {
-            e.preventDefault();
-            setFlag(false);
-        });
-    };
-
-    bindButton(leftBtn, 'LEFT');
-    bindButton(rightBtn, 'RIGHT');
-    bindButton(jumpBtn, 'JUMP');
-    bindButton(throwBtn, 'THROW');
-
-    touchControlsInitialized = true;
+    if (!mobileControls || !leftBtn || !rightBtn || !jumpBtn || !throwBtn) return null;
+    return { leftBtn, rightBtn, jumpBtn, throwBtn };
 }
+
+/**
+ * Binds all buttons to keyboard flags.
+ *
+ * @param {{leftBtn:HTMLElement,rightBtn:HTMLElement,jumpBtn:HTMLElement,throwBtn:HTMLElement}} buttons
+ * @returns {void}
+ */
+function bindTouchButtons(buttons) {
+    bindTouchButton(buttons.leftBtn, 'LEFT');
+    bindTouchButton(buttons.rightBtn, 'RIGHT');
+    bindTouchButton(buttons.jumpBtn, 'JUMP');
+    bindTouchButton(buttons.throwBtn, 'THROW');
+}
+
+/**
+ * Binds one touch button to a keyboard flag.
+ * Uses passive:false because preventDefault() is needed to block scrolling.
+ *
+ * @param {HTMLElement} btn
+ * @param {'LEFT'|'RIGHT'|'JUMP'|'THROW'} keyFlag
+ * @returns {void}
+ */
+function bindTouchButton(btn, keyFlag) {
+    const setFlag = (value) => (keyboard[keyFlag] = value);
+
+    btn.addEventListener('touchstart', (e) => handleTouchEvent(e, () => setFlag(true)), { passive: false });
+    btn.addEventListener('touchend', (e) => handleTouchEvent(e, () => setFlag(false)), { passive: false });
+    btn.addEventListener('touchcancel', (e) => handleTouchEvent(e, () => setFlag(false)), { passive: false });
+}
+
+/**
+ * Normalizes touch events by preventing default scrolling and running an action.
+ *
+ * @param {TouchEvent} event
+ * @param {Function} action
+ * @returns {void}
+ */
+function handleTouchEvent(event, action) {
+    event.preventDefault();
+    action();
+}
+
 
 /**
  * Handles keydown events for player input.

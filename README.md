@@ -13,6 +13,14 @@ Created by Kay W.
 
 ---
 
+## 🎮 Gameplay Preview
+
+![Start Screen](/docs/img/Github_asset_1.png)
+![Gameplay](/docs/img/Github_asset_2.png)
+![Boss Fight](README_assets/boss-fight.png)
+
+---
+
 ## 🎮 Gameplay & Controls
 
 ### 🕹️ Desktop

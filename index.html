@@ -8,33 +8,55 @@
 
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="img/8_coin/coin_2.png" />
-    
+
+    <!-- Base classes -->
     <script src="models/drawable-object.class.js"></script>
     <script src="models/moveable-object.class.js"></script>
+
+    <!-- Managers / Input -->
     <script src="models/sound-manager.class.js"></script>
+    <script src="models/keyboard.class.js"></script>
+
+    <!-- Entities -->
     <script src="models/character.class.js"></script>
     <script src="models/chicken.class.js"></script>
     <script src="models/small-chicken.class.js"></script>
-    <script src="models/bottle.class.js"></script> 
-    <script src="models/coin.class.js"></script> 
+    <script src="models/bottle.class.js"></script>
+    <script src="models/coin.class.js"></script>
     <script src="models/cloud.class.js"></script>
+    <script src="models/background-object.class.js"></script>
+    <script src="models/throwable-object.class.js"></script>
+    <script src="models/endboss.class.js"></script>
+
+    <!-- HUD -->
     <script src="models/status-bar.class.js"></script>
     <script src="models/status-bar-boss.class.js"></script>
     <script src="models/status-bar-bottle.class.js"></script>
     <script src="models/status-bar-coin.class.js"></script>
-    <script src="models/world.class.js"></script>
-    <script src="models/background-object.class.js"></script>
-    <script src="models/keyboard.class.js"></script>
+
+    <!-- Level -->
     <script src="models/level.class.js"></script>
-    <script src="models/throwable-object.class.js"></script>
-    <script src="models/endboss.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="levels/level2.js"></script>
+
+    <!-- World -->
+    <script src="models/world/world.class.js"></script>
+    <script src="models/world/world.loop.js"></script>
+    <script src="models/world/world.hud.js"></script>
+    <script src="models/world/world.throw.js"></script>
+    <script src="models/world/world.collectibles.js"></script>
+    <script src="models/world/world.collisions.js"></script>
+    <script src="models/world/world.endboss.js"></script>
+    <script src="models/world/world.render.js"></script>
+
+    <!-- Game bootstrap -->
     <script src="js/game.js" defer></script>
 </head>
+
 <body>
     <div id="stage">
         <canvas id="canvas" width="720" height="480" class="hidden-placeholder"></canvas>
+
         <div class="ui">
             <div id="start-screen" class="start-screen">
                 <button onclick="startGame()">START</button>
@@ -60,9 +82,10 @@
                     <li>⬆️ / W – Jump</li>
                     <li>F – Throw bottle</li>
                 </ul>
-            </div>     
+            </div>
         </div>
     </div>
+
     <div id="mobile-controls" class="mobile-controls">
         <div class="mobile-left">
             <button id="btn-throw" class="mobile-btn mobile-throw">
@@ -82,7 +105,7 @@
         </div>
     </div>
 
-    <div id="rotate-overlay" class="rotate-overlay ">
+    <div id="rotate-overlay" class="rotate-overlay">
         <div class="rotate-box">
             <p>Bitte drehe dein Gerät ins Querformat 📱↻</p>
         </div>

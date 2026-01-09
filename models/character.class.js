@@ -1,11 +1,8 @@
 /**
  * @fileoverview Defines the {@link Character} class.
- * Represents the main player character of the game, controlling
- * movement, animations, input handling, and interactions such as jumping.
- *
- * The character reacts to keyboard input, switches animation states
- * (walking, jumping, idle, sleeping, hurt, dead), and updates the
- * world camera based on movement.
+ * The player character (Pepe). Handles movement, animation state machine,
+ * gravity/jumping and related sound effects. Reads input from {@link Keyboard}
+ * via {@link World}.
  *
  * @extends MoveableObject
  * @see World
@@ -16,85 +13,22 @@
  * @version 1.2.0
  */
 
-/**
- * Class representing the player character (Pepe).
- * Handles animation sequences, movement logic, gravity, and sound effects.
- *
- * @class Character
- * @extends MoveableObject
- */
 class Character extends MoveableObject {
-    /**
-     * Character height in pixels.
-     * @type {number}
-     */
     height = 250;
-
-    /**
-     * Initial vertical position of the character.
-     * @type {number}
-     */
     y = 180;
-
-    /**
-     * Horizontal walking speed of the character.
-     * @type {number}
-     */
     speed = 6;
 
-    /**
-     * Tracks how long the character has been standing still (in ms).
-     * After 5000ms, the sleeping animation is triggered.
-     * @type {number}
-     */
     standingTime = 0;
-
-    /**
-     * Time the character has been idle (in milliseconds).
-     * @type {number}
-     */
     idleTime = 0;
-
-    /**
-     * Indicates whether the character is currently sleeping.
-     * @type {boolean}
-     */
     isSleeping = false;
 
-    /**
-     * Total number of coins collected by the player.
-     * @type {number}
-     */
     coinsCollected = 0;
-
-    /**
-     * Total number of bottles collected by the player.
-     * @type {number}
-     */
     bottlesCollected = 0;
-
-    /**
-     * Indicates whether a bottle has been thrown.
-     * @type {boolean}
-     */
     bottleThrown = false;
 
-    /**
-     * Stores the interval id for the 60 FPS movement loop.
-     * @type {number|null}
-     */
     movementIntervalId = null;
-
-    /**
-     * Stores the interval id for the animation update loop.
-     * @type {number|null}
-     */
     animationIntervalId = null;
 
-    /**
-     * Animation frames for idle/standing state.
-     * @type {string[]}
-     */
     IMAGES_STANDING = [
         'img/2_character_pepe/1_idle/idle/I-1.png',
         'img/2_character_pepe/1_idle/idle/I-2.png',
@@ -108,10 +42,6 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/idle/I-10.png'
     ];
 
-    /**
-     * Animation frames for sleeping state.
-     * @type {string[]}
-     */
     IMAGES_SLEEPING = [
         'img/2_character_pepe/1_idle/long_idle/I-11.png',
         'img/2_character_pepe/1_idle/long_idle/I-12.png',
@@ -125,10 +55,6 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/long_idle/I-20.png'
     ];
 
-    /**
-     * Animation frames for walking state.
-     * @type {string[]}
-     */
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -138,10 +64,6 @@ class Character extends MoveableObject {
         'img/2_character_pepe/2_walk/W-26.png'
     ];
 
-    /**
-     * Animation frames for jumping state.
-     * @type {string[]}
-     */
     IMAGES_JUMPING = [
         'img/2_character_pepe/3_jump/J-31.png',
         'img/2_character_pepe/3_jump/J-32.png',
@@ -154,10 +76,6 @@ class Character extends MoveableObject {
         'img/2_character_pepe/3_jump/J-39.png'
     ];
 
-    /**
-     * Animation frames for the dead state.
-     * @type {string[]}
-     */
     IMAGES_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
         'img/2_character_pepe/5_dead/D-52.png',
@@ -168,31 +86,18 @@ class Character extends MoveableObject {
         'img/2_character_pepe/5_dead/D-57.png'
     ];
 
-    /**
-     * Animation frames for the hurt state.
-     * @type {string[]}
-     */
     IMAGES_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png'
     ];
 
-    /**
-     * Reference to the active game world instance.
-     * Used to access keyboard input, sound manager, and camera.
-     * @type {World}
-     */
+    /** @type {World} */
     world;
 
-    /**
-     * Creates a new {@link Character} instance.
-     * Loads all animation images, applies gravity, and starts animation loops.
-     *
-     * @constructor
-     */
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
+
         this.loadImages(this.IMAGES_STANDING);
         this.loadImages(this.IMAGES_SLEEPING);
         this.loadImages(this.IMAGES_WALKING);
@@ -207,9 +112,9 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Starts the movement and animation loops for the character.
-     *
-     * @returns {void}
+     * Starts movement + animation loops.
+     * Call once per character instance (world reset should create a fresh instance
+     * or call {@link stopLoops} before re-using).
      */
     animate() {
         this.startMovementLoop();
@@ -217,11 +122,8 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Starts the main movement loop of the character.
-     * Handles keyboard input, movement, camera updates
-     * and walking sound playback at 60 FPS.
-     *
-     * @returns {void}
+     * Movement loop (60 FPS).
+     * Reads input, moves the character, triggers jump and keeps the camera centered.
      */
     startMovementLoop() {
         this.movementIntervalId = setInterval(() => {
@@ -236,11 +138,8 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Starts the animation loop of the character.
-     * Updates the visual animation state (idle, walk,
-     * jump, hurt, dead, sleeping).
-     *
-     * @returns {void}
+     * Animation loop (~10 FPS).
+     * Updates sprite animation based on character state (dead/hurt/jump/walk/idle/sleep).
      */
     startAnimationLoop() {
         this.animationIntervalId = setInterval(() => {
@@ -250,11 +149,20 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Determines whether the movement loop should be skipped.
-     * Stops walking sound when the game is over or the world
-     * reference is missing.
+     * Stops both loops to prevent duplicate intervals (important on reset).
+     */
+    stopLoops() {
+        if (this.movementIntervalId) clearInterval(this.movementIntervalId);
+        if (this.animationIntervalId) clearInterval(this.animationIntervalId);
+        this.movementIntervalId = null;
+        this.animationIntervalId = null;
+    }
+
+    /**
+     * Returns true if movement should not run (no world or gameOver).
+     * Ensures walking sound is stopped when movement loop is inactive.
      *
-     * @returns {boolean} True if the loop should be skipped.
+     * @returns {boolean}
      */
     shouldSkipMovementLoop() {
         if (this.world && !this.world.gameOver) return false;
@@ -263,10 +171,10 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Determines whether the animation loop should be skipped.
-     * Resets sleep state when the game is over or inactive.
+     * Returns true if animation should not run (no world or gameOver).
+     * Ensures sleep-related state is reset when animation loop is inactive.
      *
-     * @returns {boolean} True if the loop should be skipped.
+     * @returns {boolean}
      */
     shouldSkipAnimationLoop() {
         if (this.world && !this.world.gameOver) return false;
@@ -275,8 +183,7 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Calculates the current horizontal movement state
-     * based on keyboard input and level boundaries.
+     * Computes movement intent and bounds checks for current level.
      *
      * @returns {{movingRight: boolean, movingLeft: boolean, isWalking: boolean}}
      */
@@ -287,25 +194,10 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Stops all active character intervals.
-     * Used on game reset or when reinitializing the world
-     * to prevent multiple running loops.
-     *
-     * @returns {void}
-     */
-    stopLoops() {
-        if (this.movementIntervalId) clearInterval(this.movementIntervalId);
-        if (this.animationIntervalId) clearInterval(this.animationIntervalId);
-        this.movementIntervalId = null;
-        this.animationIntervalId = null;
-    }
-
-    /**
-     * Updates the horizontal movement based on keyboard input.
+     * Applies horizontal movement and direction flags.
      *
      * @param {boolean} movingRight
      * @param {boolean} movingLeft
-     * @returns {void}
      */
     updateHorizontalMovement(movingRight, movingLeft) {
         if (movingRight) {
@@ -322,26 +214,20 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Updates the walking sound based on the movement state.
+     * Plays/stops walking sound depending on movement and grounded state.
      *
      * @param {boolean} isWalking
-     * @returns {void}
      */
     updateWalkingSound(isWalking) {
         if (!this.world || !this.world.sound) return;
 
         const shouldPlayWalking = isWalking && !this.isAboveGround();
-        if (shouldPlayWalking) {
-            this.world.sound.playWalking();
-        } else {
-            this.world.sound.stopWalking();
-        }
+        if (shouldPlayWalking) this.world.sound.playWalking();
+        else this.world.sound.stopWalking();
     }
 
     /**
-     * Handles jump input and triggers a jump if possible.
-     *
-     * @returns {void}
+     * Triggers a jump if jump key is pressed and character is grounded.
      */
     handleJumpInput() {
         if (this.world.keyboard.JUMP && !this.isAboveGround()) {
@@ -351,31 +237,24 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Updates the camera position based on the character position.
-     *
-     * @returns {void}
+     * Keeps the camera centered relative to the character.
+     * This drives the world render offset (camera_x).
      */
     updateCameraPosition() {
         this.world.camera_x = -this.x + 100;
     }
 
     /**
-     * Handles animation state when the game is over or world is missing.
-     *
-     * @returns {void}
+     * Resets sleeping state and snore sound when the world is inactive/game over.
      */
     resetSleepState() {
-        if (this.world && this.world.sound && typeof this.world.sound.stopSnore === "function") {
-            this.world.sound.stopSnore();
-        }
+        if (this.world?.sound?.stopSnore) this.world.sound.stopSnore();
         this.isSleeping = false;
         this.standingTime = 0;
     }
 
     /**
-     * Updates the current animation state based on character status.
-     *
-     * @returns {void}
+     * Animation state machine: dead > hurt > air > walk > idle/sleep.
      */
     updateAnimationState() {
         if (this.isDead()) return this.handleDeadState();
@@ -385,11 +264,7 @@ class Character extends MoveableObject {
         this.handleIdleState();
     }
 
-    /**
-     * Handles the dead animation state.
-     *
-     * @returns {void}
-     */
+    /** Plays death animation and stops sleep sound/state. */
     handleDeadState() {
         this.stopSnoreIfNecessary();
         this.isSleeping = false;
@@ -397,11 +272,7 @@ class Character extends MoveableObject {
         this.playAnimation(this.IMAGES_DEAD);
     }
 
-    /**
-     * Handles the hurt animation state.
-     *
-     * @returns {void}
-     */
+    /** Plays hurt animation and stops sleep sound/state. */
     handleHurtState() {
         this.stopSnoreIfNecessary();
         this.isSleeping = false;
@@ -409,11 +280,7 @@ class Character extends MoveableObject {
         this.playAnimation(this.IMAGES_HURT);
     }
 
-    /**
-     * Handles the jumping (airborne) animation state.
-     *
-     * @returns {void}
-     */
+    /** Plays jumping animation and stops sleep sound/state. */
     handleAirState() {
         this.stopSnoreIfNecessary();
         this.isSleeping = false;
@@ -421,11 +288,7 @@ class Character extends MoveableObject {
         this.playAnimation(this.IMAGES_JUMPING);
     }
 
-    /**
-     * Handles the walking animation state.
-     *
-     * @returns {void}
-     */
+    /** Plays walking animation and stops sleep sound/state. */
     handleWalkingState() {
         this.stopSnoreIfNecessary();
         this.isSleeping = false;
@@ -434,9 +297,8 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Handles the idle and sleeping animation states.
-     *
-     * @returns {void}
+     * Handles idle -> sleep transition after a timeout.
+     * Idle time is tracked via standingTime.
      */
     handleIdleState() {
         this.standingTime += 150;
@@ -450,72 +312,44 @@ class Character extends MoveableObject {
         this.playAnimation(this.IMAGES_STANDING);
     }
 
-    /**
-     * Resets the standing time counter.
-     *
-     * @returns {void}
-     */
+    /** Resets idle timer (called on any input/movement). */
     resetStandingTime() {
         this.standingTime = 0;
     }
 
     /**
-     * Enters the sleeping state and starts the snore sound.
-     *
-     * @returns {void}
+     * Switches into sleep animation + starts snore sound (once).
      */
     enterSleepState() {
         this.isSleeping = true;
-
-        if (this.world && this.world.sound && typeof this.world.sound.playSnore === "function") {
-            this.world.sound.playSnore();
-        }
-
+        if (this.world?.sound?.playSnore) this.world.sound.playSnore();
         this.playAnimation(this.IMAGES_SLEEPING);
     }
 
     /**
-     * Exits the sleeping state and stops the snore sound.
-     *
-     * @returns {void}
+     * Leaves sleep state and ensures snore sound is stopped.
      */
     exitSleepState() {
         if (!this.isSleeping) {
             this.stopSnoreIfNecessary();
             return;
         }
-
         this.isSleeping = false;
         this.stopSnoreIfNecessary();
     }
 
-    /**
-     * Stops the snore sound if it is currently active.
-     *
-     * @returns {void}
-     */
+    /** Stops snore sound if available. */
     stopSnoreIfNecessary() {
-        if (this.world && this.world.sound && typeof this.world.sound.stopSnore === "function") {
-            this.world.sound.stopSnore();
-        }
+        if (this.world?.sound?.stopSnore) this.world.sound.stopSnore();
     }
 
-    /**
-     * Stops the walking sound if available.
-     *
-     * @returns {void}
-     */
+    /** Stops walking sound if available. */
     stopWalkingSound() {
-        if (this.world && this.world.sound && typeof this.world.sound.stopWalking === "function") {
-            this.world.sound.stopWalking();
-        }
+        if (this.world?.sound?.stopWalking) this.world.sound.stopWalking();
     }
 
     /**
-     * Makes the character jump by applying upward velocity
-     * and triggering the jump sound effect.
-     *
-     * @returns {void}
+     * Makes the character jump by applying upward velocity and playing sound.
      */
     jump() {
         this.speedY = 25;
@@ -524,21 +358,16 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Small bounce when landing on an enemy (e.g. chicken).
-     * Prevents a full "double jump" but gives feedback on stomp.
-     *
-     * @returns {void}
+     * Small bounce when stomping an enemy (feedback + prevents instant re-collision).
      */
     bounceOnEnemy() {
         this.speedY = 10;
     }
 
     /**
-     * Applies heavy damage when hit by the end boss.
-     * Internally uses the normal hit logic multiple times.
+     * Applies heavier damage from the endboss by repeating the normal hit logic.
      *
-     * @param {number} [multiplier=3] - How many normal hits to apply.
-     * @returns {void}
+     * @param {number} [multiplier=3] number of hit() calls to apply
      */
     hitByEndboss(multiplier = 3) {
         for (let i = 0; i < multiplier; i++) {

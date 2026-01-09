@@ -234,7 +234,9 @@ class SoundManager {
             this.walkingSoundActive = true;
             const playPromise = this.walkingSound.play();
             if (playPromise && typeof playPromise.catch === 'function') {
-                playPromise.catch(() => {});
+                playPromise.catch((error) => {
+                    console.error('Walking sound playback failed:', error);
+                });
             }
         }
     }
@@ -271,8 +273,11 @@ class SoundManager {
         this.gameWinSound.currentTime = 0;
         const playPromise = this.gameWinSound.play();
         if (playPromise && typeof playPromise.catch === 'function') {
-            playPromise.catch(() => {});
+            playPromise.catch((error) => {
+                console.error('Game win sound playback failed:', error);
+            });
         }
+
     }
 
     /**
@@ -372,7 +377,9 @@ class SoundManager {
 
             const playPromise = this.snoreSound.play();
             if (playPromise && typeof playPromise.catch === 'function') {
-                playPromise.catch(() => {});
+                playPromise.catch((error) => {
+                    console.error('Snore sound playback failed:', error);
+                });
             }
         }
     }

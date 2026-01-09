@@ -146,7 +146,7 @@ class World {
             music.currentTime = 0;
             music.play();
         } catch (error) {
-            console.error(error);
+            console.error('Failed to restart background music:', error);
         }
     }
 

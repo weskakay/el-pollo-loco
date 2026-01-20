@@ -77,11 +77,20 @@ World.prototype.applyEndbossCollision = function () {
 /**
  * Applies collision logic for chicken-type enemies.
  * Damages the character if they are not currently hurt.
+ * No damage is applied when falling from above or shortly after a stomp kill.
  *
  * @param {*} enemy
  * @this {World}
  */
 World.prototype.applyChickenCollision = function (enemy) {
+    // No damage when character is falling from above
+    const isFalling = this.character.speedY < 0;
+    const isAbove = this.character.isAboveGround();
+    if (isFalling && isAbove) return;
+
+    // No damage shortly after stomping an enemy
+    if (this.character.isStompInvulnerable?.()) return;
+
     if (!this.character.isHurt()) {
         this.character.hit();
         this.statusBar.setPercentage(this.character.energy);
@@ -116,21 +125,39 @@ World.prototype.isChickenAlive = function (enemy) {
 /**
  * Checks whether the current collision counts as a stomp kill.
  * Requires the character to be airborne, moving downward,
- * and hitting the enemy from above.
+ * and landing on the enemy from above.
  *
  * @param {*} enemy
  * @returns {boolean}
  * @this {World}
  */
 World.prototype.isStompKill = function (enemy) {
-    if (!this.character.isAboveGround()) return false;
-    if (this.character.speedY >= 0) return false;
-    if (!this.character.isColliding(enemy)) return false;
+    const isAbove = this.character.isAboveGround();
+    const isFalling = this.character.speedY < 0;
 
-    const characterFeet = this.character.y + this.character.height;
-    const enemyStompZone = enemy.y + enemy.height * 0.7;
+    // Use feet-based collision for stomp detection (no 130px offset)
+    const char = this.character;
+    const charLeft = char.x + 60;
+    const charRight = char.x + char.width - 45;
+    const charFeet = char.y + char.height;
 
-    return characterFeet <= enemyStompZone;
+    const enemyLeft = enemy.x;
+    const enemyRight = enemy.x + enemy.width;
+    const enemyTop = enemy.y;
+    const enemyStompZone = enemy.y + enemy.height * 0.5;
+
+    // Check horizontal overlap
+    const horizontalOverlap = charRight > enemyLeft && charLeft < enemyRight;
+
+    // Check if character feet are in the stomp zone (above enemy center)
+    const feetInStompZone = charFeet >= enemyTop && charFeet <= enemyStompZone;
+
+    if (!isAbove) return false;
+    if (!isFalling) return false;
+    if (!horizontalOverlap) return false;
+    if (!feetInStompZone) return false;
+
+    return true;
 };
 
 /**

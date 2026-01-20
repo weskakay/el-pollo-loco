@@ -359,9 +359,23 @@ class Character extends MoveableObject {
 
     /**
      * Small bounce when stomping an enemy (feedback + prevents instant re-collision).
+     * Also grants brief invulnerability to prevent damage from nearby enemies.
      */
     bounceOnEnemy() {
         this.speedY = 10;
+        this.lastStompTime = new Date().getTime();
+    }
+
+    /**
+     * Checks if the character recently stomped an enemy (within 300ms).
+     * Used to grant brief invulnerability after a stomp kill.
+     *
+     * @returns {boolean}
+     */
+    isStompInvulnerable() {
+        if (!this.lastStompTime) return false;
+        const timePassed = new Date().getTime() - this.lastStompTime;
+        return timePassed < 300;
     }
 
     /**

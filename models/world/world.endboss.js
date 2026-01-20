@@ -272,6 +272,7 @@ World.prototype.showWinScreen = function () {
     if (this.currentLevel === 1) {
         this.addNextLevelButton(overlay);
     }
+    this.addEndscreenButtons(overlay);
 };
 
 /**
@@ -324,10 +325,46 @@ World.prototype.showLoseScreen = function () {
     this.soundManager?.backgroundMusic?.pause();
     this.soundManager?.playGameOver?.();
 
-    this.createGameOverlay(
+    const overlay = this.createGameOverlay(
         "YOU LOSE",
         this.getLoseSubtitle(),
         "rgba(0,0,0,0.8)",
         "❌"
     );
+    this.addEndscreenButtons(overlay);
+};
+
+/**
+ * Adds "Retry" and "Home" buttons to an endscreen overlay.
+ *
+ * @param {HTMLDivElement} overlay
+ * @this {World}
+ */
+World.prototype.addEndscreenButtons = function (overlay) {
+    const box = overlay.querySelector(".box");
+    if (!box) return;
+
+    const retryBtn = document.createElement("button");
+    retryBtn.textContent = "Retry";
+    retryBtn.classList.add("overlay-button");
+    const currentLevel = this.currentLevel;
+    retryBtn.addEventListener("click", () => {
+        overlay.remove();
+        if (typeof hideFooter === "function") hideFooter();
+        if (typeof retryLevel === "function") retryLevel(currentLevel);
+    });
+
+    const homeBtn = document.createElement("button");
+    homeBtn.textContent = "Home";
+    homeBtn.classList.add("overlay-button");
+    homeBtn.addEventListener("click", () => {
+        overlay.remove();
+
+        if (typeof goHome === "function") goHome();
+    });
+
+    box.appendChild(retryBtn);
+    box.appendChild(homeBtn);
+
+    if (typeof showFooter === "function") showFooter();
 };

@@ -76,17 +76,13 @@ World.prototype.applyEndbossCollision = function () {
 
 /**
  * Applies collision logic for chicken-type enemies.
- * If the collision is not a stomp hit, the character takes damage.
+ * Damages the character if they are not currently hurt.
  *
  * @param {*} enemy
  * @this {World}
  */
 World.prototype.applyChickenCollision = function (enemy) {
-    const stompHit =
-        this.character.speedY < 0 &&
-        (this.character.y + this.character.height - 20) < (enemy.y + 20);
-
-    if (!stompHit && !this.character.isHurt()) {
+    if (!this.character.isHurt()) {
         this.character.hit();
         this.statusBar.setPercentage(this.character.energy);
     }
@@ -119,16 +115,22 @@ World.prototype.isChickenAlive = function (enemy) {
 
 /**
  * Checks whether the current collision counts as a stomp kill.
- * Requires the character to be airborne and moving downward.
+ * Requires the character to be airborne, moving downward,
+ * and hitting the enemy from above.
  *
  * @param {*} enemy
  * @returns {boolean}
  * @this {World}
  */
 World.prototype.isStompKill = function (enemy) {
-    return this.character.isAboveGround() &&
-        this.character.speedY < 0 &&
-        this.character.isColliding(enemy);
+    if (!this.character.isAboveGround()) return false;
+    if (this.character.speedY >= 0) return false;
+    if (!this.character.isColliding(enemy)) return false;
+
+    const characterFeet = this.character.y + this.character.height;
+    const enemyStompZone = enemy.y + enemy.height * 0.7;
+
+    return characterFeet <= enemyStompZone;
 };
 
 /**

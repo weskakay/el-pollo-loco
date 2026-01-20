@@ -69,6 +69,7 @@ function startGame() {
         document.getElementById('loading-screen').classList.add('d-none');
         document.getElementById('canvas').classList.remove('d-none');
         init();
+        document.querySelector('.level-indicator')?.classList.remove('d-none');
     }, 1000);
 }
 
@@ -93,6 +94,54 @@ function resetGame() {
 
     init();
 }
+
+/**
+ * Retries the specified level without going back to level 1.
+ *
+ * @param {number} level - The level number to retry.
+ * @returns {void}
+ */
+function retryLevel(level) {
+    hideHelpScreen();
+    removeOverlays();
+
+    if (world) {
+        stopWorld(world);
+        stopWorldSounds(world);
+        stopEndbossSounds(world);
+    }
+
+    init();
+    if (world && typeof world.switchToLevel === "function" && level > 1) {
+        world.switchToLevel(level);
+    }
+}
+
+function goHome() {
+    hideHelpScreen();
+    removeOverlays();
+
+    if (world) {
+        stopWorld(world);
+        stopWorldSounds(world);
+        stopEndbossSounds(world);
+    }
+
+    document.getElementById('start-screen')?.classList.remove('d-none');
+
+    document.getElementById('canvas')?.classList.add('d-none');
+    document.getElementById('canvas')?.classList.add('hidden-placeholder');
+
+    document.getElementById('reset-btn')?.classList.add('d-none');
+    document.getElementById('music-btn')?.classList.add('d-none');
+    document.getElementById('help-btn')?.classList.add('d-none');
+    document.getElementById('loading-screen')?.classList.add('d-none');
+
+    document.querySelector('.level-indicator')?.classList.add('d-none');
+
+    if (typeof showFooter === "function") showFooter();
+}
+
 
 /**
  * Hides the help screen if it exists.

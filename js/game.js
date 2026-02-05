@@ -250,10 +250,12 @@ function toggleMusic() {
  * @returns {void}
  */
 function updateMusicButton() {
-    const musicBtn = document.getElementById('music-btn');
-    if (!musicBtn) return;
+    const iconEl = document.getElementById('music-icon');
+    const textEl = document.getElementById('music-text');
+    if (!iconEl || !textEl) return;
 
-    musicBtn.innerText = isMuted ? '🔇 MUSIC: OFF' : '🎵 MUSIC: ON';
+    iconEl.innerText = isMuted ? '🔇' : '🎵';
+    textEl.innerText = isMuted ? ' MUSIC: OFF' : ' MUSIC: ON';
 }
 
 /**

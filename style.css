@@ -152,22 +152,18 @@ button:hover {
     100% { content: '...'; }
 }
 
-/* === CONTROLS BUTTONS === */
+/* === GAME CONTROLS (between stage and footer) === */
 
-#stage .start-controls {
-    position: absolute;
-    left: 50%;
-    bottom: 2.5%;
-    transform: translateX(-50%);
+.game-controls {
+    margin: 8px auto 0;
+    width: min(92vw, 92vh * (16/9), 1100px);
     display: flex;
     gap: clamp(8px, 1.8vw, 20px);
     justify-content: center;
-    z-index: 1500;
-    pointer-events: auto;
 }
 
-#stage .start-controls button {
-    font-size: clamp(14px, 1.6vw, 18px);
+.game-controls button {
+    font-size: clamp(16px, 1.6vw, 20px);
 }
 
 /* === HELP SCREEN === */
@@ -212,6 +208,30 @@ button:hover {
     font-size: clamp(16px, 2vw, 22px);
 }
 
+#stage .help-screen .help-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+#stage .help-screen .help-close:hover {
+    background: rgba(0, 0, 0, 0.8);
+    scale: 1.1;
+}
+
 /* === OVERLAY (YOU WIN / YOU LOSE) === */
 
 #stage .overlay {
@@ -254,7 +274,7 @@ button:hover {
 
 .overlay-button {
     margin: 16px 8px 0;
-    padding: 8px 20px;
+    padding: 10px 20px;
     border: none;
     border-radius: 12px;
     font-family: 'Zabras', Arial, sans-serif;
@@ -266,6 +286,19 @@ button:hover {
 
 .overlay-button:hover {
     filter: brightness(1.05);
+}
+
+.image-overlay-box {
+    background-color: rgba(0, 0, 0, 0.85);
+    padding: clamp(16px, 3vw, 30px);
+}
+
+.overlay-image {
+    max-width: 100%;
+    width: clamp(200px, 40vw, 350px);
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 8px;
 }
 
 /* === FOOTER === */
@@ -390,16 +423,39 @@ button:hover {
         display: none !important;
     }
 
-    #stage .start-controls {
-        bottom: 1.5%;
-        gap: 8px;
+    .game-controls {
+        position: fixed;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        left: 20%;
+        transform: translateX(-50%);
+        z-index: 6001;
+        gap: 10px;
+        margin: 0;
     }
 
-    #stage .start-controls button {
-        font-size: 12px;
-        padding: 4px 10px;
-        min-width: 70px;
-        border-radius: 8px;
+    .game-controls .btn-text {
+        display: none;
+    }
+
+    .game-controls button {
+        width: 48px;
+        height: 48px;
+        min-width: unset;
+        padding: 0;
+        border-radius: 50%;
+        font-size: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.35);
+        backdrop-filter: blur(6px);
+        border: none;
+        pointer-events: auto;
+    }
+
+    .game-controls button:active {
+        transform: scale(0.92);
+        background: rgba(255, 255, 255, 0.55);
     }
 
     #stage .level-indicator {
@@ -417,12 +473,12 @@ button:hover {
         right: 0;
         bottom: 0;
 
-        font-size: 9px;
-        letter-spacing: 0.3px;
-        line-height: 1;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+        line-height: 1.2;
 
         margin: 0;
-        padding: 1px 4px;
+        padding: 4px 8px;
 
         background: rgba(0, 0, 0, 0.7);
         z-index: 4000;
@@ -430,11 +486,43 @@ button:hover {
     }
 
     #footer a {
-        margin: 0 4px;
+        margin: 0 6px;
+    }
+
+    #stage .overlay {
+        width: clamp(280px, 65%, 600px);
+        max-height: 70vh;
+    }
+
+    #stage .overlay .box {
+        padding: clamp(20px, 3vw, 40px) clamp(16px, 3vw, 40px);
+    }
+
+    .overlay-image {
+        width: clamp(150px, 35vw, 280px);
+        max-height: 80px;
+        object-fit: contain;
+    }
+
+    .overlay-subtitle {
+        font-size: clamp(14px, 2vw, 20px);
+    }
+
+    .overlay-button {
+        font-size: 16px;
+        padding: 4px 10px;
+        min-width: 70px;
+        border-radius: 8px;
     }
 }
 
 @media (pointer: coarse) and (max-height: 420px) {
+
+    .game-controls button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
 
     .mobile-btn {
         width: 50px;
@@ -463,12 +551,12 @@ button:hover {
         right: 0;
         bottom: 0;
 
-        font-size: 10px;
+        font-size: 16px;
         letter-spacing: 0.5px;
-        line-height: 1;
+        line-height: 1.2;
 
         margin: 0;
-        padding: 2px 6px;
+        padding: 4px 8px;
 
         background: rgba(0, 0, 0, 0.7);
         z-index: 4000;
@@ -476,15 +564,64 @@ button:hover {
     }
 
     #footer a {
-        margin: 0 5px;
+        margin: 0 6px;
+    }
+
+    #stage .overlay {
+        width: clamp(280px, 65%, 600px);
+        max-height: 70vh;
+    }
+
+    #stage .overlay .box {
+        padding: clamp(20px, 3vw, 40px) clamp(16px, 3vw, 40px);
+    }
+
+    .overlay-image {
+        width: clamp(150px, 35vw, 280px);
+        max-height: 80px;
+        object-fit: contain;
+    }
+
+    .overlay-subtitle {
+        font-size: clamp(14px, 2vw, 20px);
+    }
+
+    .overlay-button {
+        font-size: 16px;
+        padding: 4px 10px;
+        min-width: 70px;
+        border-radius: 8px;
     }
 }
 
 @media (pointer: coarse) and (min-height: 521px) and (max-height: 600px) {
     #footer {
-        font-size: 12px;
+        font-size: 16px;
         letter-spacing: 1px;
         margin: 8px 0 12px;
+    }
+
+    .overlay-button {
+        font-size: 16px;
+        padding: 6px 14px;
+        min-width: 75px;
+        border-radius: 10px;
+    }
+}
+
+/* Surface Duo 720x540 */
+@media (pointer: coarse) and (min-width: 700px) and (max-width: 750px) and (min-height: 520px) and (max-height: 560px) {
+    .mobile-left {
+        left: 10px;
+    }
+}
+
+@media (pointer: coarse) and (min-height: 601px) {
+    .overlay-button {
+        font-size: clamp(16px, 1.8vw, 20px);
+        padding: 8px 18px;
+        min-width: 85px;
+        border-radius: 12px;
     }
 }
 
@@ -500,6 +637,16 @@ button:hover {
         z-index: 6000;
     }
 
+    .game-controls {
+        bottom: calc(30px + env(safe-area-inset-bottom));
+    }
+
+    .game-controls button {
+        width: 56px;
+        height: 56px;
+        font-size: 26px;
+    }
+
     #footer {
         position: fixed;
         left: 0;
@@ -507,6 +654,266 @@ button:hover {
         bottom: 10px;
         margin: 0 !important;
         z-index: 5900;
+        font-size: 28px;
+    }
+}
+
+/* iPad Air (1180x820) */
+@media (pointer: coarse) and (min-width: 1150px) and (max-width: 1250px) and (min-height: 800px) and (max-height: 900px) {
+
+    .game-controls {
+        bottom: calc(40px + env(safe-area-inset-bottom));
+    }
+
+    .game-controls button {
+        width: 62px;
+        height: 62px;
+        font-size: 28px;
+    }
+
+    .mobile-controls {
+        bottom: 66px;
+    }
+
+    .mobile-btn {
+        width: 96px;
+        height: 96px;
+        font-size: 44px;
+    }
+
+    .mobile-btn img {
+        width: 54px;
+        height: 54px;
+    }
+
+    .mobile-throw img {
+        width: 74px;
+        height: 74px;
+    }
+}
+
+/* iPad Pro (1366x1024) */
+@media (pointer: coarse) and (min-width: 1300px) and (max-width: 1450px) and (min-height: 950px) and (max-height: 1100px) {
+
+    #stage {
+        width: min(96vw, 96vh * (16/9), 1300px);
+    }
+
+    .game-controls {
+        bottom: calc(60px + env(safe-area-inset-bottom));
+    }
+
+    .game-controls button {
+        width: 74px;
+        height: 74px;
+        font-size: 34px;
+    }
+
+    .mobile-controls {
+        bottom: 86px;
+        width: min(96vw, 1300px);
+    }
+
+    .mobile-btn {
+        width: 114px;
+        height: 114px;
+        font-size: 52px;
+    }
+
+    .mobile-btn img {
+        width: 64px;
+        height: 64px;
+    }
+
+    .mobile-throw img {
+        width: 88px;
+        height: 88px;
+    }
+
+    .mobile-row { gap: 22px; }
+    .mobile-right { gap: 22px; }
+
+    #footer {
+        font-size: 32px;
+    }
+}
+
+/* Surface Pro 7 (1368x912) */
+@media (pointer: coarse) and (min-width: 1350px) and (max-width: 1400px) and (min-height: 900px) and (max-height: 950px) {
+
+    #stage {
+        width: min(94vw, 94vh * (16/9), 1250px);
+    }
+
+    .game-controls {
+        left: 22%;
+        bottom: calc(40px + env(safe-area-inset-bottom));
+    }
+
+    .game-controls button {
+        width: 64px;
+        height: 64px;
+        font-size: 30px;
+    }
+
+    .mobile-controls {
+        bottom: 70px;
+        width: min(94vw, 1250px);
+    }
+
+    .mobile-left {
+        left: 20px;
+    }
+
+    .mobile-right {
+        right: 20px;
+    }
+
+    .mobile-btn {
+        width: 100px;
+        height: 100px;
+        font-size: 46px;
+    }
+
+    .mobile-btn img {
+        width: 56px;
+        height: 56px;
+    }
+
+    .mobile-throw img {
+        width: 78px;
+        height: 78px;
+    }
+
+    .mobile-row { gap: 18px; }
+
+    #footer {
+        font-size: 28px;
+    }
+}
+
+/* Asus Zenbook Fold (Folded) ~1280x853 */
+@media (pointer: coarse) and (min-width: 1250px) and (max-width: 1320px) and (min-height: 830px) and (max-height: 880px) {
+
+    #stage {
+        width: min(96vw, 96vh * (16/9), 1240px);
+    }
+
+    .game-controls {
+        left: 22%;
+        bottom: calc(50px + env(safe-area-inset-bottom));
+    }
+
+    .game-controls button {
+        width: 66px;
+        height: 66px;
+        font-size: 32px;
+    }
+
+    .mobile-controls {
+        bottom: 75px;
+        width: min(96vw, 1240px);
+    }
+
+    .mobile-left {
+        left: 15px;
+    }
+
+    .mobile-right {
+        right: 15px;
+        gap: 16px;
+    }
+
+    .mobile-btn {
+        width: 98px;
+        height: 98px;
+        font-size: 44px;
+    }
+
+    .mobile-btn img {
+        width: 54px;
+        height: 54px;
+    }
+
+    .mobile-throw img {
+        width: 76px;
+        height: 76px;
+    }
+
+    .mobile-row { gap: 16px; }
+
+    #footer {
+        font-size: 30px;
+    }
+}
+
+/* Nest Hub Max (1280x800) */
+@media (pointer: coarse) and (min-width: 1250px) and (max-width: 1320px) and (min-height: 780px) and (max-height: 830px) {
+
+    .game-controls {
+        left: 24%;
+        bottom: calc(45px + env(safe-area-inset-bottom));
+    }
+
+    .game-controls button {
+        width: 62px;
+        height: 62px;
+        font-size: 30px;
+    }
+}
+
+/* Asus Zenbook Fold (Continuous) ~1706x1280 */
+@media (pointer: coarse) and (min-width: 1650px) and (max-width: 1800px) and (min-height: 1200px) and (max-height: 1350px) {
+
+    #stage {
+        width: min(98vw, 98vh * (16/9), 1680px);
+    }
+
+    .game-controls {
+        left: 16%;
+        bottom: calc(70px + env(safe-area-inset-bottom));
+    }
+
+    .game-controls button {
+        width: 72px;
+        height: 72px;
+        font-size: 34px;
+    }
+
+    .mobile-controls {
+        bottom: 100px;
+        width: min(98vw, 1680px);
+    }
+
+    .mobile-left {
+        left: 10px;
+    }
+
+    .mobile-right {
+        right: 20px;
+    }
+
+    .mobile-btn {
+        width: 110px;
+        height: 110px;
+        font-size: 50px;
+    }
+
+    .mobile-btn img {
+        width: 62px;
+        height: 62px;
+    }
+
+    .mobile-throw img {
+        width: 86px;
+        height: 86px;
+    }
+
+    .mobile-row { gap: 20px; }
+    .mobile-right { gap: 20px; }
+
+    #footer {
+        font-size: 32px;
     }
 }
 

@@ -100,10 +100,13 @@ World.prototype.applyChickenCollision = function (enemy) {
 /**
  * Checks if the character stomped on any alive chicken
  * and triggers the kill logic.
+ * Dead characters cannot stomp enemies.
  *
  * @this {World}
  */
 World.prototype.checkChickenKills = function () {
+    if (this.character.isDead()) return;
+
     this.level.enemies.forEach((enemy) => {
         if (!this.isChickenAlive(enemy)) return;
         if (!this.isStompKill(enemy)) return;

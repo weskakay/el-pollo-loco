@@ -183,12 +183,16 @@ World.prototype.areAllEndbossesDead = function (endbosses) {
 
 /**
  * Triggers the lose screen when the character has no energy left.
+ * Adds a delay to allow the death animation to play before showing the overlay.
  *
  * @this {World}
  */
 World.prototype.checkCharacterDead = function () {
-    if (this.character?.energy <= 0 && !this.gameOver) {
-        this.showLoseScreen();
+    if (this.character?.energy <= 0 && !this.gameOver && !this.deathSequenceStarted) {
+        this.deathSequenceStarted = true;
+        this.soundManager?.stopEndbossSounds?.();
+        this.soundManager?.backgroundMusic?.pause();
+        setTimeout(() => this.showLoseScreen(), 1500);
     }
 };
 
@@ -241,6 +245,27 @@ World.prototype.appendOverlay = function (overlay) {
 };
 
 /**
+ * Creates an image-based overlay element for win/lose screens.
+ *
+ * @param {string} imagePath - Path to the overlay image.
+ * @param {string} subtitle - Text shown below the image.
+ * @returns {HTMLDivElement}
+ * @this {World}
+ */
+World.prototype.createImageOverlay = function (imagePath, subtitle) {
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+    overlay.innerHTML = `
+        <div class="box image-overlay-box">
+            <img src="${imagePath}" alt="Game Result" class="overlay-image">
+            <div class="overlay-subtitle">${subtitle}</div>
+        </div>
+    `;
+    this.appendOverlay(overlay);
+    return overlay;
+};
+
+/**
  * Builds the subtitle string for the win screen.
  *
  * @returns {string}
@@ -255,18 +280,16 @@ World.prototype.getWinSubtitle = function () {
 };
 
 /**
- * Shows the win overlay and optionally offers "Next Level".
+ * Shows the win overlay with image and optionally offers "Next Level".
  *
  * @this {World}
  */
 World.prototype.showWinScreen = function () {
     this.gameOver = true;
 
-    const overlay = this.createGameOverlay(
-        "YOU WIN!",
-        this.getWinSubtitle(),
-        "rgba(0,0,0,0.8)",
-        "🏆"
+    const overlay = this.createImageOverlay(
+        "img/You won, you lost/You win B.png",
+        this.getWinSubtitle()
     );
 
     if (this.currentLevel === 1) {
@@ -314,22 +337,18 @@ World.prototype.getLoseSubtitle = function () {
 };
 
 /**
- * Shows the lose overlay and plays game-over audio.
+ * Shows the lose overlay with image and plays game-over audio.
  *
  * @this {World}
  */
 World.prototype.showLoseScreen = function () {
     this.gameOver = true;
 
-    this.soundManager?.stopEndbossSounds?.();
-    this.soundManager?.backgroundMusic?.pause();
     this.soundManager?.playGameOver?.();
 
-    const overlay = this.createGameOverlay(
-        "YOU LOSE",
-        this.getLoseSubtitle(),
-        "rgba(0,0,0,0.8)",
-        "❌"
+    const overlay = this.createImageOverlay(
+        "img/You won, you lost/You lost.png",
+        this.getLoseSubtitle()
     );
     this.addEndscreenButtons(overlay);
 };

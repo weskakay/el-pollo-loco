@@ -90,16 +90,19 @@ class MoveableObject extends DrawableObject {
 
     /**
      * Determines whether the object is above the ground.
-     * Throwable objects are always considered above ground.
+     * Throwable objects and dead characters are always considered above ground
+     * (dead characters fall off the screen Mario-style).
      *
      * @returns {boolean} True if the object is above ground, otherwise false.
      */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
-        } else {
-            return this.y < this.groundY;
         }
+        if (this instanceof Character && this.isDead()) {
+            return true;
+        }
+        return this.y < this.groundY;
     }
 
     /**

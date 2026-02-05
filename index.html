@@ -7,7 +7,7 @@
     <title>El Pollo Loco</title>
 
     <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="img/8_coin/coin_2.png" />
+    <link rel="icon" type="image/png" href="img/sombrero.png" />
 
     <!-- Base classes -->
     <script src="models/drawable-object.class.js"></script>
@@ -68,13 +68,8 @@
                 </div>
             </div>
 
-            <div class="start-controls">
-                <button id="reset-btn" class="d-none" onclick="resetGame()">🔁 RESET</button>
-                <button id="music-btn" class="d-none" onclick="toggleMusic()">🎵 MUSIC: ON</button>
-                <button id="help-btn" class="d-none" onclick="toggleHelp()">❔ HELP</button>
-            </div>
-
             <div id="help-screen" class="help-screen d-none">
+                <button class="help-close" onclick="toggleHelp()">✕</button>
                 <p><strong>CONTROL:</strong></p>
                 <ul>
                     <li>➡️ / D – Move right</li>
@@ -84,6 +79,12 @@
                 </ul>
             </div>
         </div>
+    </div>
+
+    <div class="game-controls">
+        <button id="reset-btn" class="d-none" onclick="resetGame()"><span class="btn-icon">🔁</span><span class="btn-text"> RESET</span></button>
+        <button id="music-btn" class="d-none" onclick="toggleMusic()"><span id="music-icon" class="btn-icon">🎵</span><span id="music-text" class="btn-text"> MUSIC: ON</span></button>
+        <button id="help-btn" class="d-none" onclick="toggleHelp()"><span class="btn-icon">❔</span><span class="btn-text"> HELP</span></button>
     </div>
 
     <div id="mobile-controls" class="mobile-controls">

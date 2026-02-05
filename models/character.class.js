@@ -82,8 +82,7 @@ class Character extends MoveableObject {
         'img/2_character_pepe/5_dead/D-53.png',
         'img/2_character_pepe/5_dead/D-54.png',
         'img/2_character_pepe/5_dead/D-55.png',
-        'img/2_character_pepe/5_dead/D-56.png',
-        'img/2_character_pepe/5_dead/D-57.png'
+        'img/2_character_pepe/5_dead/D-56.png'
     ];
 
     IMAGES_HURT = [
@@ -159,15 +158,17 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Returns true if movement should not run (no world or gameOver).
+     * Returns true if movement should not run (no world, gameOver, or dead).
      * Ensures walking sound is stopped when movement loop is inactive.
      *
      * @returns {boolean}
      */
     shouldSkipMovementLoop() {
-        if (this.world && !this.world.gameOver) return false;
-        this.stopWalkingSound();
-        return true;
+        if (!this.world || this.world.gameOver || this.isDead()) {
+            this.stopWalkingSound();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -264,12 +265,36 @@ class Character extends MoveableObject {
         this.handleIdleState();
     }
 
-    /** Plays death animation and stops sleep sound/state. */
+    /** Plays death animation once with Mario-style bounce and fall. */
     handleDeadState() {
         this.stopSnoreIfNecessary();
         this.isSleeping = false;
         this.standingTime = 0;
-        this.playAnimation(this.IMAGES_DEAD);
+        if (!this.deathBounceStarted) {
+            this.deathBounceStarted = true;
+            this.speedY = 20;
+        }
+        this.playDeathAnimation();
+    }
+
+    /**
+     * Plays the death animation once without looping.
+     * Stops on the final frame after completing the sequence.
+     */
+    playDeathAnimation() {
+        if (this.deathAnimationComplete) {
+            this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
+            return;
+        }
+        if (this.deathFrame === undefined) {
+            this.deathFrame = 0;
+        }
+        if (this.deathFrame < this.IMAGES_DEAD.length) {
+            this.img = this.imageCache[this.IMAGES_DEAD[this.deathFrame]];
+            this.deathFrame++;
+        } else {
+            this.deathAnimationComplete = true;
+        }
     }
 
     /** Plays hurt animation and stops sleep sound/state. */

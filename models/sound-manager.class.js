@@ -179,7 +179,6 @@ class SoundManager {
         }
     }
 
-
     /**
      * Pauses the background music playback.
      * @returns {void}
@@ -189,14 +188,24 @@ class SoundManager {
     }
 
     /**
+     * Helper method to play a one-shot sound effect.
+     * Resets playback position and plays if not muted.
+     *
+     * @param {HTMLAudioElement} sound - The audio element to play.
+     * @returns {void}
+     */
+    playSound(sound) {
+        if (isMuted || !sound) return;
+        sound.currentTime = 0;
+        sound.play();
+    }
+
+    /**
      * Plays the hurt sound effect.
      * @returns {void}
      */
     playHurt() {
-        if (!isMuted) {
-            this.hurtSound.currentTime = 0;
-            this.hurtSound.play();
-        }
+        this.playSound(this.hurtSound);
     }
 
     /**
@@ -204,10 +213,7 @@ class SoundManager {
      * @returns {void}
      */
     playJump() {
-        if (!isMuted) {
-            this.jumpSound.currentTime = 0;
-            this.jumpSound.play();
-        }
+        this.playSound(this.jumpSound);
     }
 
     /**
@@ -215,10 +221,7 @@ class SoundManager {
      * @returns {void}
      */
     playThrow() {
-        if (!isMuted) {
-            this.throwSound.currentTime = 0;
-            this.throwSound.play();
-        }
+        this.playSound(this.throwSound);
     }
 
     /**
@@ -257,10 +260,7 @@ class SoundManager {
      * @returns {void}
      */
     playGameOver() {
-        if (!isMuted) {
-            this.gameOverSound.currentTime = 0;
-            this.gameOverSound.play();
-        }
+        this.playSound(this.gameOverSound);
     }
 
     /**
@@ -268,16 +268,7 @@ class SoundManager {
      * @returns {void}
      */
     playGameWin() {
-        if (isMuted) return;
-
-        this.gameWinSound.currentTime = 0;
-        const playPromise = this.gameWinSound.play();
-        if (playPromise && typeof playPromise.catch === 'function') {
-            playPromise.catch((error) => {
-                console.error('Game win sound playback failed:', error);
-            });
-        }
-
+        this.playSound(this.gameWinSound);
     }
 
     /**
@@ -285,10 +276,7 @@ class SoundManager {
      * @returns {void}
      */
     playEndbossAlert() {
-        if (!isMuted) {
-            this.endbossAlertSound.currentTime = 0;
-            this.endbossAlertSound.play();
-        }
+        this.playSound(this.endbossAlertSound);
     }
 
     /**
@@ -296,10 +284,7 @@ class SoundManager {
      * @returns {void}
      */
     playEndbossAttack() {
-        if (!isMuted) {
-            this.endbossAttackSound.currentTime = 0;
-            this.endbossAttackSound.play();
-        }
+        this.playSound(this.endbossAttackSound);
     }
 
     /**
@@ -307,10 +292,7 @@ class SoundManager {
      * @returns {void}
      */
     playCoinSound() {
-        if (!isMuted) {
-            this.coinSound.currentTime = 0;
-            this.coinSound.play();
-        }
+        this.playSound(this.coinSound);
     }
 
     /**
@@ -318,10 +300,7 @@ class SoundManager {
      * @returns {void}
      */
     playBottlePickup() {
-        if (!isMuted) {
-            this.bottlePickupSound.currentTime = 0;
-            this.bottlePickupSound.play();
-        }
+        this.playSound(this.bottlePickupSound);
     }
 
     /**
@@ -329,10 +308,7 @@ class SoundManager {
      * @returns {void}
      */
     playChickenDead() {
-        if (!isMuted) {
-            this.chickenDeadSound.currentTime = 0;
-            this.chickenDeadSound.play();
-        }
+        this.playSound(this.chickenDeadSound);
     }
 
     /**
@@ -340,12 +316,8 @@ class SoundManager {
      * @returns {void}
      */
     playSmallChickenDead() {
-        if (!isMuted) {
-            this.smallChickenDeadSound.currentTime = 0;
-            this.smallChickenDeadSound.play();
-        }
+        this.playSound(this.smallChickenDeadSound);
     }
-
 
     /**
      * Stops all Endboss-related audio.
